@@ -23,9 +23,9 @@ public class Seat {
 	@JoinColumn(name = "theater_room_id")
 	private TheaterRoom theaterRoom;
 
-	@Column(name = "row")
+	@Column(name = "rows")
 	private Integer row;
 
-	@Column(name = "column")
+	@Column(name = "columns")
 	private Integer column;
 }
