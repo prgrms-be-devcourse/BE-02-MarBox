@@ -1,4 +1,4 @@
-package prgrms.marco.be02marbox.domain.reservation;
+package prgrms.marco.be02marbox.domain.theater;
 
 import java.time.LocalDateTime;
 

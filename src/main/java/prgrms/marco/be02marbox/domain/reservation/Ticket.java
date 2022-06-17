@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.user.User;
 
 @Entity
