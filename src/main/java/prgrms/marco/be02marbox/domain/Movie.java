@@ -25,6 +25,10 @@ public class Movie {
 	@Enumerated(value = EnumType.STRING)
 	private LimitAge limitAge;
 
+	@Column(name = "genre")
+	@Enumerated(value = EnumType.STRING)
+	private Genre genre;
+
 	@Column(name = "running_time")
 	private Long runningTime;
 
