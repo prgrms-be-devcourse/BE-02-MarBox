@@ -1,4 +1,4 @@
-package prgrms.marco.be02marbox.domain;
+package prgrms.marco.be02marbox.domain.movie;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,24 +10,28 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "movie")
+public class Movie {
 
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(name = "role")
-	@Enumerated(value = EnumType.STRING)
-	private Role role;
-
-	@Column(name = "email")
-	private String email;
-
-	@Column(name = "password")
-	private String password;
-
 	@Column(name = "name")
 	private String name;
+
+	@Column(name = "limit_age")
+	@Enumerated(value = EnumType.STRING)
+	private LimitAge limitAge;
+
+	@Column(name = "genre")
+	@Enumerated(value = EnumType.STRING)
+	private Genre genre;
+
+	@Column(name = "running_time")
+	private Long runningTime;
+
+	@Column(name = "poster_img_location")
+	private String posterImgLocation;
 }

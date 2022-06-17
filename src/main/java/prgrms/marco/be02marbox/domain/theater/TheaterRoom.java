@@ -1,4 +1,4 @@
-package prgrms.marco.be02marbox.domain;
+package prgrms.marco.be02marbox.domain.theater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,6 @@ public class TheaterRoom {
 	@Column(name = "total_seats")
 	private Long totalSeats;
 
-	// @OneToMany(mappedBy = "theaterRoom", cascade = CascadeType.ALL, orphanRemoval = true)
-	// List<Seat> seats = new ArrayList<>();
+	@OneToMany(mappedBy = "theaterRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+	List<Seat> seats = new ArrayList<>();
 }

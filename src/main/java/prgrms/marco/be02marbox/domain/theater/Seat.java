@@ -1,6 +1,4 @@
-package prgrms.marco.be02marbox.domain;
-
-import java.time.LocalDateTime;
+package prgrms.marco.be02marbox.domain.theater;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,8 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ticket")
-public class Ticket {
+@Table(name = "seat")
+public class Seat {
 
 	@Id
 	@Column(name = "id")
@@ -22,13 +20,12 @@ public class Ticket {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User user;
+	@JoinColumn(name = "theater_room_id")
+	private TheaterRoom theaterRoom;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "schedule_id")
-	private Schedule schedule;
+	@Column(name = "rows")
+	private Integer row;
 
-	@Column(name = "reserved_at")
-	private LocalDateTime reservedAt;
+	@Column(name = "columns")
+	private Integer column;
 }
