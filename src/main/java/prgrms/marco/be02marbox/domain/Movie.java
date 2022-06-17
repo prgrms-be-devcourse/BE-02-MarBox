@@ -14,14 +14,15 @@ import javax.persistence.Table;
 public class Movie {
 
 	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@Column(name = "name")
 	private String name;
 
-	@Enumerated(value = EnumType.STRING)
 	@Column(name = "limit_age")
+	@Enumerated(value = EnumType.STRING)
 	private LimitAge limitAge;
 
 	@Column(name = "running_time")

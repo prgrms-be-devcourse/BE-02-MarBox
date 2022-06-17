@@ -14,12 +14,12 @@ import javax.persistence.Table;
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Enumerated(value = EnumType.STRING)
 	@Column(name = "role")
+	@Enumerated(value = EnumType.STRING)
 	private Role role;
 
 	@Column(name = "email")

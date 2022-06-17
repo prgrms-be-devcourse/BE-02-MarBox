@@ -20,8 +20,8 @@ import javax.persistence.Table;
 public class TheaterRoom {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)

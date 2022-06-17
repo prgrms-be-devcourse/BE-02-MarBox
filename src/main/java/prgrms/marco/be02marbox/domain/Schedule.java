@@ -17,6 +17,7 @@ import javax.persistence.Table;
 public class Schedule {
 
 	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 

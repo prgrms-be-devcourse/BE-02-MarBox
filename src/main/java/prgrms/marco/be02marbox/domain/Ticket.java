@@ -17,8 +17,8 @@ import javax.persistence.Table;
 public class Ticket {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
