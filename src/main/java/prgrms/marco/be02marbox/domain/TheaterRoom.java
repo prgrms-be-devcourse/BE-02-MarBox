@@ -34,6 +34,6 @@ public class TheaterRoom {
 	@Column(name = "total_seats")
 	private Long totalSeats;
 
-	@OneToMany(mappedBy = "seat", cascade = CascadeType.ALL, orphanRemoval = true)
-	List<Seat> seats = new ArrayList<>();
+	// @OneToMany(mappedBy = "theaterRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+	// List<Seat> seats = new ArrayList<>();
 }
