@@ -23,7 +23,7 @@ class MovieRepositoryTest {
 	@Test
 	@DisplayName("Movie를 DB에 저장할 수 있다")
 	void testSaveMovie() {
-		Movie movie = new Movie("Frozen", LimitAge.CHILD, Genre.ANIMATION, 102L, "resources/posters/frozen.png");
+		Movie movie = new Movie("Frozen", LimitAge.CHILD, Genre.ANIMATION, 102, "resources/posters/frozen.png");
 		Movie savedMovie = movieRepository.save(movie);
 		Optional<Movie> found = movieRepository.findById(savedMovie.getId());
 
