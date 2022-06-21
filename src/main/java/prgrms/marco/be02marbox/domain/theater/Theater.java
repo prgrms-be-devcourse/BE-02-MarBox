@@ -53,14 +53,16 @@ public class Theater {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o)
+	public boolean equals(Object object) {
+		if (this == object) {
 			return true;
+		}
 
-		if (!(o instanceof Theater))
+		if (!(object instanceof Theater)) {
 			return false;
+		}
 
-		Theater theater = (Theater)o;
+		Theater theater = (Theater)object;
 
 		return new EqualsBuilder().append(getId(), theater.getId())
 			.append(getRegion(), theater.getRegion())
@@ -81,4 +83,5 @@ public class Theater {
 			.append("name", name)
 			.toString();
 	}
+
 }

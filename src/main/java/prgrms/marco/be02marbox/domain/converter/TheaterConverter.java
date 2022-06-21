@@ -7,8 +7,8 @@ import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheater;
 
 @Component
 public class TheaterConverter {
-
 	public Theater getTheater(RequestCreateTheater request) {
 		return new Theater(request.getRegion(), request.getName());
 	}
+	
 }
