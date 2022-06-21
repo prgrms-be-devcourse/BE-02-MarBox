@@ -17,7 +17,7 @@ public class MovieService {
 	}
 
 	public Movie createMovie(CreateMovieDto createMovieDto) {
-		Movie newMovie = MovieDtoConverter.convertCreateMovieDto(createMovieDto);
+		Movie newMovie = MovieDtoConverter.convertToMovie(createMovieDto);
 		Movie savedMovie = movieRepository.save(newMovie);
 		return savedMovie;
 	}
