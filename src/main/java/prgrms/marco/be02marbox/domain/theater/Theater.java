@@ -8,6 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
 @Table(name = "theater")
@@ -18,10 +23,62 @@ public class Theater {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(name = "region")
+	@NotBlank
+	@Column(name = "region", nullable = false)
 	@Enumerated(value = EnumType.STRING)
 	private Region region;
 
-	@Column(name = "name")
+	@NotBlank
+	@Column(name = "name", nullable = false)
 	private String name;
+
+	public Theater() {
+	}
+
+	public Theater(String region, String name) {
+		this.region = Region.valueOf(region);
+		this.name = name;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public Region getRegion() {
+		return region;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+
+		if (!(o instanceof Theater))
+			return false;
+
+		Theater theater = (Theater)o;
+
+		return new EqualsBuilder().append(getId(), theater.getId())
+			.append(getRegion(), theater.getRegion())
+			.append(getName(), theater.getName())
+			.isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17, 37).append(getId()).append(getRegion()).append(getName()).toHashCode();
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+			.append("id", id)
+			.append("region", region)
+			.append("name", name)
+			.toString();
+	}
 }
