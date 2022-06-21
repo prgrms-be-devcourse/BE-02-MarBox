@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static prgrms.marco.be02marbox.domain.user.exception.Message.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -71,7 +72,7 @@ class UserControllerTest {
 			userSignUpReq.password(),
 			userSignUpReq.name(),
 			userSignUpReq.role()))
-			.willThrow(new DuplicateEmailException("이미 존재하는 이메일 입니다."));
+			.willThrow(new DuplicateEmailException(DUPLICATE_EMAIL_EXP_MSG));
 
 		//when then
 		mockMvc.perform(post("/users/sign-up")
@@ -79,7 +80,7 @@ class UserControllerTest {
 				.content(objectMapper.writeValueAsString(userSignUpReq))
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("$.message").value("이미 존재하는 이메일 입니다."));
+			.andExpect(jsonPath("$.message").value(DUPLICATE_EMAIL_EXP_MSG.getMessage()));
 	}
 
 	@Test
@@ -97,7 +98,7 @@ class UserControllerTest {
 			userSignUpReq.password(),
 			userSignUpReq.name(),
 			userSignUpReq.role()))
-			.willThrow(new DuplicateNameException("이미 존재하는 이름입니다."));
+			.willThrow(new DuplicateNameException(DUPLICATE_NAME_EXP_MSG));
 
 		//when then
 		mockMvc.perform(post("/users/sign-up")
@@ -105,7 +106,7 @@ class UserControllerTest {
 				.content(objectMapper.writeValueAsString(userSignUpReq))
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("$.message").value("이미 존재하는 이름입니다."));
+			.andExpect(jsonPath("$.message").value(DUPLICATE_NAME_EXP_MSG.getMessage()));
 	}
 
 	@Test
