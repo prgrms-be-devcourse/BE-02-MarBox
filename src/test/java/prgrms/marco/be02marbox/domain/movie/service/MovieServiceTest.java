@@ -35,10 +35,4 @@ class MovieServiceTest {
 			() -> assertThat(movie.getRunningTime()).isEqualTo(frozen.getRunningTime())
 		);
 	}
-
-	@Test
-	@DisplayName("test")
-	public void dummy() {
-		System.out.println("hi");
-	}
 }
