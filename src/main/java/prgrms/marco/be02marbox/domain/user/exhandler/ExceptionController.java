@@ -13,6 +13,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import prgrms.marco.be02marbox.domain.user.exception.UserException;
+
 @RestControllerAdvice
 public class ExceptionController {
 
@@ -20,7 +22,7 @@ public class ExceptionController {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Map<String, List<String>>> handleClientException(MethodArgumentNotValidException exception) {
-		log.error("ClientException : {}", exception);
+		log.error("ClientException : {0}", exception);
 
 		BindingResult bindingResult = exception.getBindingResult();
 		List<String> errors = bindingResult.getAllErrors()
@@ -31,5 +33,14 @@ public class ExceptionController {
 		return ResponseEntity
 			.status(HttpStatus.BAD_REQUEST)
 			.body(Map.of("message", errors));
+	}
+
+	@ExceptionHandler(UserException.class)
+	public ResponseEntity<Map<String, String>> handleServiceException(UserException exception) {
+		log.error("ServiceException : {0}", exception);
+
+		return ResponseEntity
+			.status(HttpStatus.BAD_REQUEST)
+			.body(Map.of("message", exception.getMessage()));
 	}
 }

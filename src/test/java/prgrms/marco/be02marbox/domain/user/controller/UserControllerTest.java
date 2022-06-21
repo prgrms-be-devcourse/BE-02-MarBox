@@ -3,6 +3,7 @@ package prgrms.marco.be02marbox.domain.user.controller;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.dto.UserSignUpReq;
+import prgrms.marco.be02marbox.domain.user.exception.DuplicateEmailException;
+import prgrms.marco.be02marbox.domain.user.exception.DuplicateNameException;
+import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 import prgrms.marco.be02marbox.domain.user.service.UserService;
 
 @WebMvcTest(UserController.class)
@@ -32,7 +36,7 @@ class UserControllerTest {
 	private ObjectMapper objectMapper;
 
 	@Test
-	@DisplayName("Role binding 실패하면 UserSignUpReq.Role에 Null이 들어감")
+	@DisplayName("회원 가입 실패 - Role 바인딩 실패해 UserSignUpReq role 필드에 null이 들어감")
 	void testRoleBindingFail() throws Exception {
 		//given
 		StringBuilder req = new StringBuilder();
@@ -50,6 +54,58 @@ class UserControllerTest {
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().is4xxClientError())
 			.andExpect(jsonPath("$.message.[0]").value(equalTo("역할은 필수 입니다.")));
+	}
+
+	@Test
+	@DisplayName("회원 가입 실패 - 존재하는 이메일")
+	void testSignUpFailBecauseDuplicateEmail() throws Exception {
+		//given
+		UserSignUpReq userSignUpReq = new UserSignUpReq(
+			"pang@mail.com",
+			"1234",
+			"pang",
+			Role.ROLE_ADMIN);
+
+		given(userService.create(
+			userSignUpReq.email(),
+			userSignUpReq.password(),
+			userSignUpReq.name(),
+			userSignUpReq.role()))
+			.willThrow(new DuplicateEmailException("이미 존재하는 이메일 입니다."));
+
+		//when then
+		mockMvc.perform(post("/users/sign-up")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(userSignUpReq))
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().is4xxClientError())
+			.andExpect(jsonPath("$.message").value("이미 존재하는 이메일 입니다."));
+	}
+
+	@Test
+	@DisplayName("회원 가입 실패 - 존재하는 이름")
+	void testSignUpFailBecauseDuplicateName() throws Exception {
+		//given
+		UserSignUpReq userSignUpReq = new UserSignUpReq(
+			"pang@mail.com",
+			"1234",
+			"pang",
+			Role.ROLE_ADMIN);
+
+		given(userService.create(
+			userSignUpReq.email(),
+			userSignUpReq.password(),
+			userSignUpReq.name(),
+			userSignUpReq.role()))
+			.willThrow(new DuplicateNameException("이미 존재하는 이름입니다."));
+
+		//when then
+		mockMvc.perform(post("/users/sign-up")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(userSignUpReq))
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().is4xxClientError())
+			.andExpect(jsonPath("$.message").value("이미 존재하는 이름입니다."));
 	}
 
 	@Test
