@@ -2,11 +2,20 @@ package prgrms.marco.be02marbox.domain.theater.dto;
 
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotNull;
+
 public class ScheduleRequestDto {
 
+	@NotNull
 	private Long theaterRoomId;
+
+	@NotNull
 	private Long movieId;
+
+	@NotNull
 	private LocalDateTime startTime;
+
+	@NotNull
 	private LocalDateTime endTime;
 
 	public ScheduleRequestDto(Long theaterRoomId, Long movieId, LocalDateTime startTime, LocalDateTime endTime) {
