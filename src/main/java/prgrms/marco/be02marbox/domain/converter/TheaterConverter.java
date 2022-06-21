@@ -10,5 +10,4 @@ public class TheaterConverter {
 	public Theater getTheater(RequestCreateTheater request) {
 		return new Theater(request.getRegion(), request.getName());
 	}
-	
 }

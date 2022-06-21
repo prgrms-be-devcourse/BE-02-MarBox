@@ -83,5 +83,4 @@ public class Theater {
 			.append("name", name)
 			.toString();
 	}
-
 }

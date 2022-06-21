@@ -21,5 +21,4 @@ public class RequestCreateTheater {
 	public String getName() {
 		return name;
 	}
-
 }

@@ -23,5 +23,4 @@ public class TheaterService {
 		Theater savedTheater = theaterRepository.save(newTheater);
 		return savedTheater.getId();
 	}
-
 }
