@@ -6,6 +6,10 @@ import prgrms.marco.be02marbox.domain.movie.dto.CreateMovieDto;
 public class MovieDtoConverter {
 
 	public static Movie convertToMovie(CreateMovieDto createMovieDto) {
-		return new Movie(createMovieDto.getName(), createMovieDto.getLimitAge(), createMovieDto.getGenre(), createMovieDto.getRunningTime(), createMovieDto.getOriginalFileName());
+		return new Movie(createMovieDto.getName(),
+			createMovieDto.getLimitAge(),
+			createMovieDto.getGenre(),
+			createMovieDto.getRunningTime(),
+			createMovieDto.getOriginalFileName());
 	}
 }

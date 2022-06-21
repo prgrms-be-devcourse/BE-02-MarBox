@@ -25,15 +25,19 @@ public class Movie {
 	@Column(name = "name")
 	private String name;
 
-	@Column(name = "limit_age") @NotNull
+	@Column(name = "limit_age")
+	@NotNull
 	@Enumerated(value = EnumType.STRING)
 	private LimitAge limitAge;
 
-	@Column(name = "genre") @NotNull
+	@Column(name = "genre")
+	@NotNull
 	@Enumerated(value = EnumType.STRING)
 	private Genre genre;
 
-	@Column(name = "running_time")  @NotNull @Min(1)
+	@Column(name = "running_time")
+	@NotNull
+	@Min(1)
 	private Integer runningTime;
 
 	@Column(name = "poster_img_location")
