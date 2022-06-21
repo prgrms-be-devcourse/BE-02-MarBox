@@ -1,7 +1,15 @@
 package prgrms.marco.be02marbox.domain.user.exception;
 
 public class DuplicateEmailException extends UserException {
-	public DuplicateEmailException(String message) {
-		super(message);
+
+	private final Message message;
+
+	public DuplicateEmailException(Message message) {
+		this.message = message;
+	}
+
+	@Override
+	public String getMessage() {
+		return message.getMessage();
 	}
 }

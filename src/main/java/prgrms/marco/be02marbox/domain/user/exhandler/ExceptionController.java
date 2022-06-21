@@ -18,6 +18,8 @@ import prgrms.marco.be02marbox.domain.user.exception.UserException;
 @RestControllerAdvice
 public class ExceptionController {
 
+	public static final String MESSAGE = "message";
+
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -32,15 +34,15 @@ public class ExceptionController {
 
 		return ResponseEntity
 			.status(HttpStatus.BAD_REQUEST)
-			.body(Map.of("message", errors));
+			.body(Map.of(MESSAGE, errors));
 	}
 
 	@ExceptionHandler(UserException.class)
-	public ResponseEntity<Map<String, String>> handleServiceException(UserException exception) {
-		log.error("ServiceException : {0}", exception);
+	public ResponseEntity<Map<String, String>> handleUserException(UserException exception) {
+		log.error("UserException : {0}", exception);
 
 		return ResponseEntity
 			.status(HttpStatus.BAD_REQUEST)
-			.body(Map.of("message", exception.getMessage()));
+			.body(Map.of(MESSAGE, exception.getMessage()));
 	}
 }
