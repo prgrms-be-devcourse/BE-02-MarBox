@@ -38,4 +38,4 @@ out/
 .vscode/
 
 ### H2 DB file ###
-db
+db/
