@@ -19,7 +19,7 @@ import prgrms.marco.be02marbox.domain.movie.Movie;
 import prgrms.marco.be02marbox.domain.movie.repository.MovieRepository;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
-import prgrms.marco.be02marbox.domain.theater.dto.ScheduleRequestDto;
+import prgrms.marco.be02marbox.domain.theater.dto.ScheduleRecord;
 import prgrms.marco.be02marbox.domain.theater.repository.ScheduleRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
 
@@ -41,8 +41,7 @@ class ScheduleServiceTest {
 	@Test
 	@DisplayName("스케줄 생성 성공 테스트")
 	void testCreateSchedule() {
-		ScheduleRequestDto scheduleRequestDto =
-			new ScheduleRequestDto(1L, 1L, LocalDateTime.now(), LocalDateTime.now());
+		ScheduleRecord scheduleRecord = new ScheduleRecord(1L, 1L, LocalDateTime.now(), LocalDateTime.now());
 
 		TheaterRoom theaterRoom = new TheaterRoom();
 		given(theaterRoomRepository.findById(anyLong())).willReturn(Optional.of(theaterRoom));
@@ -54,12 +53,12 @@ class ScheduleServiceTest {
 			.id(1L)
 			.theaterRoom(theaterRoom)
 			.movie(movie)
-			.startTime(scheduleRequestDto.getStartTime())
-			.endTime(scheduleRequestDto.getEndTime())
+			.startTime(scheduleRecord.startTime())
+			.endTime(scheduleRecord.endTime())
 			.build();
 		given(scheduleRepository.save(any(Schedule.class))).willReturn(schedule);
 
-		Long id = scheduleService.createSchedule(scheduleRequestDto);
+		Long id = scheduleService.createSchedule(scheduleRecord);
 
 		assertThat(id).isEqualTo(1L);
 	}
