@@ -16,9 +16,9 @@ public class MovieService {
 		this.movieRepository = movieRepository;
 	}
 
-	public Movie createMovie(CreateMovie createMovie) {
+	public Long createMovie(CreateMovie createMovie) {
 		Movie newMovie = MovieDtoConverter.convertToMovie(createMovie);
 		Movie savedMovie = movieRepository.save(newMovie);
-		return savedMovie;
+		return savedMovie.getId();
 	}
 }
