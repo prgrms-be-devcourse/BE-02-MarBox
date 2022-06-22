@@ -1,6 +1,7 @@
 package prgrms.marco.be02marbox.domain.theater.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import prgrms.marco.be02marbox.domain.converter.TheaterConverter;
 import prgrms.marco.be02marbox.domain.theater.Theater;
@@ -18,6 +19,7 @@ public class TheaterService {
 		this.theaterConverter = theaterConverter;
 	}
 
+	@Transactional
 	public Long createTheater(RequestCreateTheater request) {
 		Theater newTheater = theaterConverter.getTheater(request);
 		Theater savedTheater = theaterRepository.save(newTheater);
