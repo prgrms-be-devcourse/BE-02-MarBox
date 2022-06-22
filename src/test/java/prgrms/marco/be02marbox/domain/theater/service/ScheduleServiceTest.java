@@ -46,7 +46,7 @@ class ScheduleServiceTest {
 		TheaterRoom theaterRoom = new TheaterRoom();
 		given(theaterRoomRepository.findById(anyLong())).willReturn(Optional.of(theaterRoom));
 
-		Movie movie = new Movie();
+		Movie movie = new Movie(null, null, null, null, null);
 		given(movieRepository.findById(anyLong())).willReturn(Optional.of(movie));
 
 		Schedule schedule = Schedule.builder()
