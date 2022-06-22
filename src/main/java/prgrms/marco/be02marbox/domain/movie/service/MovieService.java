@@ -3,7 +3,7 @@ package prgrms.marco.be02marbox.domain.movie.service;
 import org.springframework.stereotype.Service;
 
 import prgrms.marco.be02marbox.domain.movie.Movie;
-import prgrms.marco.be02marbox.domain.movie.dto.CreateMovieDto;
+import prgrms.marco.be02marbox.domain.movie.dto.CreateMovie;
 import prgrms.marco.be02marbox.domain.movie.repository.MovieRepository;
 import prgrms.marco.be02marbox.domain.movie.service.utils.MovieDtoConverter;
 
@@ -16,8 +16,8 @@ public class MovieService {
 		this.movieRepository = movieRepository;
 	}
 
-	public Movie createMovie(CreateMovieDto createMovieDto) {
-		Movie newMovie = MovieDtoConverter.convertToMovie(createMovieDto);
+	public Movie createMovie(CreateMovie createMovie) {
+		Movie newMovie = MovieDtoConverter.convertToMovie(createMovie);
 		Movie savedMovie = movieRepository.save(newMovie);
 		return savedMovie;
 	}
