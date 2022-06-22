@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import prgrms.marco.be02marbox.domain.movie.Movie;
 
@@ -24,22 +23,18 @@ public class Schedule {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "theater_room_id")
+	@JoinColumn(name = "theater_room_id", nullable = false)
 	private TheaterRoom theaterRoom;
 
-	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "movie_id")
+	@JoinColumn(name = "movie_id", nullable = false)
 	public Movie movie;
 
-	@NotNull
-	@Column(name = "start_time")
+	@Column(name = "start_time", nullable = false)
 	private LocalDateTime startTime;
 
-	@NotNull
-	@Column(name = "end_time")
+	@Column(name = "end_time", nullable = false)
 	private LocalDateTime endTime;
 
 	protected Schedule() {
