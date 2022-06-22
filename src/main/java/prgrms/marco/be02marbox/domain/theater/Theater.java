@@ -32,11 +32,11 @@ public class Theater {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	public Theater() {
+	protected Theater() {
 	}
 
-	public Theater(String region, String name) {
-		this.region = Region.valueOf(region);
+	public Theater(Region region, String name) {
+		this.region = region;
 		this.name = name;
 	}
 
