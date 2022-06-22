@@ -1,5 +1,7 @@
 package prgrms.marco.be02marbox.domain.theater.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import prgrms.marco.be02marbox.domain.movie.Movie;
@@ -25,6 +27,7 @@ public class ScheduleService {
 		this.movieRepository = movieRepository;
 	}
 
+	@Transactional
 	public Long createSchedule(ScheduleRequestDto scheduleRequestDto) {
 		TheaterRoom theaterRoom = theaterRoomRepository.findById(scheduleRequestDto.getTheaterRoomId())
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상영관 ID"));
