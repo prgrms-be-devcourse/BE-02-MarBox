@@ -43,7 +43,7 @@ public class Movie {
 	@Column(name = "poster_img_location")
 	private String posterImgLocation;
 
-	public Movie() {
+	protected Movie() {
 	}
 
 	public Movie(String name, LimitAge limitAge, Genre genre, Integer runningTime, String posterImgLocation) {
