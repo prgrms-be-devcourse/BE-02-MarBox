@@ -6,5 +6,11 @@ import javax.validation.constraints.NotNull;
 import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
 
-public record CreateMovie(@NotBlank String name, @NotNull LimitAge limitAge, @NotNull Genre genre, @NotNull Integer runningTime, @NotBlank String originalFileName) {
+public record CreateMovie(
+	@NotBlank String name,
+	@NotNull LimitAge limitAge,
+	@NotNull Genre genre,
+	@NotNull Integer runningTime,
+	@NotBlank String originalFileName
+) {
 }
