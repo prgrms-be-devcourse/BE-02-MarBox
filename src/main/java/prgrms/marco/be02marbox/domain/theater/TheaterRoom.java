@@ -36,4 +36,8 @@ public class TheaterRoom {
 
 	@OneToMany(mappedBy = "theaterRoom", cascade = CascadeType.ALL, orphanRemoval = true)
 	List<Seat> seats = new ArrayList<>();
+
+	public Long getId() {
+		return id;
+	}
 }
