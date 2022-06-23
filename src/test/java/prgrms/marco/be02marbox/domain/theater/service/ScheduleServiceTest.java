@@ -21,12 +21,13 @@ import prgrms.marco.be02marbox.domain.movie.Movie;
 import prgrms.marco.be02marbox.domain.movie.repository.MovieRepository;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
-import prgrms.marco.be02marbox.domain.theater.dto.ScheduleRecord;
+import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
 import prgrms.marco.be02marbox.domain.theater.repository.ScheduleRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
+import prgrms.marco.be02marbox.domain.theater.service.utils.ScheduleConverter;
 
 @DataJpaTest
-@Import(ScheduleService.class)
+@Import({ScheduleService.class, ScheduleConverter.class})
 class ScheduleServiceTest {
 
 	@Autowired
@@ -62,10 +63,11 @@ class ScheduleServiceTest {
 	@Test
 	@DisplayName("스케줄 생성 성공 테스트")
 	void testCreateSchedule() {
-		ScheduleRecord scheduleRecord = new ScheduleRecord(theaterRoom.getId(), movie.getId(), LocalDateTime.now(),
+		RequestCreateSchedule requestCreateSchedule = new RequestCreateSchedule(theaterRoom.getId(), movie.getId(),
+			LocalDateTime.now(),
 			LocalDateTime.now());
 
-		Long id = scheduleService.createSchedule(scheduleRecord);
+		Long id = scheduleService.createSchedule(requestCreateSchedule);
 
 		Optional<Schedule> findSchedule = scheduleRepository.findById(id);
 
@@ -79,22 +81,24 @@ class ScheduleServiceTest {
 	@Test
 	@DisplayName("TheaterRoom이 없을 경우 스케줄 생성 실패")
 	void testCreateScheduleFail_TheaterRoom_No_Exists() {
-		ScheduleRecord scheduleRecord = new ScheduleRecord(100L, movie.getId(), LocalDateTime.now(),
+		RequestCreateSchedule requestCreateSchedule = new RequestCreateSchedule(100L, movie.getId(),
+			LocalDateTime.now(),
 			LocalDateTime.now());
 
 		assertThrows(IllegalArgumentException.class, () -> {
-			scheduleService.createSchedule(scheduleRecord);
+			scheduleService.createSchedule(requestCreateSchedule);
 		});
 	}
 
 	@Test
 	@DisplayName("Movie가 없을 경우 스케줄 생성 실패")
 	void testCreateScheduleFail_Movie_No_Exists() {
-		ScheduleRecord scheduleRecord = new ScheduleRecord(theaterRoom.getId(), 100L, LocalDateTime.now(),
+		RequestCreateSchedule requestCreateSchedule = new RequestCreateSchedule(theaterRoom.getId(), 100L,
+			LocalDateTime.now(),
 			LocalDateTime.now());
 
 		assertThrows(IllegalArgumentException.class, () -> {
-			scheduleService.createSchedule(scheduleRecord);
+			scheduleService.createSchedule(requestCreateSchedule);
 		});
 	}
 
