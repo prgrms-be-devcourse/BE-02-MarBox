@@ -17,7 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import prgrms.marco.be02marbox.domain.movie.Movie;
 import prgrms.marco.be02marbox.domain.movie.repository.MovieRepository;
+import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
+import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
 import prgrms.marco.be02marbox.domain.theater.repository.ScheduleRepository;
@@ -48,7 +50,8 @@ class ScheduleServiceMockTest {
 		RequestCreateSchedule requestCreateSchedule = new RequestCreateSchedule(1L, 1L, LocalDateTime.now(),
 			LocalDateTime.now());
 
-		TheaterRoom theaterRoom = new TheaterRoom();
+		Theater theater = new Theater(Region.SEOUL, "강남");
+		TheaterRoom theaterRoom = new TheaterRoom(theater, "A관");
 		given(theaterRoomRepository.findById(anyLong())).willReturn(Optional.of(theaterRoom));
 
 		Movie movie = new Movie(null, null, null, null, null);

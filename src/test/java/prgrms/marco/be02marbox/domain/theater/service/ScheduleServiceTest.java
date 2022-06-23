@@ -19,10 +19,13 @@ import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
 import prgrms.marco.be02marbox.domain.movie.Movie;
 import prgrms.marco.be02marbox.domain.movie.repository.MovieRepository;
+import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
+import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
 import prgrms.marco.be02marbox.domain.theater.repository.ScheduleRepository;
+import prgrms.marco.be02marbox.domain.theater.repository.TheaterRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
 import prgrms.marco.be02marbox.domain.theater.service.utils.ScheduleConverter;
 
@@ -40,6 +43,9 @@ class ScheduleServiceTest {
 	private ScheduleRepository scheduleRepository;
 
 	@Autowired
+	private TheaterRepository theaterRepository;
+
+	@Autowired
 	private ScheduleService scheduleService;
 
 	private TheaterRoom theaterRoom;
@@ -48,7 +54,9 @@ class ScheduleServiceTest {
 
 	@BeforeEach
 	void setup() {
-		theaterRoom = new TheaterRoom();
+		Theater theater = new Theater(Region.SEOUL, "강남");
+		theaterRepository.save(theater);
+		theaterRoom = new TheaterRoom(theater, "A관");
 		theaterRoomRepository.save(theaterRoom);
 		movie = new Movie("test", LimitAge.ADULT, Genre.ACTION, 100, "test");
 		movieRepository.save(movie);
