@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
-public record ScheduleRecord(
+public record RequestCreateSchedule(
 	@NotNull Long theaterRoomId,
 	@NotNull Long movieId,
 	@NotNull LocalDateTime startTime,
