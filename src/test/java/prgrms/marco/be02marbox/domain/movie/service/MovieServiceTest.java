@@ -14,11 +14,12 @@ import org.springframework.context.annotation.Import;
 import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
 import prgrms.marco.be02marbox.domain.movie.Movie;
-import prgrms.marco.be02marbox.domain.movie.dto.CreateMovie;
+import prgrms.marco.be02marbox.domain.movie.dto.RequestCreateMovie;
 import prgrms.marco.be02marbox.domain.movie.repository.MovieRepository;
+import prgrms.marco.be02marbox.domain.movie.service.utils.MovieConverter;
 
 @DataJpaTest
-@Import({MovieService.class})
+@Import({MovieService.class, MovieConverter.class})
 class MovieServiceTest {
 
 	@Autowired
@@ -30,7 +31,8 @@ class MovieServiceTest {
 	@Test
 	@DisplayName("movie를 추가할 수 있다")
 	void testCreateMovie() {
-		CreateMovie frozen = new CreateMovie("Frozen", LimitAge.CHILD, Genre.ANIMATION, 102, "frozen.png");
+		RequestCreateMovie frozen = new RequestCreateMovie("Frozen", LimitAge.CHILD, Genre.ANIMATION, 102,
+			"frozen.png");
 		Long movieId = movieService.createMovie(frozen);
 		Optional<Movie> found = movieRepository.findById(movieId);
 
