@@ -13,9 +13,13 @@ import prgrms.marco.be02marbox.domain.theater.Seat;
 import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheaterRoom;
+import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindTheater;
+import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindTheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
 import prgrms.marco.be02marbox.domain.theater.service.utils.SeatConverter;
+import prgrms.marco.be02marbox.domain.theater.service.utils.TheaterConverter;
+import prgrms.marco.be02marbox.domain.theater.service.utils.TheaterRoomConverter;
 
 @Service
 public class TheaterRoomService {
@@ -25,13 +29,19 @@ public class TheaterRoomService {
 	private final TheaterRoomRepository theaterRoomRepository;
 	private final TheaterRepository theaterRepository;
 	private final SeatConverter seatConverter;
+	private final TheaterRoomConverter theaterRoomConverter;
+	private final TheaterConverter theaterConverter;
 
 	public TheaterRoomService(TheaterRoomRepository theaterRoomRepository,
 		TheaterRepository theaterRepository,
-		SeatConverter seatConverter) {
+		SeatConverter seatConverter,
+		TheaterRoomConverter theaterRoomConverter,
+		TheaterConverter theaterConverter) {
 		this.theaterRoomRepository = theaterRoomRepository;
 		this.theaterRepository = theaterRepository;
 		this.seatConverter = seatConverter;
+		this.theaterRoomConverter = theaterRoomConverter;
+		this.theaterConverter = theaterConverter;
 	}
 
 	@Transactional
@@ -46,5 +56,17 @@ public class TheaterRoomService {
 		).collect(toList());
 		savedTheaterRoom.addSeats(seatList);
 		return savedTheaterRoom.getId();
+	}
+
+	@Transactional(readOnly = true)
+	public List<ResponseFindTheaterRoom> findAll() {
+		return theaterRoomRepository.findAll().stream()
+			.map(theaterRoom -> {
+				ResponseFindTheater responseFindTheater = theaterConverter.convertFromTheaterToResponseFindTheater(
+					theaterRoom.getTheater());
+				return theaterRoomConverter.convertFromTheaterRoomToTheaterResponseFindTheaterRoom(responseFindTheater,
+					theaterRoom);
+			})
+			.collect(toList());
 	}
 }

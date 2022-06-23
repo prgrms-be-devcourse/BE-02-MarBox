@@ -8,12 +8,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -24,14 +28,19 @@ import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSeat;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheaterRoom;
+import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindTheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.repository.SeatRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
 import prgrms.marco.be02marbox.domain.theater.service.utils.SeatConverter;
+import prgrms.marco.be02marbox.domain.theater.service.utils.TheaterConverter;
+import prgrms.marco.be02marbox.domain.theater.service.utils.TheaterRoomConverter;
 
 @DataJpaTest
-@Import({TheaterRoomService.class, SeatConverter.class})
+@Import({TheaterRoomService.class, SeatConverter.class, TheaterRoomConverter.class, TheaterConverter.class})
 class TheaterRoomServiceTest {
+
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	TheaterRoomService theaterRoomService;
@@ -41,6 +50,10 @@ class TheaterRoomServiceTest {
 	TheaterRoomRepository theaterRoomRepository;
 	@Autowired
 	SeatRepository seatRepository;
+
+	@PersistenceContext
+	EntityManager em;
+
 
 	private Theater theater = new Theater(Region.SEOUL, "강남");
 	private Set<RequestCreateSeat> requestCreateSeats = new HashSet<>();
@@ -98,6 +111,35 @@ class TheaterRoomServiceTest {
 		RequestCreateTheaterRoom requestCreateTheaterRoom = new RequestCreateTheaterRoom(-1L, "A관", requestCreateSeats);
 
 		assertThrows(EntityNotFoundException.class, () -> theaterRoomService.save(requestCreateTheaterRoom));
+	}
+
+	@Test
+	@DisplayName("전체 상영관 정보 조회")
+	void testFindAll() {
+		RequestCreateTheaterRoom requestCreateTheaterRoom = new RequestCreateTheaterRoom(
+			theater.getId(),
+			"A관",
+			requestCreateSeats
+		);
+
+		RequestCreateTheaterRoom requestCreateTheaterRoom2 = new RequestCreateTheaterRoom(
+			theater.getId(),
+			"B관",
+			requestCreateSeats
+		);
+
+		theaterRoomService.save(requestCreateTheaterRoom);
+		theaterRoomService.save(requestCreateTheaterRoom2);
+		em.flush();
+		em.clear();
+
+		List<ResponseFindTheaterRoom> theaterRoomList = theaterRoomService.findAll();
+		log.info("result : {}", theaterRoomList);
+		assertAll(
+			() -> assertThat(theaterRoomList).hasSize(2),
+			() -> assertThat(theaterRoomList.get(0).totalCount()).isEqualTo(1),
+			() -> assertThat(theaterRoomList.get(1).totalCount()).isEqualTo(1)
+		);
 	}
 }
 
