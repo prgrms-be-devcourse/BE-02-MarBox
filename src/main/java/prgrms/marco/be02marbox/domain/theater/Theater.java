@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -23,7 +24,7 @@ public class Theater {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@NotBlank
+	@NotNull
 	@Column(name = "region", nullable = false)
 	@Enumerated(value = EnumType.STRING)
 	private Region region;
@@ -32,10 +33,6 @@ public class Theater {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	public Long getId() {
-		return id;
-	}
-  
 	protected Theater() {
 	}
 
