@@ -1,4 +1,4 @@
-package prgrms.marco.be02marbox.domain.converter;
+package prgrms.marco.be02marbox.domain.theater.service.utils;
 
 import org.springframework.stereotype.Component;
 
@@ -8,7 +8,7 @@ import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheater;
 
 @Component
 public class TheaterConverter {
-	public Theater getTheater(RequestCreateTheater request) {
+	public Theater convertFromRequestCreateTheaterToTheater(RequestCreateTheater request) {
 		return new Theater(
 			Region.valueOf(request.region()), request.name());
 	}
