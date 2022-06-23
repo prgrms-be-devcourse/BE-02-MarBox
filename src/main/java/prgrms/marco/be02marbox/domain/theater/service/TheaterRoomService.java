@@ -7,14 +7,15 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import prgrms.marco.be02marbox.domain.theater.Seat;
 import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
-import prgrms.marco.be02marbox.domain.theater.converter.SeatConverter;
-import prgrms.marco.be02marbox.domain.theater.dto.TheaterRoomRequestDto;
+import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
+import prgrms.marco.be02marbox.domain.theater.service.utils.SeatConverter;
 
 @Service
 public class TheaterRoomService {
@@ -33,17 +34,17 @@ public class TheaterRoomService {
 		this.seatConverter = seatConverter;
 	}
 
-	public Long save(TheaterRoomRequestDto requestDto) {
-		Theater theater = theaterRepository.findById(requestDto.getTheaterId())
+	@Transactional
+	public Long save(RequestCreateTheaterRoom requestCreateTheaterRoom) {
+		Theater theater = theaterRepository.findById(requestCreateTheaterRoom.theaterId())
 			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_THEATER_ERR));
 
-		List<Seat> seats = requestDto.getSeatRequestDtos().stream()
-			.distinct()
-			.map(seatConverter::convertSeat)
-			.collect(toList());
-
-		TheaterRoom newTheaterRoom = new TheaterRoom(theater, requestDto.getName(), seats);
+		TheaterRoom newTheaterRoom = new TheaterRoom(theater, requestCreateTheaterRoom.name());
 		TheaterRoom savedTheaterRoom = theaterRoomRepository.save(newTheaterRoom);
+		List<Seat> seatList = requestCreateTheaterRoom.requestCreateSeats().stream().map(requestCreateSeat ->
+			seatConverter.convertFromRequestSeatToSeat(savedTheaterRoom, requestCreateSeat)
+		).collect(toList());
+		savedTheaterRoom.addSeats(seatList);
 		return savedTheaterRoom.getId();
 	}
 }
