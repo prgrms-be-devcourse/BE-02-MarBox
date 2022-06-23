@@ -1,5 +1,10 @@
 package prgrms.marco.be02marbox.domain.movie.service;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,5 +31,9 @@ public class MovieService {
 		Movie newMovie = movieConverter.convertFromRequestCreateMovieToMovie(requestCreateMovie);
 		Movie savedMovie = movieRepository.save(newMovie);
 		return savedMovie.getId();
+	}
+
+	public List<Movie> getMovies(int page, int size) {
+		return movieRepository.findAll(PageRequest.of(page, size)).getContent();
 	}
 }
