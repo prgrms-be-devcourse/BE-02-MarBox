@@ -11,12 +11,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
-@Table(name = "seat")
+@Table(name = "seat", uniqueConstraints = {
+	@UniqueConstraint(columnNames = {"theater_room_id", "rows", "columns"})
+})
 public class Seat {
 
 	@Id
@@ -25,7 +28,7 @@ public class Seat {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "theater_room_id", nullable = false)
+	@JoinColumn(name = "theater_room_id")
 	private TheaterRoom theaterRoom;
 
 	@Column(name = "rows")
@@ -37,11 +40,8 @@ public class Seat {
 	protected Seat() {
 	}
 
-	public void changeTheaterRoom(TheaterRoom theaterRoom) {
+	public Seat(TheaterRoom theaterRoom, Integer row, Integer column) {
 		this.theaterRoom = theaterRoom;
-	}
-
-	public Seat(Integer row, Integer column) {
 		this.row = row;
 		this.column = column;
 	}
@@ -71,12 +71,13 @@ public class Seat {
 			return false;
 		}
 		Seat seat = (Seat)obj;
-		return Objects.equals(id, seat.id);
+		return Objects.equals(theaterRoom.getId(), seat.theaterRoom) && Objects.equals(row, seat.row)
+			&& Objects.equals(column, seat.column);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(theaterRoom.getId(), row, column);
 	}
 
 	@Override
