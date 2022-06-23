@@ -3,13 +3,13 @@ package prgrms.marco.be02marbox.domain.user.controller;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static prgrms.marco.be02marbox.domain.user.exception.Message.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -17,14 +17,15 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import prgrms.marco.be02marbox.config.JwtConfigure;
 import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.dto.UserSignUpReq;
 import prgrms.marco.be02marbox.domain.user.exception.DuplicateEmailException;
 import prgrms.marco.be02marbox.domain.user.exception.DuplicateNameException;
-import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 import prgrms.marco.be02marbox.domain.user.service.UserService;
 
 @WebMvcTest(UserController.class)
+@EnableConfigurationProperties(JwtConfigure.class)
 class UserControllerTest {
 
 	@MockBean
