@@ -2,8 +2,6 @@ package prgrms.marco.be02marbox.domain.theater;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -25,24 +23,13 @@ class TheaterRoomTest {
 	}
 
 	@Test
-	@DisplayName("좌석정보(seats)는 1개 이상 등록되어야 한다.")
-	void testValidate_seats() {
-		Theater theater = new Theater();
-		TheaterRoom theaterRoom = new TheaterRoom(theater, "name", new ArrayList<>());
-
-		Set<ConstraintViolation<TheaterRoom>> validate = validator.validate(theaterRoom);
-		assertThat(validate).hasSize(1);
-	}
-
-	@Test
 	@DisplayName("TheaterRoom 생성 성공")
 	void testValidate_success() {
 		Theater theater = new Theater();
-		List<Seat> seats = new ArrayList<>();
-		seats.add(new Seat());
-		seats.add(new Seat());
-		TheaterRoom theaterRoom = new TheaterRoom(theater, "A관", seats);
-
+		TheaterRoom theaterRoom = TheaterRoom.builder()
+			.theater(theater)
+			.name("A관")
+			.build();
 		Set<ConstraintViolation<TheaterRoom>> validate = validator.validate(theaterRoom);
 		assertThat(validate).isEmpty();
 	}
