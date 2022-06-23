@@ -1,6 +1,7 @@
 package prgrms.marco.be02marbox.domain.movie.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import prgrms.marco.be02marbox.domain.movie.Movie;
 import prgrms.marco.be02marbox.domain.movie.dto.RequestCreateMovie;
@@ -20,6 +21,7 @@ public class MovieService {
 		this.movieConverter = movieConverter;
 	}
 
+	@Transactional
 	public Long createMovie(RequestCreateMovie requestCreateMovie) {
 		Movie newMovie = movieConverter.convertFromRequestCreateMovieToMovie(requestCreateMovie);
 		Movie savedMovie = movieRepository.save(newMovie);
