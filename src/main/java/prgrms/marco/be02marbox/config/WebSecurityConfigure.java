@@ -16,7 +16,22 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 			.anyRequest().permitAll()
 			.and()
 
+			.formLogin()
+			.disable()
+
 			.csrf()
+			.disable()
+
+			.headers()
+			.disable()
+
+			.httpBasic()
+			.disable()
+
+			.rememberMe()
+			.disable()
+
+			.logout()
 			.disable()
 
 			.sessionManagement()
