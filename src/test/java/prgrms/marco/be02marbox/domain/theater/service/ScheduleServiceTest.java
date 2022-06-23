@@ -24,9 +24,10 @@ import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
 import prgrms.marco.be02marbox.domain.theater.repository.ScheduleRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
+import prgrms.marco.be02marbox.domain.theater.service.utils.ScheduleConverter;
 
 @DataJpaTest
-@Import(ScheduleService.class)
+@Import({ScheduleService.class, ScheduleConverter.class})
 class ScheduleServiceTest {
 
 	@Autowired
