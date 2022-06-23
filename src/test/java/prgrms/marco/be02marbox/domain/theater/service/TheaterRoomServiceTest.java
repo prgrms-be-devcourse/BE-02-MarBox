@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Seat;
 import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
@@ -41,7 +42,7 @@ class TheaterRoomServiceTest {
 	@Autowired
 	SeatRepository seatRepository;
 
-	private Theater theater = new Theater();
+	private Theater theater = new Theater(Region.SEOUL, "강남");
 	private Set<RequestCreateSeat> requestCreateSeats = new HashSet<>();
 
 	@BeforeEach
