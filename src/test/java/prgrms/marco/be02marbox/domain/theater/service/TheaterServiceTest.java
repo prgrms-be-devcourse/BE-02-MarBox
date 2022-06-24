@@ -49,6 +49,18 @@ class TheaterServiceTest {
 	}
 
 	@Test
+	@DisplayName("영화관 추가 실패 - 잘못된 Region")
+	void testCreateTheaterFailed() {
+		// given
+		String wrongRegion = "NEWYORK";
+		RequestCreateTheater request = new RequestCreateTheater(wrongRegion, "CGV 강남점");
+		// expected
+		assertThatThrownBy(
+			() -> theaterService.createTheater(request)
+		).isInstanceOf(IllegalArgumentException.class);
+	}
+
+	@Test
 	@DisplayName("관리자 영화관 전체 조회 - 페이징 X")
 	void testGetAllTheater() {
 		// given
