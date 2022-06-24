@@ -15,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import prgrms.marco.be02marbox.domain.movie.Genre;
+import prgrms.marco.be02marbox.domain.movie.LimitAge;
 import prgrms.marco.be02marbox.domain.movie.Movie;
 import prgrms.marco.be02marbox.domain.movie.repository.MovieRepository;
 import prgrms.marco.be02marbox.domain.theater.Region;
@@ -54,7 +56,7 @@ class ScheduleServiceMockTest {
 		TheaterRoom theaterRoom = new TheaterRoom(theater, "A관");
 		given(theaterRoomRepository.findById(anyLong())).willReturn(Optional.of(theaterRoom));
 
-		Movie movie = new Movie(null, null, null, null, null);
+		Movie movie = new Movie("test", LimitAge.CHILD, Genre.ACTION, 180, "/test/location");
 		given(movieRepository.findById(anyLong())).willReturn(Optional.of(movie));
 
 		Schedule schedule = Schedule.builder()
@@ -64,7 +66,7 @@ class ScheduleServiceMockTest {
 			.endTime(requestCreateSchedule.endTime())
 			.build();
 		given(
-			scheduleConverter.convertFromRequestCreateScheduleToschdeule(any(RequestCreateSchedule.class),
+			scheduleConverter.convertFromRequestCreateScheduleToSchedule(any(RequestCreateSchedule.class),
 				any(TheaterRoom.class),
 				any(Movie.class))).willReturn(
 			schedule);
