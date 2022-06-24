@@ -10,7 +10,7 @@ import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
 @Component
 public class ScheduleConverter {
 
-	public Schedule convertFromRequestCreateScheduleToschdeule(RequestCreateSchedule request, TheaterRoom theaterRoom,
+	public Schedule convertFromRequestCreateScheduleToSchedule(RequestCreateSchedule request, TheaterRoom theaterRoom,
 		Movie movie) {
 		Schedule schedule = Schedule.builder()
 			.theaterRoom(theaterRoom)

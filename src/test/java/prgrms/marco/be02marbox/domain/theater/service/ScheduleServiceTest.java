@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -60,12 +59,6 @@ class ScheduleServiceTest {
 		theaterRoomRepository.save(theaterRoom);
 		movie = new Movie("test", LimitAge.ADULT, Genre.ACTION, 100, "test");
 		movieRepository.save(movie);
-	}
-
-	@AfterEach
-	void clean() {
-		movieRepository.deleteAll();
-		theaterRoomRepository.deleteAll();
 	}
 
 	@Test
