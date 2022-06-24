@@ -19,9 +19,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.config.JwtConfigure;
 import prgrms.marco.be02marbox.domain.user.Role;
+import prgrms.marco.be02marbox.domain.user.dto.RequestSignInUser;
+import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginUser;
 import prgrms.marco.be02marbox.domain.user.dto.UserSignUpReq;
 import prgrms.marco.be02marbox.domain.user.exception.DuplicateEmailException;
 import prgrms.marco.be02marbox.domain.user.exception.DuplicateNameException;
+import prgrms.marco.be02marbox.domain.user.jwt.Jwt;
 import prgrms.marco.be02marbox.domain.user.service.UserService;
 
 @WebMvcTest(UserController.class)
@@ -36,6 +39,9 @@ class UserControllerTest {
 
 	@Autowired
 	private ObjectMapper objectMapper;
+
+	@Autowired
+	private Jwt jwt;
 
 	@Test
 	@DisplayName("회원 가입 실패 - Role 바인딩 실패해 UserSignUpReq role 필드에 null이 들어감")
@@ -134,5 +140,28 @@ class UserControllerTest {
 			.andExpect(status().isCreated())
 			.andExpect(header().string("location", "/users/sign-in"))
 			.andExpect(jsonPath("$.id").value(userId));
+	}
+
+	@Test
+	@DisplayName("로그인 성공")
+	void testSignInSuccess() throws Exception {
+		//given
+		String email = "pang@email.com";
+		String password = "1234";
+		RequestSignInUser requestSignInUser = new RequestSignInUser(email, password);
+
+		String name = "pang";
+		String role = "ROLE_ADMIN";
+		ResponseLoginUser responseLoginUser = new ResponseLoginUser(name, role);
+		given(userService.login(email, password)).willReturn(responseLoginUser);
+
+		String token = jwt.sign(Jwt.Claims.from(name, role));
+
+		//when then
+		mockMvc.perform(post("/users/sign-in")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(requestSignInUser)))
+			.andExpect(status().isNoContent())
+			.andExpect(header().string("token", token));
 	}
 }
