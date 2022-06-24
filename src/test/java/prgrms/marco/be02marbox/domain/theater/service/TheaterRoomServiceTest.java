@@ -134,7 +134,6 @@ class TheaterRoomServiceTest {
 		em.clear();
 
 		List<ResponseFindTheaterRoom> theaterRoomList = theaterRoomService.findAll();
-		log.info("result : {}", theaterRoomList);
 		assertAll(
 			() -> assertThat(theaterRoomList).hasSize(2),
 			() -> assertThat(theaterRoomList.get(0).totalCount()).isEqualTo(1),
