@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.transaction.annotation.Transactional;
 
 import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Theater;
@@ -35,7 +34,6 @@ class TheaterServiceTest {
 	@Test
 	@DisplayName("영화관 추가 성공")
 	void testCreateTheaterSuccess() {
-
 		// given
 		RequestCreateTheater request = new RequestCreateTheater("SEOUL", "CGV 강남점");
 		// when
@@ -51,7 +49,7 @@ class TheaterServiceTest {
 	}
 
 	@Test
-	@DisplayName("영화관 전체 조회 - 페이징 X")
+	@DisplayName("관리자 영화관 전체 조회 - 페이징 X")
 	void testGetAllTheater() {
 		// given
 		List<Theater> theaters = IntStream.range(0, 20)

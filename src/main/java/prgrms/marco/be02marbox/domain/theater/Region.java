@@ -12,5 +12,5 @@ public enum Region {
 	CHUNGCHEONG,
 	GANGWON,
 	GYEONGSANG,
-	JEOLLA,
+	JEOLLA
 }
