@@ -3,6 +3,7 @@ package prgrms.marco.be02marbox.domain.user.controller;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static prgrms.marco.be02marbox.domain.user.exception.Message.*;
 
@@ -13,6 +14,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +26,7 @@ import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginUser;
 import prgrms.marco.be02marbox.domain.user.dto.UserSignUpReq;
 import prgrms.marco.be02marbox.domain.user.exception.DuplicateEmailException;
 import prgrms.marco.be02marbox.domain.user.exception.DuplicateNameException;
+import prgrms.marco.be02marbox.domain.user.exception.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.jwt.Jwt;
 import prgrms.marco.be02marbox.domain.user.service.UserService;
 
@@ -163,5 +166,43 @@ class UserControllerTest {
 				.content(objectMapper.writeValueAsString(requestSignInUser)))
 			.andExpect(status().isNoContent())
 			.andExpect(header().string("token", token));
+	}
+
+	@Test
+	@DisplayName("로그인 실패 - 존재 하지 않는 이메일")
+	void testSignInFailBecauseInvalidEmail() throws Exception {
+		//given
+		String email = "pang@email.com";
+		String password = "1234";
+		RequestSignInUser requestSignInUser = new RequestSignInUser(email, password);
+
+		given(userService.login(email, password))
+			.willThrow(new InvalidEmailException(INVALID_EMAIL_EXP_MSG));
+
+		//when then
+		mockMvc.perform(post("/users/sign-in")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(requestSignInUser)))
+			.andExpect(status().is4xxClientError())
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("로그인 실패 - 틀린 비밀번호")
+	void testSignInFailBecauseWrongPassword() throws Exception {
+		//given
+		String email = "pang@email.com";
+		String password = "1234";
+		RequestSignInUser requestSignInUser = new RequestSignInUser(email, password);
+
+		given(userService.login(email, password))
+			.willThrow(new BadCredentialsException("비밀번호가 틀렸습니다."));
+
+		//when then
+		mockMvc.perform(post("/users/sign-in")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(requestSignInUser)))
+			.andExpect(status().is4xxClientError())
+			.andDo(print());
 	}
 }

@@ -10,6 +10,7 @@ import prgrms.marco.be02marbox.domain.user.User;
 import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginUser;
 import prgrms.marco.be02marbox.domain.user.exception.DuplicateEmailException;
 import prgrms.marco.be02marbox.domain.user.exception.DuplicateNameException;
+import prgrms.marco.be02marbox.domain.user.exception.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
 @Service
@@ -39,8 +40,12 @@ public class UserService {
 		return savedUser.getId();
 	}
 
-	//To do
 	public ResponseLoginUser login(String email, String password) {
-		return null;
+		User user = userRepository.findByEmail(email)
+			.orElseThrow(() -> new InvalidEmailException(INVALID_EMAIL_EXP_MSG));
+
+		user.checkPassword(password);
+
+		return new ResponseLoginUser(user.getName(), user.getRoleName());
 	}
 }

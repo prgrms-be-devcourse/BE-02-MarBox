@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
@@ -51,8 +50,6 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 			authorities.add(new SimpleGrantedAuthority(responseLoginUser.role()));
 			return new JwtAuthenticationToken(
 				new JwtAuthentication(token, responseLoginUser.name()), null, authorities);
-		} catch (IllegalArgumentException e) {
-			throw new BadCredentialsException(e.getMessage());
 		} catch (DataAccessException e) {
 			throw new AuthenticationServiceException(e.getMessage(), e);
 		}
