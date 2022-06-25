@@ -33,6 +33,7 @@ public class MovieService {
 		return savedMovie.getId();
 	}
 
+	@Transactional(readOnly = true)
 	public List<Movie> getMovies(int page, int size) {
 		return movieRepository.findAll(PageRequest.of(page, size)).getContent();
 	}
