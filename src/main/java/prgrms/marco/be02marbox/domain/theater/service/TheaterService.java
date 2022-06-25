@@ -1,11 +1,13 @@
 package prgrms.marco.be02marbox.domain.theater.service;
 
+import static java.util.stream.Collectors.*;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheater;
 import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindTheater;
@@ -35,6 +37,13 @@ public class TheaterService {
 		return theaterRepository.findAll()
 			.stream()
 			.map(theaterConverter::convertFromTheaterToResponseFindTheater)
-			.collect(Collectors.toList());
+			.collect(toList());
+	}
+
+	public List<ResponseFindTheater> findTheaterByRegion(String region) {
+		return theaterRepository.findByRegion(Region.valueOf(region.toUpperCase()))
+			.stream()
+			.map(theaterConverter::convertFromTheaterToResponseFindTheater)
+			.collect(toList());
 	}
 }

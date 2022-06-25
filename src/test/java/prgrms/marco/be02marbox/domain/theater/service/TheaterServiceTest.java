@@ -73,9 +73,38 @@ class TheaterServiceTest {
 
 		// then
 		assertAll(
-			() -> assertThat(findTheaters.size()).isEqualTo(20),
+			() -> assertThat(findTheaters).hasSize(20),
 			() -> assertThat(findTheaters.get(0).region().toString()).isEqualTo("SEOUL"),
 			() -> assertThat(findTheaters.get(0).theaterName()).isEqualTo("theater0")
 		);
 	}
+
+	@Test
+	@DisplayName("영화관 지역별 조회")
+	void testGetTheatersByRegion() {
+		// given
+		List<Theater> theatersOfSeoul = IntStream.range(0, 5)
+			.mapToObj(i -> new Theater(Region.valueOf("SEOUL"), "theater" + i)).collect(toList());
+		theaterRepository.saveAll(theatersOfSeoul);
+
+		List<Theater> theatersOfBusan = IntStream.range(0, 5)
+			.mapToObj(i -> new Theater(Region.valueOf("BUSAN"), "theater" + i)).collect(toList());
+		theaterRepository.saveAll(theatersOfBusan);
+
+		// when
+		List<ResponseFindTheater> findTheaterOfSeoul = theaterService.findTheaterByRegion("seoul");
+		List<ResponseFindTheater> findTheaterOfBusan = theaterService.findTheaterByRegion("busan");
+
+		// then
+		assertAll(
+			() -> assertThat(findTheaterOfSeoul).hasSize(5),
+			() -> assertThat(findTheaterOfSeoul.get(0).region().toString()).isEqualTo("SEOUL"),
+			() -> assertThat(findTheaterOfSeoul.get(0).theaterName()).isEqualTo("theater0"),
+
+			() -> assertThat(findTheaterOfBusan).hasSize(5),
+			() -> assertThat(findTheaterOfBusan.get(0).region().toString()).isEqualTo("BUSAN"),
+			() -> assertThat(findTheaterOfBusan.get(0).theaterName()).isEqualTo("theater0")
+		);
+	}
+
 }
