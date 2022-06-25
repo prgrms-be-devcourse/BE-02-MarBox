@@ -1,6 +1,9 @@
 package prgrms.marco.be02marbox.domain.theater.controller;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -15,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -51,7 +55,15 @@ class ScheduleControllerTest {
 				.content(objectMapper.writeValueAsString(requestCreateSchedule)))
 			.andExpect(status().isCreated())
 			.andExpect(header().string("location", "schedules/1"))
-			.andDo(print());
+			.andDo(print())
+			.andDo(document("schedule-save",
+				requestFields(
+					fieldWithPath("theaterRoomId").type(JsonFieldType.NUMBER).description("상영관 ID"),
+					fieldWithPath("movieId").type(JsonFieldType.NUMBER).description("영화 ID"),
+					fieldWithPath("startTime").type(JsonFieldType.STRING).description("영화 시작 날짜와 시간"),
+					fieldWithPath("endTime").type(JsonFieldType.STRING).description("영화 종료 날짜와 시간")
+				)));
+
 	}
 
 	@Test
