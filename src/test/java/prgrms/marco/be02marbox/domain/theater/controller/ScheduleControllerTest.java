@@ -62,7 +62,6 @@ class ScheduleControllerTest {
 				.content(objectMapper.writeValueAsString(requestCreateSchedule)))
 			.andExpect(status().isCreated())
 			.andExpect(header().string("location", "schedules/1"))
-			.andDo(print())
 			.andDo(document("schedule-save",
 				requestFields(
 					fieldWithPath("theaterRoomId").type(JsonFieldType.NUMBER).description("상영관 ID"),
@@ -88,8 +87,7 @@ class ScheduleControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(requestCreateSchedule)))
-			.andExpect(status().isNotFound())
-			.andDo(print());
+			.andExpect(status().isNotFound());
 	}
 
 }
