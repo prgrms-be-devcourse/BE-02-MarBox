@@ -81,9 +81,9 @@ class MovieServiceTest {
 		List<Movie> movies3 = movieService.getMovies(2, 5);
 
 		assertAll(
-			() -> assertThat(movies1.size()).isEqualTo(5),
-			() -> assertThat(movies2.size()).isEqualTo(1),
-			() -> assertThat(movies3.size()).isEqualTo(0)
+			() -> assertThat(movies1).hasSize(5),
+			() -> assertThat(movies2).hasSize(1),
+			() -> assertThat(movies3).hasSize(0)
 		);
 	}
 }
