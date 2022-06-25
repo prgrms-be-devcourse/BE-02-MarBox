@@ -63,7 +63,6 @@ class TheaterRoomControllerTest {
 		)
 			.andExpect(status().isCreated())
 			.andExpect(redirectedUrl(THEATER_ROOM_SAVE_URL + "/" + theaterId))
-			.andDo(print())
 			.andDo(document("theater-room-save",
 				requestFields()
 					.andWithPrefix(SEAT_LIST_PREFIX.getField(), RequestCreateSeatDoc.get())
@@ -79,13 +78,12 @@ class TheaterRoomControllerTest {
 		Long theaterId = 1L;
 		RequestCreateTheaterRoom requestDto = new RequestCreateTheaterRoom(theaterId, "A관", requestCreateSeats);
 
-		given(theaterRoomService.save(requestDto)).willThrow(new EntityNotFoundException("극장 정보를 조회할 수 없습니다."));
+		given(theaterRoomService.save(requestDto)).willThrow(new IllegalArgumentException("극장 정보를 조회할 수 없습니다."));
 
 		mockMvc.perform(post(THEATER_ROOM_SAVE_URL)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(requestDto))
 		)
-			.andDo(print())
 			.andExpect(status().isBadRequest()
 			);
 	}
