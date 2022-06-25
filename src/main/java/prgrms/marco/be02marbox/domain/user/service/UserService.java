@@ -7,8 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.User;
+import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginUser;
 import prgrms.marco.be02marbox.domain.user.exception.DuplicateEmailException;
 import prgrms.marco.be02marbox.domain.user.exception.DuplicateNameException;
+import prgrms.marco.be02marbox.domain.user.exception.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
 @Service
@@ -36,5 +38,14 @@ public class UserService {
 		User user = new User(email, password, name, role);
 		User savedUser = userRepository.save(user);
 		return savedUser.getId();
+	}
+
+	public ResponseLoginUser login(String email, String password) {
+		User user = userRepository.findByEmail(email)
+			.orElseThrow(() -> new InvalidEmailException(INVALID_EMAIL_EXP_MSG));
+
+		user.checkPassword(password);
+
+		return new ResponseLoginUser(user.getName(), user.getRoleName());
 	}
 }
