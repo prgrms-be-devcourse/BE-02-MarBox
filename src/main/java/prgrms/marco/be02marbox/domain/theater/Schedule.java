@@ -40,7 +40,7 @@ public class Schedule {
 	protected Schedule() {
 	}
 
-	public Schedule(Builder builder) {
+	private Schedule(Builder builder) {
 		this.id = builder.id;
 		this.theaterRoom = builder.theaterRoom;
 		this.movie = builder.movie;
@@ -73,7 +73,6 @@ public class Schedule {
 	}
 
 	public static class Builder {
-
 		private Long id;
 		private TheaterRoom theaterRoom;
 		public Movie movie;
