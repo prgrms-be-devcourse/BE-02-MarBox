@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +29,7 @@ public class TheaterRoomController {
 
 	@PostMapping
 	public ResponseEntity<Void> save(HttpServletRequest request,
-		@RequestBody RequestCreateTheaterRoom requestCreateTheaterRoom
+		@RequestBody @Validated RequestCreateTheaterRoom requestCreateTheaterRoom
 	) throws URISyntaxException {
 		Long savedId = theaterRoomService.save(requestCreateTheaterRoom);
 		URI redirectUri = new URI(request.getRequestURI() + SLASH + savedId);
