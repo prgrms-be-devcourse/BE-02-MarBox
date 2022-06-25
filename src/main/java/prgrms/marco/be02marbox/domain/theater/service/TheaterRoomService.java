@@ -4,8 +4,6 @@ import static java.util.stream.Collectors.*;
 
 import java.util.List;
 
-import javax.persistence.EntityNotFoundException;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +45,7 @@ public class TheaterRoomService {
 	@Transactional
 	public Long save(RequestCreateTheaterRoom requestCreateTheaterRoom) {
 		Theater theater = theaterRepository.findById(requestCreateTheaterRoom.theaterId())
-			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_THEATER_ERR));
+			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_THEATER_ERR));
 
 		TheaterRoom newTheaterRoom = new TheaterRoom(theater, requestCreateTheaterRoom.name());
 		TheaterRoom savedTheaterRoom = theaterRoomRepository.save(newTheaterRoom);

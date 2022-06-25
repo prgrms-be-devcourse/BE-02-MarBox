@@ -110,7 +110,7 @@ class TheaterRoomServiceTest {
 	void testSave_entityNotFoundException() {
 		RequestCreateTheaterRoom requestCreateTheaterRoom = new RequestCreateTheaterRoom(-1L, "A관", requestCreateSeats);
 
-		assertThrows(EntityNotFoundException.class, () -> theaterRoomService.save(requestCreateTheaterRoom));
+		assertThrows(IllegalArgumentException.class, () -> theaterRoomService.save(requestCreateTheaterRoom));
 	}
 
 	@Test
