@@ -17,20 +17,32 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import prgrms.marco.be02marbox.config.JwtConfigure;
+import prgrms.marco.be02marbox.config.WebSecurityConfigure;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSeat;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.document.RequestCreateSeatDoc;
 import prgrms.marco.be02marbox.domain.theater.dto.document.RequestCreateTheaterRoomDoc;
 import prgrms.marco.be02marbox.domain.theater.service.TheaterRoomService;
 
-@WebMvcTest(controllers = TheaterRoomController.class)
+@WebMvcTest(controllers = TheaterRoomController.class,
+	excludeFilters = {
+		@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigure.class)
+	}
+)
 @AutoConfigureRestDocs
 class TheaterRoomControllerTest {
 	@Autowired
@@ -58,6 +70,7 @@ class TheaterRoomControllerTest {
 		given(theaterRoomService.save(requestDto)).willReturn(theaterId);
 
 		mockMvc.perform(post(THEATER_ROOM_SAVE_URL)
+			.with(SecurityMockMvcRequestPostProcessors.csrf())
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(requestDto))
 		)
@@ -81,6 +94,7 @@ class TheaterRoomControllerTest {
 		given(theaterRoomService.save(requestDto)).willThrow(new IllegalArgumentException("극장 정보를 조회할 수 없습니다."));
 
 		mockMvc.perform(post(THEATER_ROOM_SAVE_URL)
+			.with(SecurityMockMvcRequestPostProcessors.csrf())
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(requestDto))
 		)
