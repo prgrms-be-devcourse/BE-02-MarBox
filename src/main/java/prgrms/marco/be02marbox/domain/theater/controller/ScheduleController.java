@@ -3,6 +3,8 @@ package prgrms.marco.be02marbox.domain.theater.controller;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +25,8 @@ public class ScheduleController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> createSchedule(@RequestBody RequestCreateSchedule request) throws URISyntaxException {
+	public ResponseEntity<Void> createSchedule(@Valid @RequestBody RequestCreateSchedule request) throws
+		URISyntaxException {
 		Long scheduleId = scheduleService.createSchedule(request);
 		return ResponseEntity.created(new URI("schedules/" + scheduleId)).build();
 	}

@@ -13,9 +13,9 @@ import prgrms.marco.be02marbox.domain.exception.dto.ResponseApiError;
 public class ScheduleExceptionHandler {
 
 	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<ResponseApiError> illegalArgumentHandle(Exception error) {
-		return ResponseEntity.badRequest()
-			.body(new ResponseApiError(List.of(error.getMessage()), HttpStatus.BAD_REQUEST.value()));
+	public ResponseEntity<ResponseApiError> handleIllegalArgument(Exception error) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+			.body(new ResponseApiError(List.of(error.getMessage()), HttpStatus.NOT_FOUND.value()));
 	}
 
 }
