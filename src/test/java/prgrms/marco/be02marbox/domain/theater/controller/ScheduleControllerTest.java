@@ -17,17 +17,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import prgrms.marco.be02marbox.config.WebSecurityConfigure;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
 import prgrms.marco.be02marbox.domain.theater.service.ScheduleService;
 
-@WebMvcTest(controllers = ScheduleController.class)
+@WebMvcTest(controllers = ScheduleController.class,
+	excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigure.class)
+)
 @AutoConfigureRestDocs
 class ScheduleControllerTest {
 
@@ -50,6 +56,7 @@ class ScheduleControllerTest {
 		given(scheduleService.createSchedule(requestCreateSchedule)).willReturn(1L);
 
 		mockMvc.perform(post("/schedules")
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(requestCreateSchedule)))
@@ -77,6 +84,7 @@ class ScheduleControllerTest {
 			new IllegalArgumentException("존재하지 않는 상영관 ID"));
 
 		mockMvc.perform(post("/schedules")
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(requestCreateSchedule)))
