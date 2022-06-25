@@ -4,6 +4,8 @@ import static java.util.stream.Collectors.*;
 
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,8 @@ import prgrms.marco.be02marbox.domain.theater.service.utils.TheaterConverter;
 @Service
 @Transactional(readOnly = true)
 public class TheaterService {
+
+	private static final String NOT_FOUND_THEATER_ERR = "극장 정보를 조회할 수 없습니다.";
 
 	private final TheaterRepository theaterRepository;
 	private final TheaterConverter theaterConverter;
@@ -33,6 +37,13 @@ public class TheaterService {
 		return savedTheater.getId();
 	}
 
+	public ResponseFindTheater findTheater(Long id) {
+		Theater findTheater = theaterRepository.findById(id)
+			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_THEATER_ERR));
+
+		return theaterConverter.convertFromTheaterToResponseFindTheater(findTheater);
+	}
+
 	public List<ResponseFindTheater> findTheaters() {
 		return theaterRepository.findAll()
 			.stream()
@@ -41,7 +52,7 @@ public class TheaterService {
 	}
 
 	public List<ResponseFindTheater> findTheaterByRegion(String region) {
-		return theaterRepository.findByRegion(Region.valueOf(region.toUpperCase()))
+		return theaterRepository.findByRegion(Region.makeRegion(region))
 			.stream()
 			.map(theaterConverter::convertFromTheaterToResponseFindTheater)
 			.collect(toList());
