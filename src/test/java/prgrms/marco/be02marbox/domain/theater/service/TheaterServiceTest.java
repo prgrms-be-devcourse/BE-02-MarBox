@@ -57,7 +57,8 @@ class TheaterServiceTest {
 		// expected
 		assertThatThrownBy(
 			() -> theaterService.createTheater(request)
-		).isInstanceOf(IllegalArgumentException.class);
+		).isInstanceOf(IllegalArgumentException.class)
+			.hasMessageContaining("해당 지역은 존재하지 않습니다.");
 	}
 
 	@Test
