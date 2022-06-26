@@ -13,4 +13,12 @@ include::{snippets}/schedule-save/request-fields.adoc[]
 
 .Response
 include::{snippets}/schedule-save/http-response.adoc[]
-include::{snippets}/schedule-save/response-fields.adoc[]
+
+### 현재 상영중인 영화 정보 가져오기
+
+.Request
+include::{snippets}/schedule-get-current-movies/http-request.adoc[]
+
+.Response
+include::{snippets}/schedule-get-current-movies/http-response.adoc[]
+include::{snippets}/schedule-get-current-movies/response-fields.adoc[]
