@@ -1,0 +1,16 @@
+:hardbreaks:
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+
+== 스케줄
+
+### 스케줄 등록
+
+.Request
+include::{snippets}/schedule-save/http-request.adoc[]
+include::{snippets}/schedule-save/request-fields.adoc[]
+
+.Response
+include::{snippets}/schedule-save/http-response.adoc[]
+include::{snippets}/schedule-save/response-fields.adoc[]
