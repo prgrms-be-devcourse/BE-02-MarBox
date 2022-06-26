@@ -128,7 +128,7 @@ class TheaterControllerTest {
 			List.of(new ResponseFindTheater(Region.SEOUL, requestBusan.name())));
 
 		mockMvc.perform(get("/theaters/region")
-				.param("region", "seoul")
+				.param("name", "seoul")
 				.contentType(APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andDo(print());

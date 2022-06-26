@@ -48,7 +48,7 @@ public class TheaterController {
 	}
 
 	@GetMapping("/region")
-	public ResponseEntity<List<ResponseFindTheater>> getTheaterByRegion(@RequestParam("region") String region) {
+	public ResponseEntity<List<ResponseFindTheater>> getTheaterByRegion(@RequestParam("name") String region) {
 		List<ResponseFindTheater> theaterByRegion = theaterService.findTheaterByRegion(region);
 		return ResponseEntity.status(HttpStatus.OK).body(theaterByRegion);
 	}
