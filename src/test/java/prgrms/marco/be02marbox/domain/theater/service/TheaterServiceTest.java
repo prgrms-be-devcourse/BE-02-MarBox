@@ -101,11 +101,13 @@ class TheaterServiceTest {
 	void testGetTheatersByRegion() {
 		// given
 		List<Theater> theatersOfSeoul = IntStream.range(0, 5)
-			.mapToObj(i -> new Theater(Region.getRegion("SEOUL"), "theater" + i)).collect(toList());
+			.mapToObj(i -> new Theater(Region.getRegion("SEOUL"), "theater" + i))
+			.collect(toList());
 		theaterRepository.saveAll(theatersOfSeoul);
 
 		List<Theater> theatersOfBusan = IntStream.range(0, 5)
-			.mapToObj(i -> new Theater(Region.getRegion("BUSAN"), "theater" + i)).collect(toList());
+			.mapToObj(i -> new Theater(Region.getRegion("BUSAN"), "theater" + i))
+			.collect(toList());
 		theaterRepository.saveAll(theatersOfBusan);
 
 		// when
