@@ -1,0 +1,22 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://database-1.c441m8l8qnrp.us-east-1.rds.amazonaws.com:3306/marbox
+    username: admin
+    password: admin1234
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 5
+      pool-name: MySQL_DB
+
+  jpa:
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
