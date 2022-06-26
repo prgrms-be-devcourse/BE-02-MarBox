@@ -40,6 +40,10 @@ spring:
     url: jdbc:mysql://database-1.c441m8l8qnrp.us-east-1.rds.amazonaws.com:3306/marbox
     username: admin
     password: admin1234
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 5
+      pool-name: MySQL_DB
 
   jpa:
     show-sql: true
