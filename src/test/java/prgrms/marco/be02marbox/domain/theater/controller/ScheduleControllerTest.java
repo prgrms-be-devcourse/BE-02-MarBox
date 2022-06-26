@@ -4,12 +4,14 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +30,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.config.WebSecurityConfigure;
+import prgrms.marco.be02marbox.domain.movie.Genre;
+import prgrms.marco.be02marbox.domain.movie.LimitAge;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
+import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindCurrentMovie;
 import prgrms.marco.be02marbox.domain.theater.service.ScheduleService;
 
 @WebMvcTest(controllers = ScheduleController.class,
@@ -88,6 +93,30 @@ class ScheduleControllerTest {
 				.accept(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(requestCreateSchedule)))
 			.andExpect(status().isNotFound());
+	}
+
+	@Test
+	@DisplayName("현재 상영중인 영화 리스트 반환 테스트")
+	@WithMockUser(roles = {"ADMIN", "USER"})
+	void testGetCurrentMovieList() throws Exception {
+
+		List<ResponseFindCurrentMovie> currentMovieList = List.of(
+			new ResponseFindCurrentMovie("테스트1", LimitAge.CHILD, Genre.ACTION, 100, "test/location"),
+			new ResponseFindCurrentMovie("테스트2", LimitAge.CHILD, Genre.ROMANCE, 150, "test/location"),
+			new ResponseFindCurrentMovie("테스트3", LimitAge.ADULT, Genre.ACTION, 120, "test/location"));
+
+		given(scheduleService.getCurrentMovieList()).willReturn(currentMovieList);
+
+		mockMvc.perform(get("/schedules/current-movies"))
+			.andExpect(status().isOk())
+			.andDo(document("schedule-get-current-movies",
+				responseFields(
+					fieldWithPath("[].name").type(JsonFieldType.STRING).description("영화 이름"),
+					fieldWithPath("[].limitAge").type(JsonFieldType.STRING).description("연령 제한"),
+					fieldWithPath("[].genre").type(JsonFieldType.STRING).description("장르"),
+					fieldWithPath("[].runningTime").type(JsonFieldType.NUMBER).description("상영시간"),
+					fieldWithPath("[].posterImgLocation").type(JsonFieldType.STRING).description("포스터 이미지 경로")
+				)));
 	}
 
 }
