@@ -33,7 +33,7 @@ public enum Region {
 		if (Arrays
 			.stream(Region.values())
 			.noneMatch(inputRegion ->
-				inputRegion.toString().equals(region))) {
+				inputRegion.toString().equals(region.toUpperCase()))) {
 			throw new IllegalArgumentException(INVALID_REGION);
 		}
 	}
