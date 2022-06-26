@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 
 import org.junit.jupiter.api.AfterEach;
@@ -22,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import prgrms.marco.be02marbox.domain.exception.custom.BadRequestTheater;
 import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Seat;
 import prgrms.marco.be02marbox.domain.theater.Theater;
@@ -53,7 +53,6 @@ class TheaterRoomServiceTest {
 
 	@PersistenceContext
 	EntityManager em;
-
 
 	private Theater theater = new Theater(Region.SEOUL, "강남");
 	private Set<RequestCreateSeat> requestCreateSeats = new HashSet<>();
@@ -110,7 +109,7 @@ class TheaterRoomServiceTest {
 	void testSave_entityNotFoundException() {
 		RequestCreateTheaterRoom requestCreateTheaterRoom = new RequestCreateTheaterRoom(-1L, "A관", requestCreateSeats);
 
-		assertThrows(IllegalArgumentException.class, () -> theaterRoomService.save(requestCreateTheaterRoom));
+		assertThrows(BadRequestTheater.class, () -> theaterRoomService.save(requestCreateTheaterRoom));
 	}
 
 	@Test

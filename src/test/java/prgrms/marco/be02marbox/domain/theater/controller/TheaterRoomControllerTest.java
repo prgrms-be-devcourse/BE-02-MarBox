@@ -4,34 +4,28 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static prgrms.marco.be02marbox.domain.theater.dto.document.RequestCreateTheaterRoomDoc.*;
 
 import java.util.Set;
-
-import javax.persistence.EntityNotFoundException;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import prgrms.marco.be02marbox.config.JwtConfigure;
 import prgrms.marco.be02marbox.config.WebSecurityConfigure;
+import prgrms.marco.be02marbox.domain.exception.custom.BadRequestTheater;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSeat;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.document.RequestCreateSeatDoc;
@@ -91,7 +85,7 @@ class TheaterRoomControllerTest {
 		Long theaterId = 1L;
 		RequestCreateTheaterRoom requestDto = new RequestCreateTheaterRoom(theaterId, "A관", requestCreateSeats);
 
-		given(theaterRoomService.save(requestDto)).willThrow(new IllegalArgumentException("극장 정보를 조회할 수 없습니다."));
+		given(theaterRoomService.save(requestDto)).willThrow(new BadRequestTheater("올바르지 않은 극장 ID"));
 
 		mockMvc.perform(post(THEATER_ROOM_SAVE_URL)
 			.with(SecurityMockMvcRequestPostProcessors.csrf())

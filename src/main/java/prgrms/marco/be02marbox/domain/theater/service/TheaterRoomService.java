@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import prgrms.marco.be02marbox.domain.exception.custom.BadRequestTheater;
 import prgrms.marco.be02marbox.domain.theater.Seat;
 import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
@@ -20,9 +21,10 @@ import prgrms.marco.be02marbox.domain.theater.service.utils.TheaterConverter;
 import prgrms.marco.be02marbox.domain.theater.service.utils.TheaterRoomConverter;
 
 @Service
+@Transactional(readOnly = true)
 public class TheaterRoomService {
 
-	private static final String NOT_FOUND_THEATER_ERR = "극장 정보를 조회할 수 없습니다.";
+	private static final String WRONG_THEATER_ID_ERR_MSG = "바르지 않은 극장 ID 값입니다.";
 
 	private final TheaterRoomRepository theaterRoomRepository;
 	private final TheaterRepository theaterRepository;
@@ -45,7 +47,7 @@ public class TheaterRoomService {
 	@Transactional
 	public Long save(RequestCreateTheaterRoom requestCreateTheaterRoom) {
 		Theater theater = theaterRepository.findById(requestCreateTheaterRoom.theaterId())
-			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_THEATER_ERR));
+			.orElseThrow(() -> new BadRequestTheater(WRONG_THEATER_ID_ERR_MSG));
 
 		TheaterRoom newTheaterRoom = new TheaterRoom(theater, requestCreateTheaterRoom.name());
 		TheaterRoom savedTheaterRoom = theaterRoomRepository.save(newTheaterRoom);
@@ -56,7 +58,6 @@ public class TheaterRoomService {
 		return savedTheaterRoom.getId();
 	}
 
-	@Transactional(readOnly = true)
 	public List<ResponseFindTheaterRoom> findAll() {
 		return theaterRoomRepository.findAll().stream()
 			.map(theaterRoom -> {
