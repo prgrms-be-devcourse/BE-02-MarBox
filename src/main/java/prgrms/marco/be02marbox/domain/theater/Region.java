@@ -1,27 +1,27 @@
 package prgrms.marco.be02marbox.domain.theater;
 
 public enum Region {
-	SEOUL("SEOUL"),
-	INCHEON("INCHEON"),
-	BUSAN("BUSAN"),
-	ULSAN("ULSAN"),
-	DAEGU("DAEGU"),
-	DAEJEON("DAEJEON"),
-	GWANGJU("GWANGJU"),
-	GYEONGGI("GYEONGGI"),
-	CHUNGCHEONG("CHUNGCHEONG"),
-	GANGWON("GANGWON"),
-	GYEONGSANG("GYEONGSANG"),
-	JEOLLA("JEOLLA"),
-	JEJU("JEJU");
+	SEOUL("서울"),
+	INCHEON("인천"),
+	BUSAN("부산"),
+	ULSAN("울산"),
+	DAEGU("대구"),
+	DAEJEON("대전"),
+	GWANGJU("광주"),
+	GYEONGGI("경기"),
+	CHUNGCHEONG("충청"),
+	GANGWON("강원"),
+	GYEONGSANG("경상"),
+	JEOLLA("전라"),
+	JEJU("제주");
 
-	private final String regionEng;
+	private final String regionKor;
 
-	Region(String regionEng) {
-		this.regionEng = regionEng;
+	Region(String regionKor) {
+		this.regionKor = regionKor;
 	}
 
-	public static Region makeRegion(String region) {
+	public static Region getRegion(String region) {
 		return Region.valueOf(region.toUpperCase());
 	}
 }
