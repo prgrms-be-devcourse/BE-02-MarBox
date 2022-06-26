@@ -61,11 +61,28 @@ class TheaterServiceTest {
 	}
 
 	@Test
+	@DisplayName("영화관 단건 조회")
+	void testGetOneTheater() {
+		// given
+		Theater theater = new Theater(Region.getRegion("SEOUL"), "theater1");
+		Theater insertedTheater = theaterRepository.save(theater);
+
+		//when
+		ResponseFindTheater findTheater = theaterService.findTheater(insertedTheater.getId());
+
+		//then
+		assertAll(
+			() -> assertThat(findTheater.region()).isEqualTo(insertedTheater.getRegion()),
+			() -> assertThat(findTheater.theaterName()).isEqualTo(insertedTheater.getName())
+		);
+	}
+
+	@Test
 	@DisplayName("관리자 영화관 전체 조회 - 페이징 X")
 	void testGetAllTheater() {
 		// given
 		List<Theater> theaters = IntStream.range(0, 20)
-			.mapToObj(i -> new Theater(Region.valueOf("SEOUL"), "theater" + i)).collect(toList());
+			.mapToObj(i -> new Theater(Region.getRegion("SEOUL"), "theater" + i)).collect(toList());
 		theaterRepository.saveAll(theaters);
 
 		// when
@@ -73,9 +90,38 @@ class TheaterServiceTest {
 
 		// then
 		assertAll(
-			() -> assertThat(findTheaters.size()).isEqualTo(20),
+			() -> assertThat(findTheaters).hasSize(20),
 			() -> assertThat(findTheaters.get(0).region().toString()).isEqualTo("SEOUL"),
 			() -> assertThat(findTheaters.get(0).theaterName()).isEqualTo("theater0")
 		);
 	}
+
+	@Test
+	@DisplayName("영화관 지역별 조회")
+	void testGetTheatersByRegion() {
+		// given
+		List<Theater> theatersOfSeoul = IntStream.range(0, 5)
+			.mapToObj(i -> new Theater(Region.getRegion("SEOUL"), "theater" + i)).collect(toList());
+		theaterRepository.saveAll(theatersOfSeoul);
+
+		List<Theater> theatersOfBusan = IntStream.range(0, 5)
+			.mapToObj(i -> new Theater(Region.getRegion("BUSAN"), "theater" + i)).collect(toList());
+		theaterRepository.saveAll(theatersOfBusan);
+
+		// when
+		List<ResponseFindTheater> findTheaterOfSeoul = theaterService.findTheaterByRegion("seoul");
+		List<ResponseFindTheater> findTheaterOfBusan = theaterService.findTheaterByRegion("busan");
+
+		// then
+		assertAll(
+			() -> assertThat(findTheaterOfSeoul).hasSize(5),
+			() -> assertThat(findTheaterOfSeoul.get(0).region().toString()).isEqualTo("SEOUL"),
+			() -> assertThat(findTheaterOfSeoul.get(0).theaterName()).isEqualTo("theater0"),
+
+			() -> assertThat(findTheaterOfBusan).hasSize(5),
+			() -> assertThat(findTheaterOfBusan.get(0).region().toString()).isEqualTo("BUSAN"),
+			() -> assertThat(findTheaterOfBusan.get(0).theaterName()).isEqualTo("theater0")
+		);
+	}
+
 }
