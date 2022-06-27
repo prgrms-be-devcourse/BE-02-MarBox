@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.security.authentication.BadCredentialsException;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -30,4 +32,40 @@ public class User {
 
 	@Column(name = "name")
 	private String name;
+
+	protected User() {
+	}
+
+	public User(String email, String password, String name, Role role) {
+		this.email = email;
+		this.password = password;
+		this.name = name;
+		this.role = role;
+	}
+
+	public void checkPassword(String password) {
+		if (!this.password.equals(password)) {
+			throw new BadCredentialsException("비밀번호가 틀렸습니다.");
+		}
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public String getRoleName() {
+		return this.role.name();
+	}
+
+	public String getEmail() {
+		return this.email;
+	}
+
+	public String getPassword() {
+		return this.password;
+	}
 }
