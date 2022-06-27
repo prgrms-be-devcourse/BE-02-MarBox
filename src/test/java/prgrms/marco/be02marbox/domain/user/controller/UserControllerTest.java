@@ -3,7 +3,6 @@ package prgrms.marco.be02marbox.domain.user.controller;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static prgrms.marco.be02marbox.domain.user.exception.Message.*;
 
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.web.servlet.MockMvc;
@@ -63,8 +63,9 @@ class UserControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(req.toString())
 				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("$.message.[0]").value(equalTo("역할은 필수 입니다.")));
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.messages.[0]").value(equalTo("역할은 필수 입니다.")))
+			.andExpect(jsonPath("$.statusCode").value(equalTo(HttpStatus.BAD_REQUEST.value())));
 	}
 
 	@Test
@@ -89,8 +90,9 @@ class UserControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(userSignUpReq))
 				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("$.message").value(DUPLICATE_EMAIL_EXP_MSG.getMessage()));
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.messages.[0]").value(equalTo(DUPLICATE_EMAIL_EXP_MSG.getMessage())))
+			.andExpect(jsonPath("$.statusCode").value(equalTo(HttpStatus.BAD_REQUEST.value())));
 	}
 
 	@Test
@@ -115,8 +117,9 @@ class UserControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(userSignUpReq))
 				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("$.message").value(DUPLICATE_NAME_EXP_MSG.getMessage()));
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.messages.[0]").value(equalTo(DUPLICATE_NAME_EXP_MSG.getMessage())))
+			.andExpect(jsonPath("$.statusCode").value(equalTo(HttpStatus.BAD_REQUEST.value())));
 	}
 
 	@Test
@@ -183,8 +186,9 @@ class UserControllerTest {
 		mockMvc.perform(post("/users/sign-in")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(requestSignInUser)))
-			.andExpect(status().is4xxClientError())
-			.andDo(print());
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.messages.[0]").value(equalTo(INVALID_EMAIL_EXP_MSG.getMessage())))
+			.andExpect(jsonPath("$.statusCode").value(equalTo(HttpStatus.BAD_REQUEST.value())));
 	}
 
 	@Test
@@ -202,7 +206,8 @@ class UserControllerTest {
 		mockMvc.perform(post("/users/sign-in")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(requestSignInUser)))
-			.andExpect(status().is4xxClientError())
-			.andDo(print());
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.messages.[0]").value(equalTo("비밀번호가 틀렸습니다.")))
+			.andExpect(jsonPath("$.statusCode").value(equalTo(HttpStatus.BAD_REQUEST.value())));
 	}
 }
