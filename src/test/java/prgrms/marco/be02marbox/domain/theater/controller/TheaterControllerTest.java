@@ -3,7 +3,6 @@ package prgrms.marco.be02marbox.domain.theater.controller;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
@@ -51,12 +50,11 @@ class TheaterControllerTest {
 			new ResponseFindTheater(Region.from("SEOUL"), "theater0"));
 
 		// expected
-		mockMvc.perform(get("/theaters/{theaterId}", theaterId)
+		mockMvc.perform(get("/theaters/{theaterId}", theaterId + 1)
 				.contentType(APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.region").value("SEOUL"))
-			.andExpect(jsonPath("$.theaterName").value("theater0"))
-			.andDo(print());
+			.andExpect(jsonPath("$.theaterName").value("theater0"));
 	}
 
 	@Test
@@ -78,8 +76,7 @@ class TheaterControllerTest {
 		// expected
 		mockMvc.perform(get("/theaters")
 				.contentType(APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andDo(print());
+			.andExpect(status().isOk());
 	}
 
 	@Test
@@ -99,8 +96,7 @@ class TheaterControllerTest {
 				.content(objectMapper.writeValueAsString(request)))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.region").value("SEOUL"))
-			.andExpect(jsonPath("$.theaterName").value("theater0"))
-			.andDo(print());
+			.andExpect(jsonPath("$.theaterName").value("theater0"));
 	}
 
 	@Test
@@ -120,7 +116,6 @@ class TheaterControllerTest {
 		mockMvc.perform(get("/theaters/region")
 				.param("name", "seoul")
 				.contentType(APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andDo(print());
+			.andExpect(status().isOk());
 	}
 }
