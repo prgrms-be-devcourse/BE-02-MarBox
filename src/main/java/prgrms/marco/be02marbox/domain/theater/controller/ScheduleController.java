@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import prgrms.marco.be02marbox.domain.movie.dto.ResponseFindCurrentMovie;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
-import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindCurrentMovie;
 import prgrms.marco.be02marbox.domain.theater.service.ScheduleService;
 
 @RestController

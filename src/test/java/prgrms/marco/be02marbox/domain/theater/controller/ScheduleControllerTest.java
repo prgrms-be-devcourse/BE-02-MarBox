@@ -32,8 +32,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import prgrms.marco.be02marbox.config.WebSecurityConfigure;
 import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
+import prgrms.marco.be02marbox.domain.movie.dto.ResponseFindCurrentMovie;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
-import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindCurrentMovie;
 import prgrms.marco.be02marbox.domain.theater.service.ScheduleService;
 
 @WebMvcTest(controllers = ScheduleController.class,

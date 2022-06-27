@@ -18,6 +18,7 @@ import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
 import prgrms.marco.be02marbox.domain.movie.Movie;
 import prgrms.marco.be02marbox.domain.movie.repository.MovieRepository;
+import prgrms.marco.be02marbox.domain.movie.service.utils.MovieConverter;
 import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.Theater;
@@ -29,7 +30,7 @@ import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
 import prgrms.marco.be02marbox.domain.theater.service.utils.ScheduleConverter;
 
 @DataJpaTest
-@Import({ScheduleService.class, ScheduleConverter.class})
+@Import({ScheduleService.class, ScheduleConverter.class, MovieConverter.class})
 class ScheduleServiceTest {
 
 	@Autowired
