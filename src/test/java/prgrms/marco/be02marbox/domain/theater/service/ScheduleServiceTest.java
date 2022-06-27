@@ -18,6 +18,7 @@ import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
 import prgrms.marco.be02marbox.domain.movie.Movie;
 import prgrms.marco.be02marbox.domain.movie.repository.MovieRepository;
+import prgrms.marco.be02marbox.domain.movie.service.utils.MovieConverter;
 import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.Theater;
@@ -29,7 +30,7 @@ import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
 import prgrms.marco.be02marbox.domain.theater.service.utils.ScheduleConverter;
 
 @DataJpaTest
-@Import({ScheduleService.class, ScheduleConverter.class})
+@Import({ScheduleService.class, ScheduleConverter.class, MovieConverter.class})
 class ScheduleServiceTest {
 
 	@Autowired
@@ -101,6 +102,56 @@ class ScheduleServiceTest {
 		assertThrows(IllegalArgumentException.class, () -> {
 			scheduleService.createSchedule(requestCreateSchedule);
 		});
+	}
+
+	@Test
+	@DisplayName("같은 영화에 대해서는 중복을 제거해서 리스트를 생성함")
+	void testGetCurrentMovieList_No_Duplicate() {
+		Theater theater2 = new Theater(Region.SEOUL, "테스트2");
+		theaterRepository.save(theater2);
+		TheaterRoom theaterRoom2 = new TheaterRoom(theater2, "테스트관");
+		theaterRoomRepository.save(theaterRoom2);
+
+		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now(), LocalDateTime.now());
+		createAndSaveSchedule(theaterRoom2, movie, LocalDateTime.now(), LocalDateTime.now());
+		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now().plusDays(1), LocalDateTime.now());
+		createAndSaveSchedule(theaterRoom2, movie, LocalDateTime.now().plusDays(2), LocalDateTime.now());
+		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now().plusDays(4), LocalDateTime.now());
+
+		assertThat(scheduleService.getCurrentMovieList().size()).isEqualTo(1);
+	}
+
+	@Test
+	@DisplayName("현재 상영되는 영화 정보는 현재 날짜를 기준으로 20일까지만(현재 날짜 + 19일까지만) 정보를 가져옴")
+	void testGetCurrentMovieList_Only_In_19_Days() {
+		Movie movie2 = new Movie("테스트2", LimitAge.CHILD, Genre.ACTION, 100, "/test/location");
+		Movie movie3 = new Movie("테스트3", LimitAge.ADULT, Genre.ACTION, 120, "/test/location");
+		Movie movie4 = new Movie("테스트4", LimitAge.ADULT, Genre.ANIMATION, 150, "/test/location");
+		Movie movie5 = new Movie("테스트5", LimitAge.CHILD, Genre.ROMANCE, 160, "/test/location");
+
+		movieRepository.save(movie2);
+		movieRepository.save(movie3);
+		movieRepository.save(movie4);
+		movieRepository.save(movie5);
+
+		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now(), LocalDateTime.now());
+		createAndSaveSchedule(theaterRoom, movie2, LocalDateTime.now(), LocalDateTime.now());
+		createAndSaveSchedule(theaterRoom, movie3, LocalDateTime.now().plusDays(10), LocalDateTime.now().plusDays(10));
+		createAndSaveSchedule(theaterRoom, movie4, LocalDateTime.now().plusDays(19), LocalDateTime.now().plusDays(19));
+		createAndSaveSchedule(theaterRoom, movie5, LocalDateTime.now().plusDays(20), LocalDateTime.now().plusDays(20));
+
+		assertThat(scheduleService.getCurrentMovieList().size()).isEqualTo(4);
+	}
+
+	void createAndSaveSchedule(TheaterRoom theaterRoom, Movie movie, LocalDateTime startTime, LocalDateTime endTime) {
+		Schedule schedule = Schedule.builder()
+			.theaterRoom(theaterRoom)
+			.movie(movie)
+			.startTime(startTime)
+			.endTime(endTime)
+			.build();
+
+		scheduleRepository.save(schedule);
 	}
 
 }
