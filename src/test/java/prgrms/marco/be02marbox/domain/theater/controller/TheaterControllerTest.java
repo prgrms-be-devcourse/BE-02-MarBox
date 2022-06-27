@@ -48,7 +48,7 @@ class TheaterControllerTest {
 		// given
 		Long theaterId = 1L;
 		given(theaterService.findTheater(theaterId)).willReturn(
-			new ResponseFindTheater(Region.getRegion("SEOUL"), "theater0"));
+			new ResponseFindTheater(Region.from("SEOUL"), "theater0"));
 
 		// expected
 		mockMvc.perform(get("/theaters/{theaterId}", theaterId)
@@ -66,7 +66,7 @@ class TheaterControllerTest {
 		// given
 		List<Theater> request = IntStream.range(0, 10)
 			.mapToObj(i ->
-				new Theater(Region.getRegion("SEOUL"), "theater" + i))
+				new Theater(Region.from("SEOUL"), "theater" + i))
 			.toList();
 
 		List<ResponseFindTheater> response = request.stream()
@@ -90,7 +90,7 @@ class TheaterControllerTest {
 		RequestCreateTheater request = new RequestCreateTheater("SEOUL", "theater0");
 		given(theaterService.createTheater(request)).willReturn(1L);
 		given(theaterService.findTheater(1L)).willReturn(
-			new ResponseFindTheater(Region.getRegion(request.region()), request.name()));
+			new ResponseFindTheater(Region.from(request.region()), request.name()));
 
 		// expected
 		mockMvc.perform(post("/theaters")

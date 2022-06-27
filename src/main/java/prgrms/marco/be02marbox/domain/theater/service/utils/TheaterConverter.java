@@ -1,7 +1,5 @@
 package prgrms.marco.be02marbox.domain.theater.service.utils;
 
-import java.util.Arrays;
-
 import org.springframework.stereotype.Component;
 
 import prgrms.marco.be02marbox.domain.theater.Region;
@@ -13,7 +11,7 @@ import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindTheater;
 public class TheaterConverter {
 	public Theater convertFromRequestCreateTheaterToTheater(RequestCreateTheater request) {
 		return new Theater(
-			Region.getRegion(request.region()), request.name());
+			Region.from(request.region()), request.name());
 	}
 
 	public ResponseFindTheater convertFromTheaterToResponseFindTheater(Theater theater) {

@@ -24,7 +24,7 @@ public enum Region {
 		this.regionKor = regionKor;
 	}
 
-	public static Region getRegion(String region) {
+	public static Region from(String region) {
 		validateRegion(region);
 		return Region.valueOf(region.toUpperCase());
 	}
@@ -33,7 +33,7 @@ public enum Region {
 		if (Arrays
 			.stream(Region.values())
 			.noneMatch(inputRegion ->
-				inputRegion.toString().equals(region.toUpperCase()))) {
+				inputRegion.toString().equalsIgnoreCase(region))) {
 			throw new IllegalArgumentException(INVALID_REGION);
 		}
 	}
