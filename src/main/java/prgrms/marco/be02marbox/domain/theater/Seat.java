@@ -18,7 +18,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "seat", uniqueConstraints = {
-	@UniqueConstraint(columnNames = {"theater_room_id", "rows", "columns"})
+	@UniqueConstraint(columnNames = {"theater_room_id", "seat_row", "seat_col"})
 })
 public class Seat {
 
@@ -31,10 +31,10 @@ public class Seat {
 	@JoinColumn(name = "theater_room_id")
 	private TheaterRoom theaterRoom;
 
-	@Column(name = "rows")
+	@Column(name = "seat_row")
 	private Integer row;
 
-	@Column(name = "columns")
+	@Column(name = "seat_col")
 	private Integer column;
 
 	protected Seat() {
