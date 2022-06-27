@@ -121,7 +121,7 @@ class ScheduleServiceTest {
 	}
 
 	@Test
-	@DisplayName("현재 상영되는 영화 정보는 현재 날짜를 기준으로 5일까지만(현재 날짜 + 19일까지만) 정보를 가져옴")
+	@DisplayName("현재 상영되는 영화 정보는 현재 날짜를 기준으로 20일까지만(현재 날짜 + 19일까지만) 정보를 가져옴")
 	void testGetCurrentMovieList_Only_In_19_Days() {
 		Movie movie2 = new Movie("테스트2", LimitAge.CHILD, Genre.ACTION, 100, "/test/location");
 		Movie movie3 = new Movie("테스트3", LimitAge.ADULT, Genre.ACTION, 120, "/test/location");
