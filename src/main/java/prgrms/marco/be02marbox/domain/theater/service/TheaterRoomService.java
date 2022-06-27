@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import prgrms.marco.be02marbox.domain.exception.custom.BadRequestTheater;
+import prgrms.marco.be02marbox.domain.exception.custom.BadRequestTheaterException;
 import prgrms.marco.be02marbox.domain.theater.Seat;
 import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
@@ -47,7 +47,7 @@ public class TheaterRoomService {
 	@Transactional
 	public Long save(RequestCreateTheaterRoom requestCreateTheaterRoom) {
 		Theater theater = theaterRepository.findById(requestCreateTheaterRoom.theaterId())
-			.orElseThrow(() -> new BadRequestTheater(WRONG_THEATER_ID_ERR_MSG));
+			.orElseThrow(() -> new BadRequestTheaterException(WRONG_THEATER_ID_ERR_MSG));
 
 		TheaterRoom newTheaterRoom = new TheaterRoom(theater, requestCreateTheaterRoom.name());
 		TheaterRoom savedTheaterRoom = theaterRoomRepository.save(newTheaterRoom);
