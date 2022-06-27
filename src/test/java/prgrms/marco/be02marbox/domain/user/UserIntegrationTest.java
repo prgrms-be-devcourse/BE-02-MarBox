@@ -9,27 +9,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignInUser;
-import prgrms.marco.be02marbox.domain.user.dto.UserSignUpReq;
+import prgrms.marco.be02marbox.domain.user.dto.RequestSignUpUser;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
 @SpringBootTest
 @AutoConfigureRestDocs
-@AutoConfigureTestDatabase
 @AutoConfigureMockMvc
 @Transactional
+@ActiveProfiles("integration")
 class UserIntegrationTest {
 
 	@Autowired
@@ -45,7 +45,7 @@ class UserIntegrationTest {
 	@DisplayName("사용자 회원 가입 API 성공")
 	void testSingUpApiSuccess() throws Exception {
 		//given
-		UserSignUpReq userSignUpReq = new UserSignUpReq(
+		RequestSignUpUser requestSignUpUser = new RequestSignUpUser(
 			"pang@mail.com",
 			"1234",
 			"pang",
@@ -54,7 +54,7 @@ class UserIntegrationTest {
 		//when then
 		mockMvc.perform(post("/users/sign-up")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(userSignUpReq))
+				.content(objectMapper.writeValueAsString(requestSignUpUser))
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
 			.andDo(document("user-sign-up",

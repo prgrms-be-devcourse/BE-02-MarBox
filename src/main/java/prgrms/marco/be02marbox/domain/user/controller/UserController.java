@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignInUser;
-import prgrms.marco.be02marbox.domain.user.dto.UserSignUpReq;
-import prgrms.marco.be02marbox.domain.user.dto.UserSignUpRes;
+import prgrms.marco.be02marbox.domain.user.dto.RequestSignUpUser;
+import prgrms.marco.be02marbox.domain.user.dto.ResponseSignUpUser;
 import prgrms.marco.be02marbox.domain.user.jwt.JwtAuthentication;
 import prgrms.marco.be02marbox.domain.user.jwt.JwtAuthenticationToken;
 import prgrms.marco.be02marbox.domain.user.service.UserService;
@@ -31,8 +31,8 @@ public class UserController {
 	}
 
 	@PostMapping("/sign-up")
-	public ResponseEntity<UserSignUpRes> signUp(
-		@Validated @RequestBody UserSignUpReq userSignUpReq) {
+	public ResponseEntity<ResponseSignUpUser> signUp(
+		@Validated @RequestBody RequestSignUpUser userSignUpReq) {
 
 		Long userId = userService.create(
 			userSignUpReq.email(),
@@ -42,7 +42,7 @@ public class UserController {
 
 		return ResponseEntity
 			.created(URI.create("/users/sign-in"))
-			.body(new UserSignUpRes(userId));
+			.body(new ResponseSignUpUser(userId));
 	}
 
 	@PostMapping("/sign-in")
