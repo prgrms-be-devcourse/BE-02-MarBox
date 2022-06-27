@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static prgrms.marco.be02marbox.domain.user.exception.Message.*;
+import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,13 +20,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.config.JwtConfigure;
+import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateEmailException;
+import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateNameException;
+import prgrms.marco.be02marbox.domain.exception.custom.user.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignInUser;
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignUpUser;
 import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginUser;
-import prgrms.marco.be02marbox.domain.user.exception.DuplicateEmailException;
-import prgrms.marco.be02marbox.domain.user.exception.DuplicateNameException;
-import prgrms.marco.be02marbox.domain.user.exception.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.jwt.Jwt;
 import prgrms.marco.be02marbox.domain.user.service.UserService;
 

@@ -2,7 +2,7 @@ package prgrms.marco.be02marbox.domain.user.service;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static prgrms.marco.be02marbox.domain.user.exception.Message.*;
+import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
 
 import java.util.Optional;
 
@@ -13,12 +13,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.BadCredentialsException;
 
+import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateEmailException;
+import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateNameException;
+import prgrms.marco.be02marbox.domain.exception.custom.user.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.User;
 import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginUser;
-import prgrms.marco.be02marbox.domain.user.exception.DuplicateEmailException;
-import prgrms.marco.be02marbox.domain.user.exception.DuplicateNameException;
-import prgrms.marco.be02marbox.domain.user.exception.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
 @DataJpaTest

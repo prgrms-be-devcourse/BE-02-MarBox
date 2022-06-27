@@ -14,9 +14,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import prgrms.marco.be02marbox.domain.exception.custom.user.UserException;
 import prgrms.marco.be02marbox.domain.exception.dto.ResponseApiError;
 import prgrms.marco.be02marbox.domain.user.controller.UserController;
-import prgrms.marco.be02marbox.domain.user.exception.UserException;
 
 @RestControllerAdvice(assignableTypes = UserController.class)
 public class UserExceptionHandler {

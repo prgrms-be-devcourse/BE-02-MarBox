@@ -1,4 +1,6 @@
-package prgrms.marco.be02marbox.domain.user.exception;
+package prgrms.marco.be02marbox.domain.exception.custom.user;
+
+import prgrms.marco.be02marbox.domain.exception.custom.Message;
 
 public class DuplicateNameException extends UserException {
 
