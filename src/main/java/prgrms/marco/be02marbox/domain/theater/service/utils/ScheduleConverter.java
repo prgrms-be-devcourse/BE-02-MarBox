@@ -6,7 +6,6 @@ import prgrms.marco.be02marbox.domain.movie.Movie;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
-import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindCurrentMovie;
 
 @Component
 public class ScheduleConverter {
@@ -21,11 +20,5 @@ public class ScheduleConverter {
 			.build();
 
 		return schedule;
-	}
-
-	public ResponseFindCurrentMovie convertFromScheduleToResponseFindCurrentMovie(Schedule schedule) {
-		return new ResponseFindCurrentMovie(schedule.getMovie().getName(), schedule.getMovie().getLimitAge(),
-			schedule.getMovie().getGenre(), schedule.getMovie().getRunningTime(),
-			schedule.getMovie().getPosterImgLocation());
 	}
 }
