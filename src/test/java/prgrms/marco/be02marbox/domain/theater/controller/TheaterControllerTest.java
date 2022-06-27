@@ -50,7 +50,7 @@ class TheaterControllerTest {
 			new ResponseFindTheater(Region.from("SEOUL"), "theater0"));
 
 		// expected
-		mockMvc.perform(get("/theaters/{theaterId}", theaterId + 1)
+		mockMvc.perform(get("/theaters/{theaterId}", theaterId)
 				.contentType(APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.region").value("SEOUL"))
