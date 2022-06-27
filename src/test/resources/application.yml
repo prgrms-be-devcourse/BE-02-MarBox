@@ -15,3 +15,9 @@ spring:
       ddl-auto: create-drop
     properties:
       hibernate.dialect: org.hibernate.dialect.H2Dialect
+
+jwt:
+  header: testToken
+  issuer: testIssuer
+  client-secret: lsuvomkeoiotkbzdjrejfgdsfngusviykzsvjoriyukscpmxiijmpfsdwveljsml
+  expiry-seconds: 100

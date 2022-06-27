@@ -1,0 +1,12 @@
+:hardbreaks:
+ifndef::snippets[]
+:snippets: ../../../target/generated-snippets
+endif::[]
+
+== 영화 예매
+
+### 상영관 등록
+
+.Request
+include::{snippets}/theater-room-save/http-request.adoc[]
+include::{snippets}/theater-room-save/request-fields.adoc[]

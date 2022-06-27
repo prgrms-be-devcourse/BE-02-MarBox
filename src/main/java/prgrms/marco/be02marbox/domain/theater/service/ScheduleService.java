@@ -38,7 +38,7 @@ public class ScheduleService {
 		Movie movie = movieRepository.findById(requestCreateSchedule.movieId())
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 영화 ID"));
 
-		Schedule schedule = converter.convertFromRequestCreateScheduleToschdeule(requestCreateSchedule, theaterRoom,
+		Schedule schedule = converter.convertFromRequestCreateScheduleToSchedule(requestCreateSchedule, theaterRoom,
 			movie);
 
 		Schedule savedSchedule = scheduleRepository.save(schedule);
