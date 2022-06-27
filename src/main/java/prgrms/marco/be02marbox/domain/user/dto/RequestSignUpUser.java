@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 
 import prgrms.marco.be02marbox.domain.user.Role;
 
-public record UserSignUpReq(
+public record RequestSignUpUser(
 	@NotEmpty(message = "이메일은 필수 입니다.")
 	@Email(message = "이메일 형식이 틀렸습니다.")
 	String email,

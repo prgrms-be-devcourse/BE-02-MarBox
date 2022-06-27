@@ -22,8 +22,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import prgrms.marco.be02marbox.config.JwtConfigure;
 import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignInUser;
+import prgrms.marco.be02marbox.domain.user.dto.RequestSignUpUser;
 import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginUser;
-import prgrms.marco.be02marbox.domain.user.dto.UserSignUpReq;
 import prgrms.marco.be02marbox.domain.user.exception.DuplicateEmailException;
 import prgrms.marco.be02marbox.domain.user.exception.DuplicateNameException;
 import prgrms.marco.be02marbox.domain.user.exception.InvalidEmailException;
@@ -71,7 +71,7 @@ class UserControllerTest {
 	@DisplayName("회원 가입 실패 - 존재하는 이메일")
 	void testSignUpFailBecauseDuplicateEmail() throws Exception {
 		//given
-		UserSignUpReq userSignUpReq = new UserSignUpReq(
+		RequestSignUpUser userSignUpReq = new RequestSignUpUser(
 			"pang@mail.com",
 			"1234",
 			"pang",
@@ -97,7 +97,7 @@ class UserControllerTest {
 	@DisplayName("회원 가입 실패 - 존재하는 이름")
 	void testSignUpFailBecauseDuplicateName() throws Exception {
 		//given
-		UserSignUpReq userSignUpReq = new UserSignUpReq(
+		RequestSignUpUser userSignUpReq = new RequestSignUpUser(
 			"pang@mail.com",
 			"1234",
 			"pang",
@@ -123,7 +123,7 @@ class UserControllerTest {
 	@DisplayName("회원가입 요청 성공")
 	void testSignUpSuccess() throws Exception {
 		//given
-		UserSignUpReq userSignUpReq = new UserSignUpReq(
+		RequestSignUpUser userSignUpReq = new RequestSignUpUser(
 			"pang@mail.com",
 			"1234",
 			"pang",

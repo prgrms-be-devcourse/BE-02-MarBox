@@ -50,7 +50,7 @@ class UserServiceTest {
 	}
 
 	@Test
-	@DisplayName("사용 생성 실패 - 이메일 중복")
+	@DisplayName("사용자 생성 실패 - 이메일 중복")
 	void testSaveFailBecauseDuplicateEmail() {
 		//given
 		String duplicateEmail = "pang@mail.com";
@@ -72,7 +72,7 @@ class UserServiceTest {
 	}
 
 	@Test
-	@DisplayName("사용 생성 실패 - 이름 중복")
+	@DisplayName("사용자 생성 실패 - 이름 중복")
 	void testSaveFailBecauseDuplicateName() {
 		//given
 		String duplicateName = "pang";
