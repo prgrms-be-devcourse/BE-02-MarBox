@@ -1,5 +1,6 @@
 package prgrms.marco.be02marbox.domain.theater.controller;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -39,7 +40,7 @@ public class TheaterController {
 	public ResponseEntity<ResponseFindTheater> saveTheater(@RequestBody @Valid RequestCreateTheater request) {
 		Long savedTheaterId = theaterService.createTheater(request);
 		return ResponseEntity
-			.status(HttpStatus.CREATED)
+			.created(URI.create("theaters/" + savedTheaterId))
 			.body(theaterService.findTheater(savedTheaterId));
 	}
 
