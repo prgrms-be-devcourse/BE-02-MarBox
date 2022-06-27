@@ -20,9 +20,7 @@ import prgrms.marco.be02marbox.domain.theater.service.utils.ScheduleConverter;
 @Service
 public class ScheduleService {
 
-	private static final int CURRENT_SCHEDULE_PERIOD = 4;
-	private static final LocalDate CURRENT_SCHEDULE_START_DATE = LocalDate.now();
-	private static final LocalDate CURRENT_SCHEDULE_END_DATE = LocalDate.now().plusDays(CURRENT_SCHEDULE_PERIOD);
+	private static final int CURRENT_SCHEDULE_PERIOD = 19;
 
 	private final ScheduleRepository scheduleRepository;
 	private final ScheduleConverter converter;
@@ -57,15 +55,11 @@ public class ScheduleService {
 	@Transactional(readOnly = true)
 	public List<ResponseFindCurrentMovie> getCurrentMovieList() {
 		List<Schedule> scheduleList = scheduleRepository.getSchedulesBetweenStartDateAndEndDate(
-			CURRENT_SCHEDULE_START_DATE,
-			CURRENT_SCHEDULE_END_DATE);
+			LocalDate.now(),
+			LocalDate.now().plusDays(CURRENT_SCHEDULE_PERIOD));
 
 		return scheduleList.stream()
-			.map(schedule ->
-				new ResponseFindCurrentMovie(schedule.getMovie().getName(), schedule.getMovie().getLimitAge(),
-					schedule.getMovie().getGenre(), schedule.getMovie().getRunningTime(),
-					schedule.getMovie().getPosterImgLocation())
-			)
+			.map(converter::convertFromScheduleToResponseFindCurrentMovie)
 			.distinct()
 			.collect(Collectors.toList());
 	}
