@@ -30,26 +30,30 @@ public class TheaterController {
 
 	@GetMapping
 	public ResponseEntity<List<ResponseFindTheater>> getTheaters() {
-		List<ResponseFindTheater> response = theaterService.findTheaters();
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(theaterService.findTheaters());
 	}
 
 	@PostMapping
 	public ResponseEntity<ResponseFindTheater> saveTheater(@RequestBody @Valid RequestCreateTheater request) {
 		Long savedTheaterId = theaterService.createTheater(request);
-		ResponseFindTheater savedTheater = theaterService.findTheater(savedTheaterId);
-		return ResponseEntity.status(HttpStatus.CREATED).body(savedTheater);
+		return ResponseEntity
+			.status(HttpStatus.CREATED)
+			.body(theaterService.findTheater(savedTheaterId));
 	}
 
 	@GetMapping("/{theaterId}")
 	public ResponseEntity<ResponseFindTheater> getTheater(@PathVariable Long theaterId) {
-		ResponseFindTheater findTheater = theaterService.findTheater(theaterId);
-		return ResponseEntity.status(HttpStatus.OK).body(findTheater);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(theaterService.findTheater(theaterId));
 	}
 
 	@GetMapping("/region")
 	public ResponseEntity<List<ResponseFindTheater>> getTheaterByRegion(@RequestParam("name") String region) {
-		List<ResponseFindTheater> theaterByRegion = theaterService.findTheaterByRegion(region);
-		return ResponseEntity.status(HttpStatus.OK).body(theaterByRegion);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(theaterService.findTheaterByRegion(region));
 	}
 }
