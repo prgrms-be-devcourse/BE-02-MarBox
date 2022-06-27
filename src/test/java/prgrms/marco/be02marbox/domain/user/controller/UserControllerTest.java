@@ -3,9 +3,8 @@ package prgrms.marco.be02marbox.domain.user.controller;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static prgrms.marco.be02marbox.domain.user.exception.Message.*;
+import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,13 +20,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.config.JwtConfigure;
+import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateEmailException;
+import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateNameException;
+import prgrms.marco.be02marbox.domain.exception.custom.user.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignInUser;
+import prgrms.marco.be02marbox.domain.user.dto.RequestSignUpUser;
 import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginUser;
-import prgrms.marco.be02marbox.domain.user.dto.UserSignUpReq;
-import prgrms.marco.be02marbox.domain.user.exception.DuplicateEmailException;
-import prgrms.marco.be02marbox.domain.user.exception.DuplicateNameException;
-import prgrms.marco.be02marbox.domain.user.exception.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.jwt.Jwt;
 import prgrms.marco.be02marbox.domain.user.service.UserService;
 
@@ -63,15 +63,16 @@ class UserControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(req.toString())
 				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("$.message.[0]").value(equalTo("역할은 필수 입니다.")));
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.messages.[0]").value(equalTo("역할은 필수 입니다.")))
+			.andExpect(jsonPath("$.statusCode").value(equalTo(HttpStatus.BAD_REQUEST.value())));
 	}
 
 	@Test
 	@DisplayName("회원 가입 실패 - 존재하는 이메일")
 	void testSignUpFailBecauseDuplicateEmail() throws Exception {
 		//given
-		UserSignUpReq userSignUpReq = new UserSignUpReq(
+		RequestSignUpUser userSignUpReq = new RequestSignUpUser(
 			"pang@mail.com",
 			"1234",
 			"pang",
@@ -89,15 +90,16 @@ class UserControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(userSignUpReq))
 				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("$.message").value(DUPLICATE_EMAIL_EXP_MSG.getMessage()));
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.messages.[0]").value(equalTo(DUPLICATE_EMAIL_EXP_MSG.getMessage())))
+			.andExpect(jsonPath("$.statusCode").value(equalTo(HttpStatus.BAD_REQUEST.value())));
 	}
 
 	@Test
 	@DisplayName("회원 가입 실패 - 존재하는 이름")
 	void testSignUpFailBecauseDuplicateName() throws Exception {
 		//given
-		UserSignUpReq userSignUpReq = new UserSignUpReq(
+		RequestSignUpUser userSignUpReq = new RequestSignUpUser(
 			"pang@mail.com",
 			"1234",
 			"pang",
@@ -115,15 +117,16 @@ class UserControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(userSignUpReq))
 				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("$.message").value(DUPLICATE_NAME_EXP_MSG.getMessage()));
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.messages.[0]").value(equalTo(DUPLICATE_NAME_EXP_MSG.getMessage())))
+			.andExpect(jsonPath("$.statusCode").value(equalTo(HttpStatus.BAD_REQUEST.value())));
 	}
 
 	@Test
 	@DisplayName("회원가입 요청 성공")
 	void testSignUpSuccess() throws Exception {
 		//given
-		UserSignUpReq userSignUpReq = new UserSignUpReq(
+		RequestSignUpUser userSignUpReq = new RequestSignUpUser(
 			"pang@mail.com",
 			"1234",
 			"pang",
@@ -183,8 +186,9 @@ class UserControllerTest {
 		mockMvc.perform(post("/users/sign-in")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(requestSignInUser)))
-			.andExpect(status().is4xxClientError())
-			.andDo(print());
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.messages.[0]").value(equalTo(INVALID_EMAIL_EXP_MSG.getMessage())))
+			.andExpect(jsonPath("$.statusCode").value(equalTo(HttpStatus.BAD_REQUEST.value())));
 	}
 
 	@Test
@@ -202,7 +206,8 @@ class UserControllerTest {
 		mockMvc.perform(post("/users/sign-in")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(requestSignInUser)))
-			.andExpect(status().is4xxClientError())
-			.andDo(print());
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.messages.[0]").value(equalTo("비밀번호가 틀렸습니다.")))
+			.andExpect(jsonPath("$.statusCode").value(equalTo(HttpStatus.BAD_REQUEST.value())));
 	}
 }

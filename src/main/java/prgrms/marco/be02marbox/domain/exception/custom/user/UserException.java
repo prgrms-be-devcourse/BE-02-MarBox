@@ -1,4 +1,4 @@
-package prgrms.marco.be02marbox.domain.user.exception;
+package prgrms.marco.be02marbox.domain.exception.custom.user;
 
 public abstract class UserException extends RuntimeException {
 }

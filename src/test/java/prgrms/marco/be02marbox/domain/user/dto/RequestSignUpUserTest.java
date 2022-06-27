@@ -18,7 +18,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import prgrms.marco.be02marbox.domain.user.Role;
 
-class UserSignUpReqTest {
+class RequestSignUpUserTest {
 
 	private static ValidatorFactory factory;
 	private static Validator validator;
@@ -38,14 +38,14 @@ class UserSignUpReqTest {
 	@DisplayName("빈 이메일 전송시 예외 발생")
 	void testEmptyEmail() {
 		//given
-		UserSignUpReq userSignUpReq = new UserSignUpReq(
+		RequestSignUpUser requestSignUpUser = new RequestSignUpUser(
 			"",
 			"1234",
 			"pang",
 			Role.ROLE_CUSTOMER);
 
 		//when
-		Set<ConstraintViolation<UserSignUpReq>> violations = validator.validate(userSignUpReq);
+		Set<ConstraintViolation<RequestSignUpUser>> violations = validator.validate(requestSignUpUser);
 
 		//then
 		assertThat(violations).isNotEmpty();
@@ -56,14 +56,14 @@ class UserSignUpReqTest {
 	@DisplayName("유효하지 않은 이메일 형식")
 	void testInvalidFormatEmail() {
 		//given
-		UserSignUpReq userSignUpReq = new UserSignUpReq(
+		RequestSignUpUser requestSignUpUser = new RequestSignUpUser(
 			"aaaaa",
 			"1234",
 			"pang",
 			Role.ROLE_CUSTOMER);
 
 		//when
-		Set<ConstraintViolation<UserSignUpReq>> violations = validator.validate(userSignUpReq);
+		Set<ConstraintViolation<RequestSignUpUser>> violations = validator.validate(requestSignUpUser);
 
 		//then
 		assertThat(violations).isNotEmpty();
@@ -74,14 +74,14 @@ class UserSignUpReqTest {
 	@ValueSource(strings = {"", "123", "123456789"})
 	void testInvalidFormatPassword(String password) {
 		//given
-		UserSignUpReq userSignUpReq = new UserSignUpReq(
+		RequestSignUpUser requestSignUpUser = new RequestSignUpUser(
 			"pang@email.com",
 			password,
 			"pang",
 			Role.ROLE_CUSTOMER);
 
 		//when
-		Set<ConstraintViolation<UserSignUpReq>> violations = validator.validate(userSignUpReq);
+		Set<ConstraintViolation<RequestSignUpUser>> violations = validator.validate(requestSignUpUser);
 
 		//then
 		assertThat(violations).isNotEmpty();
@@ -89,17 +89,17 @@ class UserSignUpReqTest {
 	}
 
 	@Test
-	@DisplayName("빈 이메일 전송시 예외 발생")
+	@DisplayName("빈 이름 전송시 예외 발생")
 	void testEmptyName() {
 		//given
-		UserSignUpReq userSignUpReq = new UserSignUpReq(
+		RequestSignUpUser requestSignUpUser = new RequestSignUpUser(
 			"pang@email.com",
 			"1234",
 			"",
 			Role.ROLE_CUSTOMER);
 
 		//when
-		Set<ConstraintViolation<UserSignUpReq>> violations = validator.validate(userSignUpReq);
+		Set<ConstraintViolation<RequestSignUpUser>> violations = validator.validate(requestSignUpUser);
 
 		//then
 		assertThat(violations).isNotEmpty();

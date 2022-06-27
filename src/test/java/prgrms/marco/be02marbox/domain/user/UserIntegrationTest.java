@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignInUser;
-import prgrms.marco.be02marbox.domain.user.dto.UserSignUpReq;
+import prgrms.marco.be02marbox.domain.user.dto.RequestSignUpUser;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
 @SpringBootTest
@@ -45,7 +45,7 @@ class UserIntegrationTest {
 	@DisplayName("사용자 회원 가입 API 성공")
 	void testSingUpApiSuccess() throws Exception {
 		//given
-		UserSignUpReq userSignUpReq = new UserSignUpReq(
+		RequestSignUpUser requestSignUpUser = new RequestSignUpUser(
 			"pang@mail.com",
 			"1234",
 			"pang",
@@ -54,7 +54,7 @@ class UserIntegrationTest {
 		//when then
 		mockMvc.perform(post("/users/sign-up")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(userSignUpReq))
+				.content(objectMapper.writeValueAsString(requestSignUpUser))
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
 			.andDo(document("user-sign-up",
