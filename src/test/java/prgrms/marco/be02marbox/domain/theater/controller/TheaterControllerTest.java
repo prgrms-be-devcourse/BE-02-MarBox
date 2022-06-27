@@ -43,7 +43,6 @@ class TheaterControllerTest {
 	@MockBean
 	private TheaterService theaterService;
 
-	// 단건 조회 테스트
 	@Test
 	@DisplayName("영화관 단건 조회 테스트")
 	@WithMockUser(roles = "ADMIN")
@@ -64,7 +63,6 @@ class TheaterControllerTest {
 			.andDo(print());
 	}
 
-	// 전체 조회 테스트
 	@Test
 	@DisplayName("영화관 전체 조회 테스트")
 	@WithMockUser(roles = "ADMIN")
@@ -79,7 +77,6 @@ class TheaterControllerTest {
 			.map(theater -> new ResponseFindTheater(theater.getRegion(), theater.getName()))
 			.collect(Collectors.toList());
 
-		// when
 		given(theaterService.findTheaters()).willReturn(response);
 
 		// expected
@@ -89,15 +86,12 @@ class TheaterControllerTest {
 			.andDo(print());
 	}
 
-	// 극장 생성 테스트
 	@Test
 	@DisplayName("영화관 생성 테스트")
 	@WithMockUser(roles = "ADMIN")
 	void testSaveTheater() throws Exception {
 		// given
 		RequestCreateTheater request = new RequestCreateTheater("SEOUL", "theater0");
-
-		// when
 		given(theaterService.createTheater(request)).willReturn(1L);
 		given(theaterService.findTheater(1L)).willReturn(
 			new ResponseFindTheater(Region.getRegion(request.region()), request.name()));
@@ -113,7 +107,6 @@ class TheaterControllerTest {
 			.andDo(print());
 	}
 
-	// 지역별 조회 테스트
 	@Test
 	@DisplayName("영화관 지역별 조회 테스트")
 	@WithMockUser(roles = "ADMIN")
