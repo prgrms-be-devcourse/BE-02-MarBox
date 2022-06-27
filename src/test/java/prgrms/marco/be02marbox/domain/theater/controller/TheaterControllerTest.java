@@ -47,12 +47,10 @@ class TheaterControllerTest {
 	void testGetOneTheater() throws Exception {
 		// given
 		Long theaterId = 1L;
-
-		// when
 		given(theaterService.findTheater(theaterId)).willReturn(
 			new ResponseFindTheater(Region.getRegion("SEOUL"), "theater0"));
 
-		// then
+		// expected
 		mockMvc.perform(get("/theaters/{theaterId}", theaterId)
 				.contentType(APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -94,7 +92,7 @@ class TheaterControllerTest {
 		given(theaterService.findTheater(1L)).willReturn(
 			new ResponseFindTheater(Region.getRegion(request.region()), request.name()));
 
-		// then
+		// expected
 		mockMvc.perform(post("/theaters")
 				.with(SecurityMockMvcRequestPostProcessors.csrf())
 				.contentType(APPLICATION_JSON)
@@ -118,6 +116,7 @@ class TheaterControllerTest {
 		given(theaterService.findTheaterByRegion("seoul")).willReturn(
 			List.of(new ResponseFindTheater(Region.SEOUL, requestBusan.name())));
 
+		// expected
 		mockMvc.perform(get("/theaters/region")
 				.param("name", "seoul")
 				.contentType(APPLICATION_JSON))
