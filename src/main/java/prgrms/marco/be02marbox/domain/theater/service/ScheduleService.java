@@ -14,6 +14,7 @@ import prgrms.marco.be02marbox.domain.movie.service.utils.MovieConverter;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
+import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindMovieAndDate;
 import prgrms.marco.be02marbox.domain.theater.repository.ScheduleRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
 import prgrms.marco.be02marbox.domain.theater.service.utils.ScheduleConverter;
@@ -59,14 +60,30 @@ public class ScheduleService {
 
 	@Transactional(readOnly = true)
 	public List<ResponseFindCurrentMovie> getCurrentMovieList() {
-		List<Schedule> scheduleList = scheduleRepository.getSchedulesBetweenStartDateAndEndDate(
-			LocalDate.now(),
-			LocalDate.now().plusDays(CURRENT_SCHEDULE_PERIOD));
+		List<Schedule> showingMoviesSchedules = getShowingMoviesSchedules();
 
-		return scheduleList.stream()
+		return showingMoviesSchedules.stream()
 			.map(schedule -> movieConverter.convertFromMovieToResponseFindCurrentMovie(schedule.getMovie()))
 			.distinct()
 			.collect(Collectors.toList());
+	}
+
+	@Transactional(readOnly = true)
+	public List<ResponseFindMovieAndDate> findMovieAndDateWithTheaterId(Long theaterId) {
+		List<TheaterRoom> theaterRooms = theaterRoomRepository.findAllByTheaterId(theaterId);
+		List<Schedule> showingMoviesSchedules = getShowingMoviesSchedules();
+
+		return showingMoviesSchedules.stream()
+			.filter(schedule -> theaterRooms.contains(schedule.getTheaterRoom()))
+			.map(scheduleConverter::convertFromScheduleToResponseFindMovieAndDate)
+			.distinct()
+			.collect(Collectors.toList());
+	}
+
+	private List<Schedule> getShowingMoviesSchedules() {
+		return scheduleRepository.getSchedulesBetweenStartDateAndEndDate(
+			LocalDate.now(),
+			LocalDate.now().plusDays(CURRENT_SCHEDULE_PERIOD));
 	}
 
 }
