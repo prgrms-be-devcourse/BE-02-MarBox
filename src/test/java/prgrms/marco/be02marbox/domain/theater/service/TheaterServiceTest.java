@@ -57,14 +57,15 @@ class TheaterServiceTest {
 		// expected
 		assertThatThrownBy(
 			() -> theaterService.createTheater(request)
-		).isInstanceOf(IllegalArgumentException.class);
+		).isInstanceOf(IllegalArgumentException.class)
+			.hasMessageContaining("해당 지역은 존재하지 않습니다.");
 	}
 
 	@Test
 	@DisplayName("영화관 단건 조회")
 	void testGetOneTheater() {
 		// given
-		Theater theater = new Theater(Region.getRegion("SEOUL"), "theater1");
+		Theater theater = new Theater(Region.from("SEOUL"), "theater1");
 		Theater insertedTheater = theaterRepository.save(theater);
 
 		//when
@@ -82,7 +83,7 @@ class TheaterServiceTest {
 	void testGetAllTheater() {
 		// given
 		List<Theater> theaters = IntStream.range(0, 20)
-			.mapToObj(i -> new Theater(Region.getRegion("SEOUL"), "theater" + i)).collect(toList());
+			.mapToObj(i -> new Theater(Region.from("SEOUL"), "theater" + i)).collect(toList());
 		theaterRepository.saveAll(theaters);
 
 		// when
@@ -101,11 +102,13 @@ class TheaterServiceTest {
 	void testGetTheatersByRegion() {
 		// given
 		List<Theater> theatersOfSeoul = IntStream.range(0, 5)
-			.mapToObj(i -> new Theater(Region.getRegion("SEOUL"), "theater" + i)).collect(toList());
+			.mapToObj(i -> new Theater(Region.from("SEOUL"), "theater" + i))
+			.collect(toList());
 		theaterRepository.saveAll(theatersOfSeoul);
 
 		List<Theater> theatersOfBusan = IntStream.range(0, 5)
-			.mapToObj(i -> new Theater(Region.getRegion("BUSAN"), "theater" + i)).collect(toList());
+			.mapToObj(i -> new Theater(Region.from("BUSAN"), "theater" + i))
+			.collect(toList());
 		theaterRepository.saveAll(theatersOfBusan);
 
 		// when
