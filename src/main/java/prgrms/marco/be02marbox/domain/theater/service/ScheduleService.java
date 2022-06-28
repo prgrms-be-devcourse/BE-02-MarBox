@@ -2,6 +2,7 @@ package prgrms.marco.be02marbox.domain.theater.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -70,7 +71,7 @@ public class ScheduleService {
 
 	@Transactional(readOnly = true)
 	public List<ResponseFindMovieAndDate> findMovieAndDateWithTheaterId(Long theaterId) {
-		List<TheaterRoom> theaterRooms = theaterRoomRepository.findAllByTheaterId(theaterId);
+		Set<TheaterRoom> theaterRooms = theaterRoomRepository.findAllByTheaterId(theaterId);
 		List<Schedule> showingMoviesSchedules = getShowingMoviesSchedules();
 
 		return showingMoviesSchedules.stream()
