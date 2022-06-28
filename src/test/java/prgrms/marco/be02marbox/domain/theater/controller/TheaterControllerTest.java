@@ -106,8 +106,7 @@ class TheaterControllerTest {
 		mockMvc.perform(get("/theaters")
 				.contentType(APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andDo(document("theater-find-all",
-				responseBody()));
+			.andDo(document("theater-find-all"));
 	}
 
 	@Test
@@ -191,7 +190,6 @@ class TheaterControllerTest {
 				.contentType(APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andDo(document("theater-find-by-region",
-				requestParameters(parameterWithName("name").description("지역")),
-				responseBody()));
+				requestParameters(parameterWithName("name").description("지역"))));
 	}
 }
