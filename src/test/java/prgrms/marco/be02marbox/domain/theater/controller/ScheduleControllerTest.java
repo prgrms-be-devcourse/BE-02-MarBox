@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -34,6 +35,7 @@ import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
 import prgrms.marco.be02marbox.domain.movie.dto.ResponseFindCurrentMovie;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
+import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindMovieAndDate;
 import prgrms.marco.be02marbox.domain.theater.service.ScheduleService;
 
 @WebMvcTest(controllers = ScheduleController.class,
@@ -116,6 +118,28 @@ class ScheduleControllerTest {
 					fieldWithPath("[].genre").type(JsonFieldType.STRING).description("장르"),
 					fieldWithPath("[].runningTime").type(JsonFieldType.NUMBER).description("상영시간"),
 					fieldWithPath("[].posterImgLocation").type(JsonFieldType.STRING).description("포스터 이미지 경로")
+				)));
+	}
+
+	@Test
+	@DisplayName("영화관 ID로 요청하면 영화와 날짜 리스트 반환 테스트")
+	@WithMockUser(roles = {"ADMIN", "USER"})
+	void testGetMovieAndDateListInOneTheater() throws Exception {
+		List<ResponseFindMovieAndDate> movieAndDateList = List.of(
+			new ResponseFindMovieAndDate("영화1", LocalDate.now()),
+			new ResponseFindMovieAndDate("영화2", LocalDate.now()),
+			new ResponseFindMovieAndDate("영화1", LocalDate.now().plusDays(1))
+		);
+
+		given(scheduleService.findMovieAndDateWithTheaterId(1L)).willReturn(movieAndDateList);
+
+		mockMvc.perform(get("/schedules")
+				.param("theaterId", "1"))
+			.andExpect(status().isOk())
+			.andDo(document("schedule-get-movie-and-date-in-theater",
+				responseFields(
+					fieldWithPath("[].movieName").type(JsonFieldType.STRING).description("영화 이름"),
+					fieldWithPath("[].date").type(JsonFieldType.STRING).description("상영 날짜")
 				)));
 	}
 
