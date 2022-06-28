@@ -45,9 +45,7 @@ public class ScheduleController {
 	@GetMapping
 	public ResponseEntity<List<ResponseFindMovieAndDate>> getMovieAndDateListInOneTheater(
 		@RequestParam Long theaterId) {
-		List<ResponseFindMovieAndDate> movieAndDateList = scheduleService.findMovieAndDateWithTheaterId(
-			theaterId);
-		return ResponseEntity.ok().body(movieAndDateList);
+		return ResponseEntity.ok().body(scheduleService.findMovieAndDateWithTheaterId(theaterId));
 	}
 
 }
