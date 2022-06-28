@@ -122,7 +122,11 @@ class ReservedSeatRepositoryTest {
 			() -> assertThat(findReservedSeat).isPresent(),
 			() -> {
 				ReservedSeat getReservedSeat = findReservedSeat.get();
-				assertThat(getReservedSeat.getId()).isEqualTo(ticket.getSchedule().getId() + "_" + seat.getId());
+				StringBuilder makeId = new StringBuilder()
+					.append(ticket.getSchedule().getId())
+					.append("_")
+					.append(seat.getId());
+				assertThat(getReservedSeat.getId()).isEqualTo(makeId.toString());
 			}
 		);
 	}

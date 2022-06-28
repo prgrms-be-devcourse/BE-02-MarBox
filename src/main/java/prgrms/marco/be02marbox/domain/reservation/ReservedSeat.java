@@ -35,7 +35,11 @@ public class ReservedSeat {
 	}
 
 	private void makeReservedSeatId(Long scheduleId, Long seatId) {
-		this.id = scheduleId + ID_SEPARATOR + seatId;
+		this.id = new StringBuilder()
+			.append(scheduleId)
+			.append(ID_SEPARATOR)
+			.append(seatId)
+			.toString();
 	}
 
 	public ReservedSeat(Ticket ticket, Seat seat) {
