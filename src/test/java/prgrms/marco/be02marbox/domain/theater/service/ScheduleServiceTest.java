@@ -178,8 +178,6 @@ class ScheduleServiceTest {
 		List<ResponseFindMovieAndDate> movieAndDateList = scheduleService.findMovieAndDateWithTheaterId(
 			theater.getId());
 
-		System.out.println(movieAndDateList);
-
 		// then
 		assertAll(
 			() -> assertThat(movieAndDateList.size()).isEqualTo(3),
