@@ -3,6 +3,7 @@ package prgrms.marco.be02marbox.domain.theater.controller;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
@@ -23,6 +25,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.config.WebSecurityConfigure;
+import prgrms.marco.be02marbox.domain.exception.custom.BadRequestTheaterException;
+import prgrms.marco.be02marbox.domain.exception.custom.theater.DuplicateTheaterNameException;
+import prgrms.marco.be02marbox.domain.exception.custom.theater.NotRegisteredRegion;
 import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheater;
@@ -31,6 +36,7 @@ import prgrms.marco.be02marbox.domain.theater.service.TheaterService;
 
 @WebMvcTest(controllers = TheaterController.class,
 	excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigure.class))
+@AutoConfigureRestDocs
 class TheaterControllerTest {
 
 	@Autowired
@@ -55,6 +61,21 @@ class TheaterControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.region").value("SEOUL"))
 			.andExpect(jsonPath("$.theaterName").value("theater0"));
+	}
+
+	@Test
+	@DisplayName("영화관 단건 조회 테스트 - 실패")
+	@WithMockUser(roles = "ADMIN")
+	void testGetOneTheaterFailed() throws Exception {
+		// given
+		Long theaterId = 1L;
+		given(theaterService.findTheater(theaterId)).willThrow(new BadRequestTheaterException("올바르지 않은 극장 ID"));
+
+		// expected
+		mockMvc.perform(get("/theaters/{theaterId}", theaterId)
+				.contentType(APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andDo(print());
 	}
 
 	@Test
@@ -97,6 +118,40 @@ class TheaterControllerTest {
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.region").value("SEOUL"))
 			.andExpect(jsonPath("$.theaterName").value("theater0"));
+	}
+
+	@Test
+	@DisplayName("영화관 생성 실패 테스트 - 중복되는 이름")
+	@WithMockUser(roles = "ADMIN")
+	void testSaveTheaterFailedByName() throws Exception {
+		// given
+		RequestCreateTheater request = new RequestCreateTheater("SEOUL", "theater0");
+		given(theaterService.createTheater(request)).willThrow(new DuplicateTheaterNameException());
+
+		// expected
+		mockMvc.perform(post("/theaters")
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.contentType(APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(request)))
+			.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@DisplayName("영화관 생성 실패 테스트 - 잘못된 지역 입력")
+	@WithMockUser(roles = "ADMIN")
+	void testSaveTheaterFailedByRegion() throws Exception {
+		// given
+		String wrongRegion = "NEWYORK";
+		RequestCreateTheater request = new RequestCreateTheater(wrongRegion, "theater0");
+		given(theaterService.createTheater(request)).willThrow(new NotRegisteredRegion());
+
+		// expected
+		mockMvc.perform(post("/theaters")
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.contentType(APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(request)))
+			.andExpect(status().isBadRequest())
+			.andDo(print());
 	}
 
 	@Test
