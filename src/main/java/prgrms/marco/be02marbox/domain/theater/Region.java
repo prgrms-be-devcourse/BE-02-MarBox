@@ -17,7 +17,6 @@ public enum Region {
 	JEOLLA("전라"),
 	JEJU("제주");
 
-	private static final String INVALID_REGION = "해당 지역은 존재하지 않습니다.";
 	private final String regionKor;
 
 	Region(String regionKor) {
@@ -34,7 +33,7 @@ public enum Region {
 			.stream(Region.values())
 			.noneMatch(inputRegion ->
 				inputRegion.toString().equalsIgnoreCase(region))) {
-			throw new IllegalArgumentException(INVALID_REGION);
+			throw new IllegalArgumentException("사전에 등록되지 않은 지역입니다.");
 		}
 	}
 }
