@@ -57,7 +57,7 @@ public class TheaterService {
 	}
 
 	public List<ResponseFindTheater> findTheaterByRegion(String region) {
-		return theaterRepository.findByRegion(Region.from(region))
+		return theaterRepository.findAllByRegion(Region.from(region))
 			.stream()
 			.map(theaterConverter::convertFromTheaterToResponseFindTheater)
 			.collect(toList());
