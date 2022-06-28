@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import prgrms.marco.be02marbox.domain.exception.custom.BadRequestTheaterException;
+import prgrms.marco.be02marbox.domain.exception.custom.theater.TheaterException;
 import prgrms.marco.be02marbox.domain.exception.dto.ResponseApiError;
 
 @RestControllerAdvice(basePackages = "prgrms.marco.be02marbox.domain.theater.controller")
@@ -26,5 +27,13 @@ public class TheaterExceptionHandler {
 
 		messages.add(exception.getMessage());
 		return ResponseEntity.badRequest().body(new ResponseApiError(messages, HttpStatus.BAD_REQUEST.value()));
+	}
+
+	@ExceptionHandler(TheaterException.class)
+	public ResponseEntity<ResponseApiError> handlerTheaterException(TheaterException exception) {
+		List<String> message = new ArrayList<>();
+		message.add(exception.getMessage());
+		return ResponseEntity.status(exception.getStatusCode())
+			.body(new ResponseApiError(message, exception.getStatusCode()));
 	}
 }
