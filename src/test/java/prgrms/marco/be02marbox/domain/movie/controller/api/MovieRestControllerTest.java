@@ -57,7 +57,8 @@ class MovieRestControllerTest {
 
 		List<Movie> list = new ArrayList<>();
 		list.add(new Movie("Frozen", LimitAge.CHILD, Genre.ANIMATION, 102, "frozen.png"));
-		given(movieService.getMovies(0, 5)).willReturn(list);
+		given(movieService.getMovies(0, 5))
+			.willReturn(list);
 
 		mockMvc.perform(
 				get("/api/movies").params(multiValueMap)

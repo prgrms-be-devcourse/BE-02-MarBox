@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import prgrms.marco.be02marbox.domain.exception.custom.theater.DuplicateTheaterNameException;
 import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheater;
@@ -56,9 +57,25 @@ class TheaterServiceTest {
 		RequestCreateTheater request = new RequestCreateTheater(wrongRegion, "CGV 강남점");
 		// expected
 		assertThatThrownBy(
-			() -> theaterService.createTheater(request)
-		).isInstanceOf(IllegalArgumentException.class)
-			.hasMessageContaining("해당 지역은 존재하지 않습니다.");
+			() -> theaterService.createTheater(request))
+			.isInstanceOf(IllegalArgumentException.class)
+			.hasMessageContaining("사전에 등록되지 않은 지역입니다");
+	}
+
+	@Test
+	@DisplayName("영화관 추가 실패 - 중복된 영화관 이름")
+	void testCreateTheaterFailedByDuplicateName() {
+		// given
+		Theater theater = new Theater(Region.from("SEOUL"), "CGV 강남점");
+		theaterRepository.save(theater);
+		RequestCreateTheater request = new RequestCreateTheater("SEOUL", "CGV 강남점");
+
+		// expected
+		assertThatThrownBy(
+			() -> theaterService.createTheater(request))
+			.isInstanceOf(DuplicateTheaterNameException.class)
+			.hasMessageContaining("이미 존재하는 영화관입니다.");
+
 	}
 
 	@Test
@@ -76,6 +93,19 @@ class TheaterServiceTest {
 			() -> assertThat(findTheater.region()).isEqualTo(insertedTheater.getRegion()),
 			() -> assertThat(findTheater.theaterName()).isEqualTo(insertedTheater.getName())
 		);
+	}
+
+	@Test
+	@DisplayName("영화관 단건 조회 - 존재하지 않는 영화관")
+	void testGetOneTheaterFailed() {
+		// given
+		Long wrongId = 1L;
+
+		// expected
+		assertThatThrownBy(
+			() -> theaterService.findTheater(wrongId))
+			.isInstanceOf(EntityNotFoundException.class)
+			.hasMessageContaining("극장 정보를 조회할 수 없습니다.");
 	}
 
 	@Test

@@ -34,4 +34,17 @@ public class Ticket {
 
 	@Column(name = "reserved_at")
 	private LocalDateTime reservedAt;
+
+	public Ticket() {
+	}
+
+	public Ticket(User user, Schedule schedule, LocalDateTime reservedAt) {
+		this.user = user;
+		this.schedule = schedule;
+		this.reservedAt = reservedAt;
+	}
+
+	public Schedule getSchedule() {
+		return schedule;
+	}
 }

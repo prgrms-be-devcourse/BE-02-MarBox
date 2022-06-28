@@ -23,6 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.config.WebSecurityConfigure;
+import prgrms.marco.be02marbox.domain.exception.custom.BadRequestTheaterException;
+import prgrms.marco.be02marbox.domain.exception.custom.theater.DuplicateTheaterNameException;
 import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheater;
@@ -55,6 +57,20 @@ class TheaterControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.region").value("SEOUL"))
 			.andExpect(jsonPath("$.theaterName").value("theater0"));
+	}
+
+	@Test
+	@DisplayName("영화관 단건 조회 테스트 - 실패")
+	@WithMockUser(roles = "ADMIN")
+	void testGetOneTheaterFailed() throws Exception {
+		// given
+		Long theaterId = 1L;
+		given(theaterService.findTheater(theaterId)).willThrow(new BadRequestTheaterException("올바르지 않은 극장 ID"));
+
+		// expected
+		mockMvc.perform(get("/theaters/{theaterId}", theaterId)
+				.contentType(APPLICATION_JSON))
+			.andExpect(status().isBadRequest());
 	}
 
 	@Test
@@ -97,6 +113,39 @@ class TheaterControllerTest {
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.region").value("SEOUL"))
 			.andExpect(jsonPath("$.theaterName").value("theater0"));
+	}
+
+	@Test
+	@DisplayName("영화관 생성 실패 테스트 - 중복되는 이름")
+	@WithMockUser(roles = "ADMIN")
+	void testSaveTheaterFailedByName() throws Exception {
+		// given
+		RequestCreateTheater request = new RequestCreateTheater("SEOUL", "theater0");
+		given(theaterService.createTheater(request)).willThrow(new DuplicateTheaterNameException());
+
+		// expected
+		mockMvc.perform(post("/theaters")
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.contentType(APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(request)))
+			.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@DisplayName("영화관 생성 실패 테스트 - 잘못된 지역 입력")
+	@WithMockUser(roles = "ADMIN")
+	void testSaveTheaterFailedByRegion() throws Exception {
+		// given
+		String wrongRegion = "NEWYORK";
+		RequestCreateTheater request = new RequestCreateTheater(wrongRegion, "theater0");
+		given(theaterService.createTheater(request)).willThrow(new IllegalArgumentException("사전에 등록되지 않은 지역입니다."));
+
+		// expected
+		mockMvc.perform(post("/theaters")
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.contentType(APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(request)))
+			.andExpect(status().isNotFound());
 	}
 
 	@Test
