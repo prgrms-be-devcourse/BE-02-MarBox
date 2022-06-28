@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import prgrms.marco.be02marbox.domain.exception.custom.theater.DuplicateTheaterNameException;
+import prgrms.marco.be02marbox.domain.exception.custom.theater.NotRegisteredRegion;
 import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheater;
@@ -57,9 +58,9 @@ class TheaterServiceTest {
 		RequestCreateTheater request = new RequestCreateTheater(wrongRegion, "CGV 강남점");
 		// expected
 		assertThatThrownBy(
-			() -> theaterService.createTheater(request)
-		).isInstanceOf(IllegalArgumentException.class)
-			.hasMessageContaining("해당 지역은 존재하지 않습니다.");
+			() -> theaterService.createTheater(request))
+			.isInstanceOf(NotRegisteredRegion.class)
+			.hasMessageContaining("사전에 등록되지 않은 지역입니다");
 	}
 
 	@Test
