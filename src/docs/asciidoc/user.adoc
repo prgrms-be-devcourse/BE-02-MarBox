@@ -1,0 +1,16 @@
+:hardbreaks:
+ifndef::snippets[]
+:snippets: ../../../target/generated-snippets
+endif::[]
+
+== 사용자
+
+### 회원가입
+
+.Request
+include::{snippets}/user-sign-up/http-request.adoc[]
+include::{snippets}/user-sign-up/request-fields.adoc[]
+
+.Response
+include::{snippets}/user-sign-up/http-response.adoc[]
+include::{snippets}/user-sign-up/response-headers.adoc[]
