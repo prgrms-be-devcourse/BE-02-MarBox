@@ -27,12 +27,15 @@ public class MovieService {
 	@Transactional
 	public Long createMovie(RequestCreateMovie requestCreateMovie) {
 		Movie newMovie = movieConverter.convertFromRequestCreateMovieToMovie(requestCreateMovie);
-		Movie savedMovie = movieRepository.save(newMovie);
-		return savedMovie.getId();
+		return movieRepository
+			.save(newMovie)
+			.getId();
 	}
 
 	@Transactional(readOnly = true)
 	public List<Movie> getMovies(int page, int size) {
-		return movieRepository.findAll(PageRequest.of(page, size)).getContent();
+		return movieRepository
+			.findAll(PageRequest.of(page, size))
+			.getContent();
 	}
 }
