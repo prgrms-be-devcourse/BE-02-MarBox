@@ -72,8 +72,7 @@ class TheaterControllerTest {
 		// expected
 		mockMvc.perform(get("/theaters/{theaterId}", theaterId)
 				.contentType(APPLICATION_JSON))
-			.andExpect(status().isBadRequest())
-			.andDo(print());
+			.andExpect(status().isBadRequest());
 	}
 
 	@Test
@@ -148,8 +147,7 @@ class TheaterControllerTest {
 				.with(SecurityMockMvcRequestPostProcessors.csrf())
 				.contentType(APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(request)))
-			.andExpect(status().isBadRequest())
-			.andDo(print());
+			.andExpect(status().isBadRequest());
 	}
 
 	@Test
