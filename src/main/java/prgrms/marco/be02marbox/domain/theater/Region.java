@@ -2,8 +2,6 @@ package prgrms.marco.be02marbox.domain.theater;
 
 import java.util.Arrays;
 
-import prgrms.marco.be02marbox.domain.exception.custom.theater.NotRegisteredRegion;
-
 public enum Region {
 	SEOUL("서울"),
 	INCHEON("인천"),
@@ -35,7 +33,7 @@ public enum Region {
 			.stream(Region.values())
 			.noneMatch(inputRegion ->
 				inputRegion.toString().equalsIgnoreCase(region))) {
-			throw new NotRegisteredRegion();
+			throw new IllegalArgumentException("사전에 등록되지 않은 지역입니다.");
 		}
 	}
 }
