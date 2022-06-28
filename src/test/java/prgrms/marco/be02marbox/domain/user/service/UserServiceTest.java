@@ -16,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateEmailException;
-import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateNameException;
 import prgrms.marco.be02marbox.domain.exception.custom.user.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.User;
@@ -74,28 +73,6 @@ class UserServiceTest {
 			Role.ROLE_CUSTOMER))
 			.isInstanceOf(DuplicateEmailException.class)
 			.hasMessageContaining("이미 존재하는 이메일 입니다.");
-	}
-
-	@Test
-	@DisplayName("사용자 생성 실패 - 이름 중복")
-	void testSaveFailBecauseDuplicateName() {
-		//given
-		String duplicateName = "pang";
-		User user = new User(
-			"pang@mail.com",
-			"1234",
-			duplicateName,
-			Role.ROLE_CUSTOMER);
-		userRepository.save(user);
-
-		//when then
-		assertThatThrownBy(() -> userService.create(
-			"bang@mail.com",
-			"1234",
-			duplicateName,
-			Role.ROLE_CUSTOMER))
-			.isInstanceOf(DuplicateNameException.class)
-			.hasMessageContaining("이미 존재하는 이름입니다.");
 	}
 
 	@Test

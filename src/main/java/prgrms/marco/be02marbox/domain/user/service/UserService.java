@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateEmailException;
-import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateNameException;
 import prgrms.marco.be02marbox.domain.exception.custom.user.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.User;
@@ -34,18 +33,12 @@ public class UserService {
 	 * @param role
 	 * @return 사용자 아이디
 	 * @throws DuplicateEmailException - 입력 받은 이메일이 DB에 존재하는 경우
-	 * @throws DuplicateNameException - 입력 받은 이름이 DB에 존재하는 경우
 	 */
 	@Transactional
 	public Long create(String email, String password, String name, Role role) {
 		userRepository.findByEmail(email)
 			.ifPresent(user -> {
 				throw new DuplicateEmailException(DUPLICATE_EMAIL_EXP_MSG);
-			});
-
-		userRepository.findByName(name)
-			.ifPresent(user -> {
-				throw new DuplicateNameException(DUPLICATE_NAME_EXP_MSG);
 			});
 
 		User user = new User(email, passwordEncoder.encode(password), name, role);
