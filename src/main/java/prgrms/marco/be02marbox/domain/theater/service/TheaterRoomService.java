@@ -24,7 +24,7 @@ import prgrms.marco.be02marbox.domain.theater.service.utils.TheaterRoomConverter
 @Transactional(readOnly = true)
 public class TheaterRoomService {
 
-	private static final String WRONG_THEATER_ID_ERR_MSG = "바르지 않은 극장 ID 값입니다.";
+	private static final String WRONG_THEATER_ID_ERR_MSG = "올바르지 않은 극장 ID 값입니다.";
 
 	private final TheaterRoomRepository theaterRoomRepository;
 	private final TheaterRepository theaterRepository;
@@ -44,6 +44,12 @@ public class TheaterRoomService {
 		this.theaterConverter = theaterConverter;
 	}
 
+	/**
+	 * 새로운 상영관 추가
+	 * @param requestCreateTheaterRoom 극장, 상영관 이름, 좌석 정보
+	 * @return 생성된 id
+	 * @throws  BadRequestTheaterException 극장 정보가 존재하지 않는 경우
+	 */
 	@Transactional
 	public Long save(RequestCreateTheaterRoom requestCreateTheaterRoom) {
 		Theater theater = theaterRepository.findById(requestCreateTheaterRoom.theaterId())
@@ -58,6 +64,10 @@ public class TheaterRoomService {
 		return savedTheaterRoom.getId();
 	}
 
+	/**
+	 * 등록된 모든 상영관 조회
+	 * @return 상영관 리스트
+	 */
 	public List<ResponseFindTheaterRoom> findAll() {
 		return theaterRoomRepository.findAll().stream()
 			.map(theaterRoom -> {
