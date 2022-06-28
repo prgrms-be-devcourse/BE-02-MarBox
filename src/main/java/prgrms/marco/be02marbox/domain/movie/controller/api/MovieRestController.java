@@ -27,6 +27,8 @@ public class MovieRestController {
 	public ResponseEntity<ResponseGetMovies> getMovies(
 		@RequestParam(name = "page", defaultValue = DEFAULT_PAGE) int page,
 		@RequestParam(name = "size", defaultValue = DEFAULT_SIZE) int size) {
-		return ResponseEntity.ok().body(new ResponseGetMovies(movieService.getMovies(page, size)));
+		return ResponseEntity
+			.ok()
+			.body(new ResponseGetMovies(movieService.getMovies(page, size)));
 	}
 }
