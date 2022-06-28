@@ -14,6 +14,9 @@ import prgrms.marco.be02marbox.domain.movie.service.MovieService;
 @RestController
 public class MovieRestController {
 
+	private static final String DEFAULT_PAGE = "0";
+	private static final String DEFAULT_SIZE = "10";
+
 	private final MovieService movieService;
 
 	public MovieRestController(MovieService movieService) {
@@ -21,8 +24,9 @@ public class MovieRestController {
 	}
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResponseGetMovies> getMovies(@RequestParam(name = "page", defaultValue = "0") int page,
-		@RequestParam(name = "size", defaultValue = "10") int size) {
+	public ResponseEntity<ResponseGetMovies> getMovies(
+		@RequestParam(name = "page", defaultValue = DEFAULT_PAGE) int page,
+		@RequestParam(name = "size", defaultValue = DEFAULT_SIZE) int size) {
 		return ResponseEntity.ok().body(new ResponseGetMovies(movieService.getMovies(page, size)));
 	}
 }
