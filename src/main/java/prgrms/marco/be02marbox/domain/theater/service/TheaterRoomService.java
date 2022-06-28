@@ -44,6 +44,11 @@ public class TheaterRoomService {
 		this.theaterConverter = theaterConverter;
 	}
 
+	/**
+	 * 새로운 상영관 추가
+	 * @param requestCreateTheaterRoom 극장, 상영관 이름, 좌석 정보
+	 * @return 생성된 id
+	 */
 	@Transactional
 	public Long save(RequestCreateTheaterRoom requestCreateTheaterRoom) {
 		Theater theater = theaterRepository.findById(requestCreateTheaterRoom.theaterId())
@@ -58,6 +63,10 @@ public class TheaterRoomService {
 		return savedTheaterRoom.getId();
 	}
 
+	/**
+	 * 등록된 모든 상영관 조회
+	 * @return 상영관 리스트
+	 */
 	public List<ResponseFindTheaterRoom> findAll() {
 		return theaterRoomRepository.findAll().stream()
 			.map(theaterRoom -> {
