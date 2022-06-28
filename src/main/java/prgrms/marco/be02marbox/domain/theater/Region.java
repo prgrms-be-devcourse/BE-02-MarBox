@@ -1,5 +1,7 @@
 package prgrms.marco.be02marbox.domain.theater;
 
+import java.util.Arrays;
+
 public enum Region {
 	SEOUL("서울"),
 	INCHEON("인천"),
@@ -21,7 +23,17 @@ public enum Region {
 		this.regionKor = regionKor;
 	}
 
-	public static Region getRegion(String region) {
+	public static Region from(String region) {
+		validateRegion(region);
 		return Region.valueOf(region.toUpperCase());
+	}
+
+	private static void validateRegion(String region) {
+		if (Arrays
+			.stream(Region.values())
+			.noneMatch(inputRegion ->
+				inputRegion.toString().equalsIgnoreCase(region))) {
+			throw new IllegalArgumentException("사전에 등록되지 않은 지역입니다.");
+		}
 	}
 }

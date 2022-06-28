@@ -11,7 +11,7 @@ import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindTheater;
 public class TheaterConverter {
 	public Theater convertFromRequestCreateTheaterToTheater(RequestCreateTheater request) {
 		return new Theater(
-			Region.valueOf(request.region()), request.name());
+			Region.from(request.region()), request.name());
 	}
 
 	public ResponseFindTheater convertFromTheaterToResponseFindTheater(Theater theater) {
