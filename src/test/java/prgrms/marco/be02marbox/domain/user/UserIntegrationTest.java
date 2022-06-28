@@ -73,9 +73,6 @@ class UserIntegrationTest {
 				),
 				responseHeaders(
 					headerWithName(HttpHeaders.LOCATION).description("로그인 API 위치")
-				),
-				responseFields(
-					fieldWithPath("id").type(JsonFieldType.NUMBER).description("사용자 식별 번호")
 				)));
 	}
 

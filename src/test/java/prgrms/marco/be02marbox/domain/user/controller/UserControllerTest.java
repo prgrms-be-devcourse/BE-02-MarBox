@@ -144,8 +144,7 @@ class UserControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(userSignUpReq)))
 			.andExpect(status().isCreated())
-			.andExpect(header().string("location", "/users/sign-in"))
-			.andExpect(jsonPath("$.id").value(userId));
+			.andExpect(header().string("location", "/users/sign-in"));
 	}
 
 	@Test
