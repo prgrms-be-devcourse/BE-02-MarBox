@@ -6,19 +6,22 @@ import prgrms.marco.be02marbox.domain.movie.Movie;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
+import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindMovieAndDate;
 
 @Component
 public class ScheduleConverter {
 
 	public Schedule convertFromRequestCreateScheduleToSchedule(RequestCreateSchedule request, TheaterRoom theaterRoom,
 		Movie movie) {
-		Schedule schedule = Schedule.builder()
+		return Schedule.builder()
 			.theaterRoom(theaterRoom)
 			.movie(movie)
 			.startTime(request.startTime())
 			.endTime(request.endTime())
 			.build();
+	}
 
-		return schedule;
+	public ResponseFindMovieAndDate convertFromScheduleToResponseFindMovieAndDate(Schedule schedule) {
+		return new ResponseFindMovieAndDate(schedule.getMovie().getName(), schedule.getStartTime().toLocalDate());
 	}
 }
