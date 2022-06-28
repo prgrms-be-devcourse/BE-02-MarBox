@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Table(name = "users")
@@ -43,8 +44,8 @@ public class User {
 		this.role = role;
 	}
 
-	public void checkPassword(String password) {
-		if (!this.password.equals(password)) {
+	public void checkPassword(PasswordEncoder passwordEncoder, String password) {
+		if (!passwordEncoder.matches(password, this.password)) {
 			throw new BadCredentialsException("비밀번호가 틀렸습니다.");
 		}
 	}

@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateEmailException;
 import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateNameException;
@@ -22,7 +24,7 @@ import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginUser;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
 @DataJpaTest
-@Import({UserService.class})
+@Import({UserService.class, BCryptPasswordEncoder.class})
 class UserServiceTest {
 
 	@Autowired
@@ -30,6 +32,9 @@ class UserServiceTest {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Test
 	@DisplayName("사용자 생성 성공")
@@ -97,15 +102,16 @@ class UserServiceTest {
 	@DisplayName("사용자 로그인 성공")
 	void testLoginSuccess() {
 		//given
+		String rawPassword = "1234";
 		User user = new User(
 			"pang@mail.com",
-			"1234",
+			passwordEncoder.encode(rawPassword),
 			"pang",
 			Role.ROLE_ADMIN);
 		User savedUser = userRepository.save(user);
 
 		//when
-		ResponseLoginUser responseLoginUser = userService.login(savedUser.getEmail(), savedUser.getPassword());
+		ResponseLoginUser responseLoginUser = userService.login(savedUser.getEmail(), rawPassword);
 
 		//then
 		assertAll(
