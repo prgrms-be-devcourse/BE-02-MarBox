@@ -20,7 +20,7 @@ public class Schedule {
 
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -48,6 +48,10 @@ public class Schedule {
 		this.endTime = builder.endTime;
 	}
 
+	public static Builder builder() {
+		return new Builder();
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -68,14 +72,10 @@ public class Schedule {
 		return endTime;
 	}
 
-	public static Builder builder() {
-		return new Builder();
-	}
-
 	public static class Builder {
+		public Movie movie;
 		private Long id;
 		private TheaterRoom theaterRoom;
-		public Movie movie;
 		private LocalDateTime startTime;
 		private LocalDateTime endTime;
 
