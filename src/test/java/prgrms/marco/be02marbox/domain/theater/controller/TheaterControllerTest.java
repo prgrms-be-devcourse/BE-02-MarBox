@@ -2,7 +2,10 @@ package prgrms.marco.be02marbox.domain.theater.controller;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.http.MediaType.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
@@ -12,10 +15,12 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,7 +28,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.config.WebSecurityConfigure;
-import prgrms.marco.be02marbox.domain.exception.custom.BadRequestTheaterException;
 import prgrms.marco.be02marbox.domain.exception.custom.theater.DuplicateTheaterNameException;
 import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Theater;
@@ -33,6 +37,7 @@ import prgrms.marco.be02marbox.domain.theater.service.TheaterService;
 
 @WebMvcTest(controllers = TheaterController.class,
 	excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigure.class))
+@AutoConfigureRestDocs
 class TheaterControllerTest {
 
 	@Autowired
@@ -56,7 +61,14 @@ class TheaterControllerTest {
 				.contentType(APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.region").value("SEOUL"))
-			.andExpect(jsonPath("$.theaterName").value("theater0"));
+			.andExpect(jsonPath("$.theaterName").value("theater0"))
+			.andDo(document("theater-find",
+				pathParameters(
+					parameterWithName("theaterId").description("영화관 ID")),
+				responseFields(
+					fieldWithPath("region").type(JsonFieldType.STRING).description("지역"),
+					fieldWithPath("theaterName").type(JsonFieldType.STRING).description("영화관 이름")
+				)));
 	}
 
 	@Test
@@ -65,7 +77,7 @@ class TheaterControllerTest {
 	void testGetOneTheaterFailed() throws Exception {
 		// given
 		Long theaterId = 1L;
-		given(theaterService.findTheater(theaterId)).willThrow(new BadRequestTheaterException("올바르지 않은 극장 ID"));
+		given(theaterService.findTheater(theaterId)).willThrow(new IllegalArgumentException("올바르지 않은 극장 ID"));
 
 		// expected
 		mockMvc.perform(get("/theaters/{theaterId}", theaterId)
@@ -92,7 +104,8 @@ class TheaterControllerTest {
 		// expected
 		mockMvc.perform(get("/theaters")
 				.contentType(APPLICATION_JSON))
-			.andExpect(status().isOk());
+			.andExpect(status().isOk())
+			.andDo(document("theater-find-all"));
 	}
 
 	@Test
@@ -112,7 +125,16 @@ class TheaterControllerTest {
 				.content(objectMapper.writeValueAsString(request)))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.region").value("SEOUL"))
-			.andExpect(jsonPath("$.theaterName").value("theater0"));
+			.andExpect(jsonPath("$.theaterName").value("theater0"))
+			.andDo(document("theater-save",
+				requestFields(
+					fieldWithPath("region").type(JsonFieldType.STRING).description("지역"),
+					fieldWithPath("name").type(JsonFieldType.STRING).description("영화관 이름")
+				),
+				responseFields(
+					fieldWithPath("region").type(JsonFieldType.STRING).description("지역"),
+					fieldWithPath("theaterName").type(JsonFieldType.STRING).description("영화관 이름")
+				)));
 	}
 
 	@Test
@@ -145,7 +167,7 @@ class TheaterControllerTest {
 				.with(SecurityMockMvcRequestPostProcessors.csrf())
 				.contentType(APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(request)))
-			.andExpect(status().isNotFound());
+			.andExpect(status().isBadRequest());
 	}
 
 	@Test
@@ -165,6 +187,8 @@ class TheaterControllerTest {
 		mockMvc.perform(get("/theaters/region")
 				.param("name", "seoul")
 				.contentType(APPLICATION_JSON))
-			.andExpect(status().isOk());
+			.andExpect(status().isOk())
+			.andDo(document("theater-find-by-region",
+				requestParameters(parameterWithName("name").description("지역"))));
 	}
 }

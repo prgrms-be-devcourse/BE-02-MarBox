@@ -11,7 +11,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 public enum RequestCreateTheaterRoomDoc {
 	THEATER_ID(NUMBER, "theaterId", "영화관 id"),
 	NAME(STRING, "name", "상영관 이름"),
-	SEAT_LIST_PREFIX(ARRAY, "requestCreateSeats[]", "좌석 리스트");
+	SEAT_LIST_PREFIX(ARRAY, "requestCreateSeats[].", "좌석 리스트");
 
 	private JsonFieldType type;
 	private final String field;

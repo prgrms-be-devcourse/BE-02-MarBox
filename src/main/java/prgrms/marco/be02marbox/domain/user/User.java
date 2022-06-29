@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Table(name = "users")
@@ -20,17 +21,17 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(name = "role")
+	@Column(name = "role", nullable = false)
 	@Enumerated(value = EnumType.STRING)
 	private Role role;
 
-	@Column(name = "email")
+	@Column(name = "email", unique = true, nullable = false)
 	private String email;
 
-	@Column(name = "password")
+	@Column(name = "password", nullable = false)
 	private String password;
 
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
 	private String name;
 
 	protected User() {
@@ -43,14 +44,14 @@ public class User {
 		this.role = role;
 	}
 
-	public void checkPassword(String password) {
-		if (!this.password.equals(password)) {
+	public void checkPassword(PasswordEncoder passwordEncoder, String password) {
+		if (!passwordEncoder.matches(password, this.password)) {
 			throw new BadCredentialsException("비밀번호가 틀렸습니다.");
 		}
 	}
 
 	public Long getId() {
-		return id;
+		return this.id;
 	}
 
 	public String getName() {

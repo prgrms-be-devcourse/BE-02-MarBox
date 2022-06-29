@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import prgrms.marco.be02marbox.domain.exception.custom.BadRequestTheaterException;
 import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Seat;
 import prgrms.marco.be02marbox.domain.theater.Theater;
@@ -109,7 +108,7 @@ class TheaterRoomServiceTest {
 	void testSave_entityNotFoundException() {
 		RequestCreateTheaterRoom requestCreateTheaterRoom = new RequestCreateTheaterRoom(-1L, "A관", requestCreateSeats);
 
-		assertThrows(BadRequestTheaterException.class, () -> theaterRoomService.save(requestCreateTheaterRoom));
+		assertThrows(IllegalArgumentException.class, () -> theaterRoomService.save(requestCreateTheaterRoom));
 	}
 
 	@Test

@@ -94,7 +94,7 @@ class ScheduleControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(requestCreateSchedule)))
-			.andExpect(status().isNotFound());
+			.andExpect(status().isBadRequest());
 	}
 
 	@Test

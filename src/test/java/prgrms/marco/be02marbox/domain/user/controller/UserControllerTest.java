@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.config.JwtConfigure;
 import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateEmailException;
-import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateNameException;
 import prgrms.marco.be02marbox.domain.exception.custom.user.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignInUser;
@@ -96,33 +95,6 @@ class UserControllerTest {
 	}
 
 	@Test
-	@DisplayName("회원 가입 실패 - 존재하는 이름")
-	void testSignUpFailBecauseDuplicateName() throws Exception {
-		//given
-		RequestSignUpUser userSignUpReq = new RequestSignUpUser(
-			"pang@mail.com",
-			"1234",
-			"pang",
-			Role.ROLE_ADMIN);
-
-		given(userService.create(
-			userSignUpReq.email(),
-			userSignUpReq.password(),
-			userSignUpReq.name(),
-			userSignUpReq.role()))
-			.willThrow(new DuplicateNameException(DUPLICATE_NAME_EXP_MSG));
-
-		//when then
-		mockMvc.perform(post("/users/sign-up")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(userSignUpReq))
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.messages.[0]").value(equalTo(DUPLICATE_NAME_EXP_MSG.getMessage())))
-			.andExpect(jsonPath("$.statusCode").value(equalTo(HttpStatus.BAD_REQUEST.value())));
-	}
-
-	@Test
 	@DisplayName("회원가입 요청 성공")
 	void testSignUpSuccess() throws Exception {
 		//given
@@ -144,8 +116,7 @@ class UserControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(userSignUpReq)))
 			.andExpect(status().isCreated())
-			.andExpect(header().string("location", "/users/sign-in"))
-			.andExpect(jsonPath("$.id").value(userId));
+			.andExpect(header().string("location", "/users/sign-in"));
 	}
 
 	@Test

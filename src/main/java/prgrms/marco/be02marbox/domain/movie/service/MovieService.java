@@ -24,6 +24,13 @@ public class MovieService {
 		this.movieConverter = movieConverter;
 	}
 
+	/**
+	 * movie 테이블에 영화 데이터를 추가한다
+	 *
+	 * @param
+	 * 	requestCreateMovie: 사용자의 Movie 생성 요청
+	 * @return Movie가 생성되고 나서의 Id
+	 */
 	@Transactional
 	public Long createMovie(RequestCreateMovie requestCreateMovie) {
 		Movie newMovie = movieConverter.convertFromRequestCreateMovieToMovie(requestCreateMovie);
@@ -32,6 +39,13 @@ public class MovieService {
 			.getId();
 	}
 
+	/**
+	 * 관리자에게 요청한 Movie들이 데이터를 보여준다
+	 *
+	 * @param page: Movie 데이터를 조회 페이지
+	 * @param size: 읽을 Movie 데이터 사이즈
+	 * @return Movie List
+	 */
 	@Transactional(readOnly = true)
 	public List<Movie> getMovies(int page, int size) {
 		return movieRepository

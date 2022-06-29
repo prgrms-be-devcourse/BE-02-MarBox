@@ -1,0 +1,41 @@
+:hardbreaks:
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+
+== 영화관
+
+## 영화관 등록
+
+.Reqeust
+include::{snippets}/theater-save/http-request.adoc[]
+include::{snippets}/theater-save/request-fields.adoc[]
+
+.Response
+include::{snippets}/theater-save/http-response.adoc[]
+
+## 영화관 단건 조회
+
+.Request
+include::{snippets}/theater-find/http-request.adoc[]
+include::{snippets}/theater-find/path-parameters.adoc[]
+
+.Response
+include::{snippets}/theater-find/http-response.adoc[]
+
+## 영화관 전체 조회
+
+.Request
+include::{snippets}/theater-find-all/http-request.adoc[]
+
+.Response
+include::{snippets}/theater-find-all/http-response.adoc[]
+
+## 영화관 지역별 조회
+
+.Reqeust
+include::{snippets}/theater-find-by-region/http-request.adoc[]
+include::{snippets}/theater-find-by-region/request-parameters.adoc[]
+
+.Response
+include::{snippets}/theater-find-by-region/http-response.adoc[]
