@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import prgrms.marco.be02marbox.domain.movie.dto.ResponseFindCurrentMovie;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
-import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindMovieAndDate;
+import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindMovieListAndDateList;
 import prgrms.marco.be02marbox.domain.theater.service.ScheduleService;
 
 @RestController
@@ -43,9 +43,9 @@ public class ScheduleController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<ResponseFindMovieAndDate>> getMovieAndDateListInOneTheater(
+	public ResponseEntity<ResponseFindMovieListAndDateList> getMovieAndDateListInOneTheater(
 		@RequestParam Long theaterId) {
-		return ResponseEntity.ok().body(scheduleService.findMovieAndDateWithTheaterId(theaterId));
+		return ResponseEntity.ok().body(scheduleService.findMovieListAndDateListInOneTheater(theaterId));
 	}
 
 }

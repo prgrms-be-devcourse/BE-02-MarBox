@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +24,7 @@ import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
-import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindMovieAndDate;
+import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindMovieListAndDateList;
 import prgrms.marco.be02marbox.domain.theater.repository.ScheduleRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
@@ -148,8 +147,8 @@ class ScheduleServiceTest {
 	}
 
 	@Test
-	@DisplayName("한 영화관(theater)에서만 상영하는 영화 스케줄을 가져옴")
-	void testFindMovieAndDateWithTheaterId_Only_In_One_Theater() {
+	@DisplayName("한 영화관(theater)에서만 상영하는 영화 리스트, 날짜 리스트를 가져옴")
+	void testFindMovieListAndDateListInOneTheater_Only_In_One_Theater() {
 		// given
 		Movie movie2 = createAndSaveTempMovieInstance("영화2");
 		Movie movie3 = createAndSaveTempMovieInstance("영화3");
@@ -175,14 +174,13 @@ class ScheduleServiceTest {
 		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(1));
 		createAndSaveSchedule(theaterRoom, movie4, LocalDateTime.now().plusDays(19), LocalDateTime.now().plusDays(19));
 		createAndSaveSchedule(theaterRoom, movie4, LocalDateTime.now().plusDays(20), LocalDateTime.now().plusDays(20));
-		List<ResponseFindMovieAndDate> movieAndDateList = scheduleService.findMovieAndDateWithTheaterId(
+
+		ResponseFindMovieListAndDateList scheduleInOneTheater = scheduleService.findMovieListAndDateListInOneTheater(
 			theater.getId());
 
-		// then
 		assertAll(
-			() -> assertThat(movieAndDateList.size()).isEqualTo(3),
-			() -> assertThat(movieAndDateList.get(0).movieName()).isEqualTo(movie.getName()),
-			() -> assertThat(movieAndDateList.get(2).movieName()).isEqualTo(movie4.getName())
+			() -> assertThat(scheduleInOneTheater.movieList().size()).isEqualTo(2),
+			() -> assertThat(scheduleInOneTheater.dateList().size()).isEqualTo(3)
 		);
 	}
 
