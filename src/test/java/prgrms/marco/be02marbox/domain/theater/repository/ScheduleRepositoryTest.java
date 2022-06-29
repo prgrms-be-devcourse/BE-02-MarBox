@@ -62,7 +62,8 @@ class ScheduleRepositoryTest {
 		assertThat(schedules.size()).isEqualTo(2);
 	}
 
-	private void createAndSaveSchedule(TheaterRoom theaterRoom, Movie movie, LocalDateTime startTime, LocalDateTime endTime) {
+	private void createAndSaveSchedule(TheaterRoom theaterRoom, Movie movie, LocalDateTime startTime,
+		LocalDateTime endTime) {
 		Schedule schedule = Schedule.builder()
 			.theaterRoom(theaterRoom)
 			.movie(movie)
