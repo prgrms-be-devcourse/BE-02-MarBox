@@ -1,5 +1,7 @@
 package prgrms.marco.be02marbox.domain.user.jwt;
 
+import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -22,7 +24,7 @@ import prgrms.marco.be02marbox.domain.exception.dto.ResponseApiError;
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
 	private static final ResponseApiError responseApiError =
-		new ResponseApiError(List.of("API 접근 권한이 없습니다."), HttpStatus.FORBIDDEN.value());
+		new ResponseApiError(List.of(ACCESS_DENIED_EXP_MSG.getMessage()), HttpStatus.FORBIDDEN.value());
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
