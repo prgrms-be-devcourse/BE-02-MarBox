@@ -30,34 +30,34 @@ import prgrms.marco.be02marbox.domain.user.User;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
 @DataJpaTest
-class RepositoryTestUtil {
+public class RepositoryTestUtil {
 
 	@PersistenceContext
-	EntityManager em;
+	public EntityManager em;
 
 	@Autowired
-	ReservedSeatRepository reservedSeatRepository;
+	public ReservedSeatRepository reservedSeatRepository;
 
 	@Autowired
-	TicketRepository ticketRepository;
+	public TicketRepository ticketRepository;
 
 	@Autowired
-	SeatRepository seatRepository;
+	public SeatRepository seatRepository;
 
 	@Autowired
-	UserRepository userRepository;
+	public UserRepository userRepository;
 
 	@Autowired
-	TheaterRepository theaterRepository;
+	public TheaterRepository theaterRepository;
 
 	@Autowired
-	TheaterRoomRepository theaterRoomRepository;
+	public TheaterRoomRepository theaterRoomRepository;
 
 	@Autowired
-	MovieRepository movieRepository;
+	public MovieRepository movieRepository;
 
 	@Autowired
-	ScheduleRepository scheduleRepository;
+	public ScheduleRepository scheduleRepository;
 
 	public Seat saveSeat(TheaterRoom theaterRoom, int row, int col) {
 		Seat seat = new Seat(theaterRoom, row, col);
@@ -122,15 +122,15 @@ class RepositoryTestUtil {
 		return reservedSeatRepository.save(reservedSeat);
 	}
 
-	public Schedule saveSameScheduleSeatList(int count) {
+	public Schedule saveReservedSeatMultiSeat(int seatCount) {
 		Ticket ticket = saveTicket();
 		int maxCount = 100;
-		if (count > maxCount) {
-			count = maxCount;
+		if (seatCount > maxCount) {
+			seatCount = maxCount;
 		}
 		int maxRow = 10;
 		TheaterRoom theaterRoom = saveTheaterRoom("A관");
-		IntStream.range(0, count).forEach((index) -> {
+		IntStream.range(0, seatCount).forEach((index) -> {
 			int row = index / maxRow;
 			int col = index % maxRow;
 			Seat seat = saveSeat(theaterRoom, row, col);
