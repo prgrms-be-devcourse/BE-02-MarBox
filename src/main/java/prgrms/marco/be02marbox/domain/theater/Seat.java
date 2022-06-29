@@ -21,9 +21,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 	@UniqueConstraint(columnNames = {"theater_room_id", "seat_row", "seat_col"})
 })
 public class Seat {
-
 	@Id
-	@Column(name = "id", nullable = false)
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
