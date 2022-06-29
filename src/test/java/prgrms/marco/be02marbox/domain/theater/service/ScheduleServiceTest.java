@@ -122,7 +122,7 @@ class ScheduleServiceTest {
 		createAndSaveSchedule(theaterRoom2, movie, LocalDateTime.now().plusDays(2), LocalDateTime.now());
 		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now().plusDays(4), LocalDateTime.now());
 
-		assertThat(scheduleService.getCurrentMovieList().size()).isEqualTo(1);
+		assertThat(scheduleService.findCurrentMovieList().size()).isEqualTo(1);
 	}
 
 	@Test
@@ -144,7 +144,7 @@ class ScheduleServiceTest {
 		createAndSaveSchedule(theaterRoom, movie4, LocalDateTime.now().plusDays(19), LocalDateTime.now().plusDays(19));
 		createAndSaveSchedule(theaterRoom, movie5, LocalDateTime.now().plusDays(20), LocalDateTime.now().plusDays(20));
 
-		assertThat(scheduleService.getCurrentMovieList().size()).isEqualTo(4);
+		assertThat(scheduleService.findCurrentMovieList().size()).isEqualTo(4);
 	}
 
 	@Test

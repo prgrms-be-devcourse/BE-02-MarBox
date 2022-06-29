@@ -60,8 +60,8 @@ public class ScheduleService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<ResponseFindCurrentMovie> getCurrentMovieList() {
-		List<Schedule> showingMoviesSchedules = getShowingMoviesSchedules();
+	public List<ResponseFindCurrentMovie> findCurrentMovieList() {
+		List<Schedule> showingMoviesSchedules = findShowingMoviesSchedules();
 
 		return showingMoviesSchedules.stream()
 			.map(schedule -> movieConverter.convertFromMovieToResponseFindCurrentMovie(schedule.getMovie()))
@@ -72,7 +72,7 @@ public class ScheduleService {
 	@Transactional(readOnly = true)
 	public List<ResponseFindMovieAndDate> findMovieAndDateWithTheaterId(Long theaterId) {
 		Set<TheaterRoom> theaterRooms = theaterRoomRepository.findAllByTheaterId(theaterId);
-		List<Schedule> showingMoviesSchedules = getShowingMoviesSchedules();
+		List<Schedule> showingMoviesSchedules = findShowingMoviesSchedules();
 
 		return showingMoviesSchedules.stream()
 			.filter(schedule -> theaterRooms.contains(schedule.getTheaterRoom()))
@@ -81,8 +81,8 @@ public class ScheduleService {
 			.collect(Collectors.toList());
 	}
 
-	private List<Schedule> getShowingMoviesSchedules() {
-		return scheduleRepository.getSchedulesBetweenStartDateAndEndDate(
+	private List<Schedule> findShowingMoviesSchedules() {
+		return scheduleRepository.findSchedulesBetweenStartDateAndEndDate(
 			LocalDate.now(),
 			LocalDate.now().plusDays(CURRENT_SCHEDULE_PERIOD));
 	}

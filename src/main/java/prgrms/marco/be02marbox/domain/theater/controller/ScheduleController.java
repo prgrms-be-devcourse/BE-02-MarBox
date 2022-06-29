@@ -38,7 +38,7 @@ public class ScheduleController {
 
 	@GetMapping("/current-movies")
 	public ResponseEntity<List<ResponseFindCurrentMovie>> getCurrentMovieList() {
-		List<ResponseFindCurrentMovie> currentMovieList = scheduleService.getCurrentMovieList();
+		List<ResponseFindCurrentMovie> currentMovieList = scheduleService.findCurrentMovieList();
 		return ResponseEntity.ok().body(currentMovieList);
 	}
 
