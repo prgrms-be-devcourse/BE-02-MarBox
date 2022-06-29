@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import prgrms.marco.be02marbox.domain.movie.dto.ResponseFindCurrentMovie;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
+import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindMovieListAndDateList;
 import prgrms.marco.be02marbox.domain.theater.service.ScheduleService;
 
 @RestController
@@ -36,8 +38,14 @@ public class ScheduleController {
 
 	@GetMapping("/current-movies")
 	public ResponseEntity<List<ResponseFindCurrentMovie>> getCurrentMovieList() {
-		List<ResponseFindCurrentMovie> currentMovieList = scheduleService.getCurrentMovieList();
+		List<ResponseFindCurrentMovie> currentMovieList = scheduleService.findCurrentMovieList();
 		return ResponseEntity.ok().body(currentMovieList);
+	}
+
+	@GetMapping
+	public ResponseEntity<ResponseFindMovieListAndDateList> getMovieAndDateListInOneTheater(
+		@RequestParam Long theaterId) {
+		return ResponseEntity.ok().body(scheduleService.findMovieListAndDateListInOneTheater(theaterId));
 	}
 
 }

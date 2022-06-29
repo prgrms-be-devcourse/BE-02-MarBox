@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -34,6 +35,7 @@ import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
 import prgrms.marco.be02marbox.domain.movie.dto.ResponseFindCurrentMovie;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
+import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindMovieListAndDateList;
 import prgrms.marco.be02marbox.domain.theater.service.ScheduleService;
 
 @WebMvcTest(controllers = ScheduleController.class,
@@ -92,7 +94,7 @@ class ScheduleControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(requestCreateSchedule)))
-			.andExpect(status().isNotFound());
+			.andExpect(status().isBadRequest());
 	}
 
 	@Test
@@ -105,7 +107,7 @@ class ScheduleControllerTest {
 			new ResponseFindCurrentMovie("테스트2", LimitAge.CHILD, Genre.ROMANCE, 150, "test/location"),
 			new ResponseFindCurrentMovie("테스트3", LimitAge.ADULT, Genre.ACTION, 120, "test/location"));
 
-		given(scheduleService.getCurrentMovieList()).willReturn(currentMovieList);
+		given(scheduleService.findCurrentMovieList()).willReturn(currentMovieList);
 
 		mockMvc.perform(get("/schedules/current-movies"))
 			.andExpect(status().isOk())
@@ -116,6 +118,28 @@ class ScheduleControllerTest {
 					fieldWithPath("[].genre").type(JsonFieldType.STRING).description("장르"),
 					fieldWithPath("[].runningTime").type(JsonFieldType.NUMBER).description("상영시간"),
 					fieldWithPath("[].posterImgLocation").type(JsonFieldType.STRING).description("포스터 이미지 경로")
+				)));
+	}
+
+	@Test
+	@DisplayName("영화관 ID로 요청하면 영화 리스트와 날짜 리스트 반환 테스트")
+	@WithMockUser(roles = {"ADMIN", "USER"})
+	void testGetMovieListAndDateListInOneTheater() throws Exception {
+		List<String> movieList = List.of("영화1", "영화2", "영화3");
+		List<LocalDate> dateList = List.of(LocalDate.now(), LocalDate.now().plusDays(1));
+
+		ResponseFindMovieListAndDateList responseFindMovieListAndDateList =
+			new ResponseFindMovieListAndDateList(movieList, dateList);
+
+		given(scheduleService.findMovieListAndDateListInOneTheater(1L)).willReturn(responseFindMovieListAndDateList);
+
+		mockMvc.perform(get("/schedules")
+				.param("theaterId", "1"))
+			.andExpect(status().isOk())
+			.andDo(document("schedule-get-movie-and-date-in-theater",
+				responseFields(
+					fieldWithPath("movieList").type(JsonFieldType.ARRAY).description("영화 리스트"),
+					fieldWithPath("dateList").type(JsonFieldType.ARRAY).description("상영 날짜 리스트")
 				)));
 	}
 

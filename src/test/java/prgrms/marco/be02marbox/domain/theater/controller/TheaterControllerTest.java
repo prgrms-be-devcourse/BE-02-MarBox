@@ -28,7 +28,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.config.WebSecurityConfigure;
-import prgrms.marco.be02marbox.domain.exception.custom.BadRequestTheaterException;
 import prgrms.marco.be02marbox.domain.exception.custom.theater.DuplicateTheaterNameException;
 import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Theater;
@@ -78,7 +77,7 @@ class TheaterControllerTest {
 	void testGetOneTheaterFailed() throws Exception {
 		// given
 		Long theaterId = 1L;
-		given(theaterService.findTheater(theaterId)).willThrow(new BadRequestTheaterException("올바르지 않은 극장 ID"));
+		given(theaterService.findTheater(theaterId)).willThrow(new IllegalArgumentException("올바르지 않은 극장 ID"));
 
 		// expected
 		mockMvc.perform(get("/theaters/{theaterId}", theaterId)
@@ -168,7 +167,7 @@ class TheaterControllerTest {
 				.with(SecurityMockMvcRequestPostProcessors.csrf())
 				.contentType(APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(request)))
-			.andExpect(status().isNotFound());
+			.andExpect(status().isBadRequest());
 	}
 
 	@Test
