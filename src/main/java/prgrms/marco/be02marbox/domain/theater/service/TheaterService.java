@@ -9,6 +9,7 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import prgrms.marco.be02marbox.domain.exception.custom.theater.DuplicateTheaterNameException;
 import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheater;
@@ -32,6 +33,10 @@ public class TheaterService {
 
 	@Transactional
 	public Long createTheater(RequestCreateTheater request) {
+		theaterRepository.findByName(request.name())
+			.ifPresent(theater -> {
+				throw new DuplicateTheaterNameException();
+			});
 		Theater newTheater = theaterConverter.convertFromRequestCreateTheaterToTheater(request);
 		Theater savedTheater = theaterRepository.save(newTheater);
 		return savedTheater.getId();
@@ -52,7 +57,7 @@ public class TheaterService {
 	}
 
 	public List<ResponseFindTheater> findTheaterByRegion(String region) {
-		return theaterRepository.findByRegion(Region.from(region))
+		return theaterRepository.findAllByRegion(Region.from(region))
 			.stream()
 			.map(theaterConverter::convertFromTheaterToResponseFindTheater)
 			.collect(toList());
