@@ -36,7 +36,7 @@ public class MovieService {
 	 * movie 테이블에 영화 데이터를 추가한다
 	 *
 	 * @param
-	 * 	requestCreateMovie: 사용자의 Movie 생성 요청
+	 *    requestCreateMovie: 사용자의 Movie 생성 요청
 	 * @return Movie가 생성되고 나서의 Id
 	 */
 	@Transactional
@@ -78,7 +78,7 @@ public class MovieService {
 
 	private void makeDirectory() {
 		File dir = new File(posterDirectory);
-		if(!dir.exists()) {
+		if (!dir.exists()) {
 			dir.mkdir();
 		}
 	}

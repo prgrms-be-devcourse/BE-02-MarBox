@@ -64,7 +64,6 @@ class MovieServiceTest {
 	void testCreateMovie() throws IOException {
 		Long movieId = movieService.createMovie(frozen);
 		Optional<Movie> found = movieRepository.findById(movieId);
-
 		assertAll(
 			() -> assertThat(found.isPresent()).isTrue(),
 			() -> assertThat(found.get().getName()).isEqualTo(frozen.name()),
