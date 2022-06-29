@@ -56,13 +56,14 @@ class ScheduleRepositoryTest {
 		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now().plusDays(2), LocalDateTime.now().plusDays(2));
 		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now().plusDays(3), LocalDateTime.now().plusDays(3));
 
-		List<Schedule> schedules = scheduleRepository.getSchedulesBetweenStartDateAndEndDate(LocalDate.now(),
+		List<Schedule> schedules = scheduleRepository.findSchedulesBetweenStartDateAndEndDate(LocalDate.now(),
 			LocalDate.now().plusDays(2));
 
 		assertThat(schedules.size()).isEqualTo(2);
 	}
 
-	void createAndSaveSchedule(TheaterRoom theaterRoom, Movie movie, LocalDateTime startTime, LocalDateTime endTime) {
+	private void createAndSaveSchedule(TheaterRoom theaterRoom, Movie movie, LocalDateTime startTime,
+		LocalDateTime endTime) {
 		Schedule schedule = Schedule.builder()
 			.theaterRoom(theaterRoom)
 			.movie(movie)

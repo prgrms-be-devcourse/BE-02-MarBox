@@ -24,6 +24,7 @@ import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
+import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindMovieListAndDateList;
 import prgrms.marco.be02marbox.domain.theater.repository.ScheduleRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
@@ -48,13 +49,15 @@ class ScheduleServiceTest {
 	@Autowired
 	private ScheduleService scheduleService;
 
+	private Theater theater;
+
 	private TheaterRoom theaterRoom;
 
 	private Movie movie;
 
 	@BeforeEach
 	void setup() {
-		Theater theater = new Theater(Region.SEOUL, "강남");
+		theater = new Theater(Region.SEOUL, "강남");
 		theaterRepository.save(theater);
 		theaterRoom = new TheaterRoom(theater, "A관");
 		theaterRoomRepository.save(theaterRoom);
@@ -118,7 +121,7 @@ class ScheduleServiceTest {
 		createAndSaveSchedule(theaterRoom2, movie, LocalDateTime.now().plusDays(2), LocalDateTime.now());
 		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now().plusDays(4), LocalDateTime.now());
 
-		assertThat(scheduleService.getCurrentMovieList().size()).isEqualTo(1);
+		assertThat(scheduleService.findCurrentMovieList().size()).isEqualTo(1);
 	}
 
 	@Test
@@ -140,10 +143,55 @@ class ScheduleServiceTest {
 		createAndSaveSchedule(theaterRoom, movie4, LocalDateTime.now().plusDays(19), LocalDateTime.now().plusDays(19));
 		createAndSaveSchedule(theaterRoom, movie5, LocalDateTime.now().plusDays(20), LocalDateTime.now().plusDays(20));
 
-		assertThat(scheduleService.getCurrentMovieList().size()).isEqualTo(4);
+		assertThat(scheduleService.findCurrentMovieList().size()).isEqualTo(4);
 	}
 
-	void createAndSaveSchedule(TheaterRoom theaterRoom, Movie movie, LocalDateTime startTime, LocalDateTime endTime) {
+	@Test
+	@DisplayName("한 영화관(theater)에서만 상영하는 영화 리스트, 날짜 리스트를 가져옴")
+	void testFindMovieListAndDateListInOneTheater_Only_In_One_Theater() {
+		// given
+		Movie movie2 = createAndSaveTempMovieInstance("영화2");
+		Movie movie3 = createAndSaveTempMovieInstance("영화3");
+		Movie movie4 = createAndSaveTempMovieInstance("영화4");
+		Movie movie5 = createAndSaveTempMovieInstance("영화5");
+
+		Theater theater2 = new Theater(Region.SEOUL, "영화관2");
+		theaterRepository.save(theater2);
+		TheaterRoom theaterRoom2 = new TheaterRoom(theater2, "영화관2의 상영관");
+		theaterRoomRepository.save(theaterRoom2);
+		createAndSaveSchedule(theaterRoom2, movie, LocalDateTime.now(), LocalDateTime.now());
+		createAndSaveSchedule(theaterRoom2, movie2, LocalDateTime.now(), LocalDateTime.now());
+		createAndSaveSchedule(theaterRoom2, movie3, LocalDateTime.now(), LocalDateTime.now());
+
+		Theater theater3 = new Theater(Region.GYEONGGI, "영화관3");
+		theaterRepository.save(theater3);
+		TheaterRoom theaterRoom3 = new TheaterRoom(theater3, "영화관3의 상영관");
+		theaterRoomRepository.save(theaterRoom3);
+		createAndSaveSchedule(theaterRoom3, movie5, LocalDateTime.now(), LocalDateTime.now());
+
+		// when
+		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now(), LocalDateTime.now());
+		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(1));
+		createAndSaveSchedule(theaterRoom, movie4, LocalDateTime.now().plusDays(19), LocalDateTime.now().plusDays(19));
+		createAndSaveSchedule(theaterRoom, movie4, LocalDateTime.now().plusDays(20), LocalDateTime.now().plusDays(20));
+
+		ResponseFindMovieListAndDateList scheduleInOneTheater = scheduleService.findMovieListAndDateListInOneTheater(
+			theater.getId());
+
+		assertAll(
+			() -> assertThat(scheduleInOneTheater.movieList().size()).isEqualTo(2),
+			() -> assertThat(scheduleInOneTheater.dateList().size()).isEqualTo(3)
+		);
+	}
+
+	private Movie createAndSaveTempMovieInstance(String name) {
+		Movie movie = new Movie(name, LimitAge.ADULT, Genre.ACTION, 100, "test/location");
+		movieRepository.save(movie);
+		return movie;
+	}
+
+	private Schedule createAndSaveSchedule(TheaterRoom theaterRoom, Movie movie, LocalDateTime startTime,
+		LocalDateTime endTime) {
 		Schedule schedule = Schedule.builder()
 			.theaterRoom(theaterRoom)
 			.movie(movie)
@@ -152,6 +200,7 @@ class ScheduleServiceTest {
 			.build();
 
 		scheduleRepository.save(schedule);
+		return schedule;
 	}
 
 }

@@ -2,6 +2,7 @@ package prgrms.marco.be02marbox.domain.theater.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import prgrms.marco.be02marbox.domain.movie.service.utils.MovieConverter;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
+import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindMovieListAndDateList;
 import prgrms.marco.be02marbox.domain.theater.repository.ScheduleRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
 import prgrms.marco.be02marbox.domain.theater.service.utils.ScheduleConverter;
@@ -58,15 +60,31 @@ public class ScheduleService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<ResponseFindCurrentMovie> getCurrentMovieList() {
-		List<Schedule> scheduleList = scheduleRepository.getSchedulesBetweenStartDateAndEndDate(
-			LocalDate.now(),
-			LocalDate.now().plusDays(CURRENT_SCHEDULE_PERIOD));
+	public List<ResponseFindCurrentMovie> findCurrentMovieList() {
+		List<Schedule> showingMoviesSchedules = findShowingMoviesSchedules();
 
-		return scheduleList.stream()
+		return showingMoviesSchedules.stream()
 			.map(schedule -> movieConverter.convertFromMovieToResponseFindCurrentMovie(schedule.getMovie()))
 			.distinct()
 			.collect(Collectors.toList());
+	}
+
+	@Transactional(readOnly = true)
+	public ResponseFindMovieListAndDateList findMovieListAndDateListInOneTheater(Long theaterId) {
+		Set<TheaterRoom> theaterRooms = theaterRoomRepository.findAllByTheaterId(theaterId);
+		List<Schedule> showingMoviesSchedules = findShowingMoviesSchedules();
+
+		List<Schedule> theaterSchedules = showingMoviesSchedules.stream()
+			.filter(schedule -> theaterRooms.contains(schedule.getTheaterRoom()))
+			.toList();
+
+		return scheduleConverter.convertFromScheduleListToResponseFindMovieListAndDateList(theaterSchedules);
+	}
+
+	private List<Schedule> findShowingMoviesSchedules() {
+		return scheduleRepository.findSchedulesBetweenStartDateAndEndDate(
+			LocalDate.now(),
+			LocalDate.now().plusDays(CURRENT_SCHEDULE_PERIOD));
 	}
 
 }
