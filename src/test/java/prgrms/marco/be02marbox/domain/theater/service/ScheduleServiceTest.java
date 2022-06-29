@@ -58,7 +58,7 @@ class ScheduleServiceTest {
 		theaterRepository.save(theater);
 		theaterRoom = new TheaterRoom(theater, "A관");
 		theaterRoomRepository.save(theaterRoom);
-		movie = new Movie("test", LimitAge.ADULT, Genre.ACTION, 100, "test");
+		movie = new Movie("test", LimitAge.ADULT, Genre.ACTION, 100);
 		movieRepository.save(movie);
 	}
 
@@ -124,10 +124,10 @@ class ScheduleServiceTest {
 	@Test
 	@DisplayName("현재 상영되는 영화 정보는 현재 날짜를 기준으로 20일까지만(현재 날짜 + 19일까지만) 정보를 가져옴")
 	void testGetCurrentMovieList_Only_In_19_Days() {
-		Movie movie2 = new Movie("테스트2", LimitAge.CHILD, Genre.ACTION, 100, "/test/location");
-		Movie movie3 = new Movie("테스트3", LimitAge.ADULT, Genre.ACTION, 120, "/test/location");
-		Movie movie4 = new Movie("테스트4", LimitAge.ADULT, Genre.ANIMATION, 150, "/test/location");
-		Movie movie5 = new Movie("테스트5", LimitAge.CHILD, Genre.ROMANCE, 160, "/test/location");
+		Movie movie2 = new Movie("테스트2", LimitAge.CHILD, Genre.ACTION, 100);
+		Movie movie3 = new Movie("테스트3", LimitAge.ADULT, Genre.ACTION, 120);
+		Movie movie4 = new Movie("테스트4", LimitAge.ADULT, Genre.ANIMATION, 150);
+		Movie movie5 = new Movie("테스트5", LimitAge.CHILD, Genre.ROMANCE, 160);
 
 		movieRepository.save(movie2);
 		movieRepository.save(movie3);
