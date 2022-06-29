@@ -109,7 +109,7 @@ class ScheduleServiceTest {
 
 	@Test
 	@DisplayName("같은 영화에 대해서는 중복을 제거해서 리스트를 생성함")
-	void testGetCurrentMovieList_No_Duplicate() {
+	void testFindShowingMovieList_No_Duplicate() {
 		Theater theater2 = new Theater(Region.SEOUL, "테스트2");
 		theaterRepository.save(theater2);
 		TheaterRoom theaterRoom2 = new TheaterRoom(theater2, "테스트관");
@@ -121,12 +121,12 @@ class ScheduleServiceTest {
 		createAndSaveSchedule(theaterRoom2, movie, LocalDateTime.now().plusDays(2), LocalDateTime.now());
 		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now().plusDays(4), LocalDateTime.now());
 
-		assertThat(scheduleService.findCurrentMovieList().size()).isEqualTo(1);
+		assertThat(scheduleService.findShowingMovieList().size()).isEqualTo(1);
 	}
 
 	@Test
 	@DisplayName("현재 상영되는 영화 정보는 현재 날짜를 기준으로 20일까지만(현재 날짜 + 19일까지만) 정보를 가져옴")
-	void testGetCurrentMovieList_Only_In_19_Days() {
+	void testFindShowingMovieList_Only_In_19_Days() {
 		Movie movie2 = new Movie("테스트2", LimitAge.CHILD, Genre.ACTION, 100, "/test/location");
 		Movie movie3 = new Movie("테스트3", LimitAge.ADULT, Genre.ACTION, 120, "/test/location");
 		Movie movie4 = new Movie("테스트4", LimitAge.ADULT, Genre.ANIMATION, 150, "/test/location");
@@ -143,12 +143,12 @@ class ScheduleServiceTest {
 		createAndSaveSchedule(theaterRoom, movie4, LocalDateTime.now().plusDays(19), LocalDateTime.now().plusDays(19));
 		createAndSaveSchedule(theaterRoom, movie5, LocalDateTime.now().plusDays(20), LocalDateTime.now().plusDays(20));
 
-		assertThat(scheduleService.findCurrentMovieList().size()).isEqualTo(4);
+		assertThat(scheduleService.findShowingMovieList().size()).isEqualTo(4);
 	}
 
 	@Test
 	@DisplayName("한 영화관(theater)에서만 상영하는 영화 리스트, 날짜 리스트를 가져옴")
-	void testFindMovieListAndDateListInOneTheater_Only_In_One_Theater() {
+	void testFindMovieListAndDateListByTheaterId_Only_In_One_Theater() {
 		// given
 		Movie movie2 = createAndSaveTempMovieInstance("영화2");
 		Movie movie3 = createAndSaveTempMovieInstance("영화3");
@@ -175,7 +175,7 @@ class ScheduleServiceTest {
 		createAndSaveSchedule(theaterRoom, movie4, LocalDateTime.now().plusDays(19), LocalDateTime.now().plusDays(19));
 		createAndSaveSchedule(theaterRoom, movie4, LocalDateTime.now().plusDays(20), LocalDateTime.now().plusDays(20));
 
-		ResponseFindMovieListAndDateList scheduleInOneTheater = scheduleService.findMovieListAndDateListInOneTheater(
+		ResponseFindMovieListAndDateList scheduleInOneTheater = scheduleService.findMovieListAndDateListByTheaterId(
 			theater.getId());
 
 		assertAll(

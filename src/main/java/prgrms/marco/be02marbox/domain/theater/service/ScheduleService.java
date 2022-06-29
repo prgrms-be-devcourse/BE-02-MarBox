@@ -60,7 +60,7 @@ public class ScheduleService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<ResponseFindCurrentMovie> findCurrentMovieList() {
+	public List<ResponseFindCurrentMovie> findShowingMovieList() {
 		List<Schedule> showingMoviesSchedules = findShowingMoviesSchedules();
 
 		return showingMoviesSchedules.stream()
@@ -70,7 +70,7 @@ public class ScheduleService {
 	}
 
 	@Transactional(readOnly = true)
-	public ResponseFindMovieListAndDateList findMovieListAndDateListInOneTheater(Long theaterId) {
+	public ResponseFindMovieListAndDateList findMovieListAndDateListByTheaterId(Long theaterId) {
 		Set<TheaterRoom> theaterRooms = theaterRoomRepository.findAllByTheaterId(theaterId);
 		List<Schedule> showingMoviesSchedules = findShowingMoviesSchedules();
 

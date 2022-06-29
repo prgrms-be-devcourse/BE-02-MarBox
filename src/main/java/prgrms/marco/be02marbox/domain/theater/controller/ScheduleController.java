@@ -38,14 +38,14 @@ public class ScheduleController {
 
 	@GetMapping("/current-movies")
 	public ResponseEntity<List<ResponseFindCurrentMovie>> getCurrentMovieList() {
-		List<ResponseFindCurrentMovie> currentMovieList = scheduleService.findCurrentMovieList();
+		List<ResponseFindCurrentMovie> currentMovieList = scheduleService.findShowingMovieList();
 		return ResponseEntity.ok().body(currentMovieList);
 	}
 
 	@GetMapping
 	public ResponseEntity<ResponseFindMovieListAndDateList> getMovieAndDateListInOneTheater(
 		@RequestParam Long theaterId) {
-		return ResponseEntity.ok().body(scheduleService.findMovieListAndDateListInOneTheater(theaterId));
+		return ResponseEntity.ok().body(scheduleService.findMovieListAndDateListByTheaterId(theaterId));
 	}
 
 }

@@ -107,7 +107,7 @@ class ScheduleControllerTest {
 			new ResponseFindCurrentMovie("테스트2", LimitAge.CHILD, Genre.ROMANCE, 150, "test/location"),
 			new ResponseFindCurrentMovie("테스트3", LimitAge.ADULT, Genre.ACTION, 120, "test/location"));
 
-		given(scheduleService.findCurrentMovieList()).willReturn(currentMovieList);
+		given(scheduleService.findShowingMovieList()).willReturn(currentMovieList);
 
 		mockMvc.perform(get("/schedules/current-movies"))
 			.andExpect(status().isOk())
@@ -131,7 +131,7 @@ class ScheduleControllerTest {
 		ResponseFindMovieListAndDateList responseFindMovieListAndDateList =
 			new ResponseFindMovieListAndDateList(movieList, dateList);
 
-		given(scheduleService.findMovieListAndDateListInOneTheater(1L)).willReturn(responseFindMovieListAndDateList);
+		given(scheduleService.findMovieListAndDateListByTheaterId(1L)).willReturn(responseFindMovieListAndDateList);
 
 		mockMvc.perform(get("/schedules")
 				.param("theaterId", "1"))
