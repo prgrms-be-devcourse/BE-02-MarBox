@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignInUser;
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignUpUser;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
+import prgrms.marco.be02marbox.domain.user.service.UserService;
 
 @SpringBootTest
 @AutoConfigureRestDocs
@@ -40,6 +41,9 @@ class UserIntegrationTest {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private UserService userService;
 
 	@Test
 	@DisplayName("사용자 회원 가입 API 성공")
@@ -69,9 +73,6 @@ class UserIntegrationTest {
 				),
 				responseHeaders(
 					headerWithName(HttpHeaders.LOCATION).description("로그인 API 위치")
-				),
-				responseFields(
-					fieldWithPath("id").type(JsonFieldType.NUMBER).description("사용자 식별 번호")
 				)));
 	}
 
@@ -79,14 +80,20 @@ class UserIntegrationTest {
 	@DisplayName("사용자 로그인 API 성공")
 	void testSignInApiSuccess() throws Exception {
 		//given
-		User user = new User(
+		RequestSignUpUser requestSignUpUser = new RequestSignUpUser(
 			"pang@mail.com",
 			"1234",
 			"pang",
 			Role.ROLE_ADMIN);
-		User savedUser = userRepository.save(user);
 
-		RequestSignInUser requestSignInUser = new RequestSignInUser(savedUser.getEmail(), savedUser.getPassword());
+		Long savedUserId = userService.create(
+			requestSignUpUser.email(),
+			requestSignUpUser.password(),
+			requestSignUpUser.name(),
+			requestSignUpUser.role());
+
+		RequestSignInUser requestSignInUser =
+			new RequestSignInUser(requestSignUpUser.email(), requestSignUpUser.password());
 
 		//when then
 		mockMvc.perform(post("/users/sign-in")
