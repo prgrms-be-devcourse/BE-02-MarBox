@@ -5,6 +5,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
 import static prgrms.marco.be02marbox.domain.theater.dto.document.RequestCreateTheaterRoomDoc.*;
 
 import java.util.Set;
@@ -85,7 +86,8 @@ class TheaterRoomControllerTest {
 		Long theaterId = 1L;
 		RequestCreateTheaterRoom requestDto = new RequestCreateTheaterRoom(theaterId, "A관", requestCreateSeats);
 
-		given(theaterRoomService.save(requestDto)).willThrow(new BadRequestTheaterException("올바르지 않은 극장 ID"));
+		given(theaterRoomService.save(requestDto)).willThrow(
+			new BadRequestTheaterException(INVALID_THEATER_EXP_MSG.getMessage()));
 
 		mockMvc.perform(post(THEATER_ROOM_SAVE_URL)
 			.with(SecurityMockMvcRequestPostProcessors.csrf())
