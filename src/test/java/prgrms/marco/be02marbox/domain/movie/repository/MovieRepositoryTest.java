@@ -23,7 +23,7 @@ class MovieRepositoryTest {
 	@Test
 	@DisplayName("Movie를 DB에 저장할 수 있다")
 	void testSaveMovie() {
-		Movie movie = new Movie("Frozen", LimitAge.CHILD, Genre.ANIMATION, 102, "resources/posters/frozen.png");
+		Movie movie = new Movie("Frozen", LimitAge.CHILD, Genre.ANIMATION, 102);
 		Movie savedMovie = movieRepository.save(movie);
 		Optional<Movie> found = movieRepository.findById(savedMovie.getId());
 
@@ -32,8 +32,7 @@ class MovieRepositoryTest {
 			() -> assertThat(found.get().getName()).isEqualTo(movie.getName()),
 			() -> assertThat(found.get().getLimitAge()).isEqualTo(movie.getLimitAge()),
 			() -> assertThat(found.get().getGenre()).isEqualTo(movie.getGenre()),
-			() -> assertThat(found.get().getRunningTime()).isEqualTo(movie.getRunningTime()),
-			() -> assertThat(found.get().getPosterImgLocation()).isEqualTo(movie.getPosterImgLocation())
+			() -> assertThat(found.get().getRunningTime()).isEqualTo(movie.getRunningTime())
 		);
 	}
 }

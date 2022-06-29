@@ -110,7 +110,7 @@ class RepositoryTestUtil {
 	}
 
 	public Movie saveMovie(String name) {
-		Movie movie = new Movie(name, LimitAge.ADULT, Genre.ACTION, 100, "test");
+		Movie movie = new Movie(name, LimitAge.ADULT, Genre.ACTION, 100);
 		return movieRepository.save(movie);
 	}
 
