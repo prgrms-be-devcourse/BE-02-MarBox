@@ -56,7 +56,7 @@ class ScheduleServiceMockTest {
 		TheaterRoom theaterRoom = new TheaterRoom(theater, "A관");
 		given(theaterRoomRepository.findById(anyLong())).willReturn(Optional.of(theaterRoom));
 
-		Movie movie = new Movie("test", LimitAge.CHILD, Genre.ACTION, 180, "/test/location");
+		Movie movie = new Movie("test", LimitAge.CHILD, Genre.ACTION, 180);
 		given(movieRepository.findById(anyLong())).willReturn(Optional.of(movie));
 
 		Schedule schedule = Schedule.builder()

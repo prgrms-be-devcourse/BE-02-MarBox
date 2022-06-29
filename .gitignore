@@ -6,6 +6,9 @@ build/
 !**/src/test/**/build/
 .DS_Store
 
+### 포스터가 저장되는 디렉토리 ###
+posters/
+
 ### STS ###
 .apt_generated
 .classpath

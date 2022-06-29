@@ -91,7 +91,7 @@ class ReservedSeatRepositoryTest {
 		seatRepository.save(seat);
 
 		// movie
-		Movie movie = new Movie("test", LimitAge.ADULT, Genre.ACTION, 100, "test");
+		Movie movie = new Movie("test", LimitAge.ADULT, Genre.ACTION, 100);
 		movieRepository.save(movie);
 
 		// schedule
