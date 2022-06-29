@@ -1,6 +1,7 @@
 package prgrms.marco.be02marbox.domain.theater.service;
 
 import static java.util.stream.Collectors.*;
+import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
 
 import java.util.List;
 
@@ -23,8 +24,6 @@ import prgrms.marco.be02marbox.domain.theater.service.utils.TheaterRoomConverter
 @Service
 @Transactional(readOnly = true)
 public class TheaterRoomService {
-
-	private static final String WRONG_THEATER_ID_ERR_MSG = "올바르지 않은 극장 ID 값입니다.";
 
 	private final TheaterRoomRepository theaterRoomRepository;
 	private final TheaterRepository theaterRepository;
@@ -53,7 +52,7 @@ public class TheaterRoomService {
 	@Transactional
 	public Long save(RequestCreateTheaterRoom requestCreateTheaterRoom) {
 		Theater theater = theaterRepository.findById(requestCreateTheaterRoom.theaterId())
-			.orElseThrow(() -> new BadRequestTheaterException(WRONG_THEATER_ID_ERR_MSG));
+			.orElseThrow(() -> new BadRequestTheaterException(INVALID_THEATER_EXP_MSG.getMessage()));
 
 		TheaterRoom newTheaterRoom = new TheaterRoom(theater, requestCreateTheaterRoom.name());
 		TheaterRoom savedTheaterRoom = theaterRoomRepository.save(newTheaterRoom);
