@@ -26,7 +26,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.config.WebSecurityConfigure;
-import prgrms.marco.be02marbox.domain.exception.custom.BadRequestTheaterException;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSeat;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.document.RequestCreateSeatDoc;
@@ -87,7 +86,7 @@ class TheaterRoomControllerTest {
 		RequestCreateTheaterRoom requestDto = new RequestCreateTheaterRoom(theaterId, "A관", requestCreateSeats);
 
 		given(theaterRoomService.save(requestDto)).willThrow(
-			new BadRequestTheaterException(INVALID_THEATER_EXP_MSG.getMessage()));
+			new IllegalArgumentException(INVALID_THEATER_EXP_MSG.getMessage()));
 
 		mockMvc.perform(post(THEATER_ROOM_SAVE_URL)
 			.with(SecurityMockMvcRequestPostProcessors.csrf())

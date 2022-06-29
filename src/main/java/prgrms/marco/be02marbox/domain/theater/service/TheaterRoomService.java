@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import prgrms.marco.be02marbox.domain.exception.custom.BadRequestTheaterException;
 import prgrms.marco.be02marbox.domain.theater.Seat;
 import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
@@ -47,12 +46,12 @@ public class TheaterRoomService {
 	 * 새로운 상영관 추가
 	 * @param requestCreateTheaterRoom 극장, 상영관 이름, 좌석 정보
 	 * @return 생성된 id
-	 * @throws  BadRequestTheaterException 극장 정보가 존재하지 않는 경우
+	 * @throws IllegalArgumentException 극장 정보가 존재하지 않는 경우
 	 */
 	@Transactional
 	public Long save(RequestCreateTheaterRoom requestCreateTheaterRoom) {
 		Theater theater = theaterRepository.findById(requestCreateTheaterRoom.theaterId())
-			.orElseThrow(() -> new BadRequestTheaterException(INVALID_THEATER_EXP_MSG.getMessage()));
+			.orElseThrow(() -> new IllegalArgumentException(INVALID_THEATER_EXP_MSG.getMessage()));
 
 		TheaterRoom newTheaterRoom = new TheaterRoom(theater, requestCreateTheaterRoom.name());
 		TheaterRoom savedTheaterRoom = theaterRoomRepository.save(newTheaterRoom);
