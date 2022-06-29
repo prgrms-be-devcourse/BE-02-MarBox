@@ -10,6 +10,7 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import prgrms.marco.be02marbox.domain.exception.custom.Message;
 import prgrms.marco.be02marbox.domain.movie.Movie;
 import prgrms.marco.be02marbox.domain.movie.dto.ResponseFindMovie;
 import prgrms.marco.be02marbox.domain.movie.repository.MovieRepository;
@@ -77,7 +78,8 @@ public class ScheduleService {
 
 	@Transactional(readOnly = true)
 	public ResponseFindSchedule findMovieListAndDateListByTheaterId(Long theaterId) {
-		theaterRepository.findById(theaterId).orElseThrow(EntityNotFoundException::new);
+		theaterRepository.findById(theaterId).orElseThrow(
+			() -> new EntityNotFoundException(Message.INVALID_THEATER_EXP_MSG.getMessage()));
 		Set<TheaterRoom> theaterRooms = theaterRoomRepository.findAllByTheaterId(theaterId);
 		List<Schedule> showingMoviesSchedules = findShowingMoviesSchedules();
 
