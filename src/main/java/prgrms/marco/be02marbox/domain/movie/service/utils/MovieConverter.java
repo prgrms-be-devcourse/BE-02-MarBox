@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import prgrms.marco.be02marbox.domain.movie.Movie;
 import prgrms.marco.be02marbox.domain.movie.dto.RequestCreateMovie;
-import prgrms.marco.be02marbox.domain.movie.dto.ResponseFindCurrentMovie;
+import prgrms.marco.be02marbox.domain.movie.dto.ResponseFindMovie;
 
 @Component
 public class MovieConverter {
@@ -24,13 +24,13 @@ public class MovieConverter {
 	}
 
 	/**
-	 * Movie 객체를 ResponseFindCurrentMovie 객체로 변환
+	 * Movie 객체를 ResponseFindMovie 객체로 변환
 	 *
 	 * @param movie
-	 * @return ResponseFindCurrentMovie
+	 * @return ResponseFindMovie
 	 */
-	public ResponseFindCurrentMovie convertFromMovieToResponseFindCurrentMovie(Movie movie) {
-		return new ResponseFindCurrentMovie(movie.getName(),
+	public ResponseFindMovie convertFromMovieToResponseFindMovie(Movie movie) {
+		return new ResponseFindMovie(movie.getName(),
 			movie.getLimitAge(),
 			movie.getGenre(),
 			movie.getRunningTime(),
