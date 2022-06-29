@@ -185,7 +185,7 @@ class ScheduleServiceTest {
 	}
 
 	private Movie createAndSaveTempMovieInstance(String name) {
-		Movie movie = new Movie(name, LimitAge.ADULT, Genre.ACTION, 100, "test/location");
+		Movie movie = new Movie(name, LimitAge.ADULT, Genre.ACTION, 100);
 		movieRepository.save(movie);
 		return movie;
 	}
