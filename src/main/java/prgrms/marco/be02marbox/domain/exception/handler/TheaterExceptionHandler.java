@@ -17,10 +17,10 @@ import prgrms.marco.be02marbox.domain.exception.dto.ResponseApiError;
 public class TheaterExceptionHandler {
 
 	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<ResponseApiError> handleIllegalArgument(IllegalArgumentException error) {
+	public ResponseEntity<ResponseApiError> handleIllegalArgument(IllegalArgumentException exception) {
 		List<String> messages = new ArrayList<>();
 
-		messages.add(error.getMessage());
+		messages.add(exception.getMessage());
 		return ResponseEntity.badRequest().body(new ResponseApiError(messages, HttpStatus.BAD_REQUEST.value()));
 	}
 
