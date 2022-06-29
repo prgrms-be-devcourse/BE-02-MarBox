@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.mock.web.MockMultipartFile;
 
 import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
@@ -45,7 +46,7 @@ class ScheduleRepositoryTest {
 		theaterRepository.save(theater);
 		theaterRoom = new TheaterRoom(theater, "A관");
 		theaterRoomRepository.save(theaterRoom);
-		movie = new Movie("test", LimitAge.ADULT, Genre.ACTION, 100, "test");
+		movie = new Movie("test", LimitAge.ADULT, Genre.ACTION, 100);
 		movieRepository.save(movie);
 	}
 

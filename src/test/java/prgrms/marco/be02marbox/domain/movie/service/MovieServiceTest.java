@@ -3,6 +3,7 @@ package prgrms.marco.be02marbox.domain.movie.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.mock.web.MockMultipartFile;
 
 import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
@@ -43,17 +45,23 @@ class MovieServiceTest {
 
 	@BeforeAll
 	static void beforeAll() {
-		frozen = new RequestCreateMovie("Frozen", LimitAge.CHILD, Genre.ANIMATION, 102, "frozen.png");
-		notebook = new RequestCreateMovie("Frozen", LimitAge.CHILD, Genre.ROMANCE, 124, "notebook.png");
-		matrix = new RequestCreateMovie("Matrix", LimitAge.CHILD, Genre.ACTION, 136, "matrix.png");
-		tangled = new RequestCreateMovie("tangled", LimitAge.CHILD, Genre.ANIMATION, 148, "tangled.png");
-		tazza = new RequestCreateMovie("tazza", LimitAge.ADULT, Genre.ACTION, 186, "tazza.png");
-		aboutTime = new RequestCreateMovie("Frozen", LimitAge.CHILD, Genre.ROMANCE, 124, "notebook.png");
+		frozen = new RequestCreateMovie("Frozen", LimitAge.CHILD, Genre.ANIMATION, 102,
+			new MockMultipartFile("fronzen.tmp", "fronzen.tmp", "tmp", "fronzen poster".getBytes()));
+		notebook = new RequestCreateMovie("NoteBook", LimitAge.CHILD, Genre.ROMANCE, 124,
+			new MockMultipartFile("notebook.tmp", "notebook.tmp", "tmp", "notebook poster".getBytes()));
+		matrix = new RequestCreateMovie("Matrix", LimitAge.CHILD, Genre.ACTION, 136,
+			new MockMultipartFile("matrix.tmp", "matrix.tmp", "tmp", "matrix poster".getBytes()));
+		tangled = new RequestCreateMovie("tangled", LimitAge.CHILD, Genre.ANIMATION, 148,
+			new MockMultipartFile("tangled.tmp", "tangled.tmp", "tmp", "tangled poster".getBytes()));
+		tazza = new RequestCreateMovie("tazza", LimitAge.ADULT, Genre.ACTION, 186,
+			new MockMultipartFile("tazza.tmp", "tazza.tmp", "tmp", "tazza poster".getBytes()));
+		aboutTime = new RequestCreateMovie("About Time", LimitAge.CHILD, Genre.ROMANCE, 124,
+			new MockMultipartFile("about_time.tmp", "about_time.tmp", "tmp", "about time poster".getBytes()));
 	}
 
 	@Test
 	@DisplayName("movie를 추가할 수 있다")
-	void testCreateMovie() {
+	void testCreateMovie() throws IOException {
 		Long movieId = movieService.createMovie(frozen);
 		Optional<Movie> found = movieRepository.findById(movieId);
 
@@ -68,7 +76,7 @@ class MovieServiceTest {
 
 	@Test
 	@DisplayName("movie 리스트를 조회할 수 있다")
-	void testGetMovies() {
+	void testGetMovies() throws IOException {
 		movieService.createMovie(frozen);
 		movieService.createMovie(notebook);
 		movieService.createMovie(matrix);
