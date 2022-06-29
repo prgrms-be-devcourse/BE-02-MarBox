@@ -7,8 +7,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
+import prgrms.marco.be02marbox.domain.user.jwt.CustomAccessDeniedHandler;
 import prgrms.marco.be02marbox.domain.user.jwt.Jwt;
 import prgrms.marco.be02marbox.domain.user.jwt.JwtAuthenticationFilter;
 import prgrms.marco.be02marbox.domain.user.jwt.JwtAuthenticationProvider;
@@ -48,6 +50,11 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 		return new JwtAuthenticationFilter(jwtConfigure.header(), jwt);
 	}
 
+	@Bean
+	public AccessDeniedHandler accessDeniedHandler() {
+		return new CustomAccessDeniedHandler();
+	}
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -78,6 +85,9 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
 
-			.addFilterAfter(jwtAuthenticationFilter(), SecurityContextPersistenceFilter.class);
+			.addFilterAfter(jwtAuthenticationFilter(), SecurityContextPersistenceFilter.class)
+
+			.exceptionHandling()
+			.accessDeniedHandler(accessDeniedHandler());
 	}
 }
