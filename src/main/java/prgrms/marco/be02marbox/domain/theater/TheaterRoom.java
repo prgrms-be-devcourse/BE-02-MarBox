@@ -25,7 +25,7 @@ import org.hibernate.annotations.Formula;
 @Table(name = "theater_room")
 public class TheaterRoom {
 	@Id
-	@Column(name = "id")
+	@Column(name = "id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
@@ -34,7 +34,7 @@ public class TheaterRoom {
 	@NotNull
 	private Theater theater;
 
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
 	@NotNull
 	private String name;
 

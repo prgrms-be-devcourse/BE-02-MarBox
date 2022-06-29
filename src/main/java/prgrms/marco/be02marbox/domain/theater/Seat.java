@@ -23,7 +23,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class Seat {
 
 	@Id
-	@Column(name = "id")
+	@Column(name = "id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
@@ -31,10 +31,10 @@ public class Seat {
 	@JoinColumn(name = "theater_room_id")
 	private TheaterRoom theaterRoom;
 
-	@Column(name = "seat_row")
+	@Column(name = "seat_row", nullable = false)
 	private Integer row;
 
-	@Column(name = "seat_col")
+	@Column(name = "seat_col", nullable = false)
 	private Integer column;
 
 	protected Seat() {
