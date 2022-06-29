@@ -56,7 +56,7 @@ class MovieRestControllerTest {
 		multiValueMap.add("size", "5");
 
 		List<Movie> list = new ArrayList<>();
-		list.add(new Movie("Frozen", LimitAge.CHILD, Genre.ANIMATION, 102, "frozen.png"));
+		list.add(new Movie("Frozen", LimitAge.CHILD, Genre.ANIMATION, 102));
 		given(movieService.getMovies(0, 5))
 			.willReturn(list);
 
