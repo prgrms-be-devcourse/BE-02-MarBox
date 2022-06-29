@@ -1,16 +1,12 @@
 package prgrms.marco.be02marbox.domain.reservation.service;
 
-import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
-
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import prgrms.marco.be02marbox.domain.reservation.Ticket;
 import prgrms.marco.be02marbox.domain.reservation.dto.ResponseFindTicket;
 import prgrms.marco.be02marbox.domain.reservation.repository.TicketRepository;
 import prgrms.marco.be02marbox.domain.reservation.service.utils.TicketConverter;
@@ -34,10 +30,11 @@ public class TicketService {
 		this.ticketConverter = ticketConverter;
 	}
 
-	public ResponseFindTicket findOneUserTicket(Long userId) {
-		Ticket findTicket = ticketRepository.findTicketByUserId(userId)
-			.orElseThrow(() -> new EntityNotFoundException(NO_USER_TICKET_INFO_EXP_MSG.getMessage()));
-		return ticketConverter.convertFromTicketToResponseFindTicket(findTicket);
+	public List<ResponseFindTicket> findOneUserTickets(Long userId) {
+		return ticketRepository.findAllTicketByUserId(userId)
+			.stream()
+			.map(ticketConverter::convertFromTicketToResponseFindTicket)
+			.collect(Collectors.toList());
 	}
 
 	public List<ResponseFindTicket> findTickets() {
@@ -48,8 +45,9 @@ public class TicketService {
 	}
 
 	public List<ResponseFindTicket> findValidTicketsOfUser(Long userId) {
-		return ticketRepository.findAllValidTicketsV2(userId)
+		return ticketRepository.findAllTicketByUserId(userId)
 			.stream()
+			.filter(ticket -> ticket.getSchedule().getEndTime().isAfter(LocalDateTime.now()))
 			.map(ticketConverter::convertFromTicketToResponseFindTicket)
 			.collect(Collectors.toList());
 	}

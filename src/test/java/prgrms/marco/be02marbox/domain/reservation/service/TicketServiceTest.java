@@ -89,23 +89,18 @@ class TicketServiceTest {
 
 	@Test
 	@DisplayName("특정 고객의 티켓 정보 조회")
-	void testFindOneUserTicket() {
+	void testFindOneUserTickets() {
 		// given
 		initData();
 		ticketRepository.saveAll(List.of(
 			new Ticket(user1, schedule1, LocalDateTime.now()),
-			new Ticket(user2, schedule2, LocalDateTime.now())));
+			new Ticket(user1, schedule2, LocalDateTime.now())));
 
 		// when
-		ResponseFindTicket findUserTicket = ticketService.findOneUserTicket(user1.getId());
+		List<ResponseFindTicket> findTickets = ticketService.findOneUserTickets(user1.getId());
 
 		// then
-		assertAll(
-			() -> assertThat(findUserTicket.user().getEmail()).isEqualTo("iop1996@gmail.com"),
-			() -> assertThat(findUserTicket.schedule().getMovie().getName()).isEqualTo("movie1"),
-			() -> assertThat(findUserTicket.schedule().getTheaterRoom().getName()).isEqualTo("first"),
-			() -> assertThat(findUserTicket.schedule().getTheaterRoom().getTheater().getName()).isEqualTo("theater0")
-		);
+		assertThat(findTickets).hasSize(2);
 	}
 
 	@Test
