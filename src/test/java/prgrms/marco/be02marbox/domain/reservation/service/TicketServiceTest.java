@@ -77,7 +77,8 @@ class TicketServiceTest {
 	void testFindAllTicket() {
 		// given
 		initData();
-		ticketRepository.saveAll(List.of(new Ticket(user1, schedule1, LocalDateTime.now()),
+		ticketRepository.saveAll(List.of(
+			new Ticket(user1, schedule1, LocalDateTime.now()),
 			new Ticket(user2, schedule2, LocalDateTime.now())));
 
 		// when
@@ -97,10 +98,13 @@ class TicketServiceTest {
 			new Ticket(user1, schedule2, LocalDateTime.now())));
 
 		// when
-		List<ResponseFindTicket> findTickets = ticketService.findOneUserTickets(user1.getId());
+		List<ResponseFindTicket> findTickets = ticketService.findTicketsOfUser(user1.getId());
 
 		// then
-		assertThat(findTickets).hasSize(2);
+		assertAll(
+			() -> assertThat(findTickets).hasSize(2),
+			() -> assertThat(findTickets.get(0).user().getId()).isEqualTo(user1.getId())
+		);
 	}
 
 	@Test
@@ -138,7 +142,25 @@ class TicketServiceTest {
 				theaterRoom1.getName()),
 			() -> assertThat(validTicketsOfUser.get(0).schedule().getEndTime().isAfter(LocalDateTime.now())).isTrue()
 		);
+	}
 
+	@Test
+	@DisplayName("특정 스케줄의 티켓 정보 조회")
+	void testFindTicketsOfSchedule() {
+		// given
+		initData();
+		ticketRepository.saveAll(List.of(
+			new Ticket(user1, schedule1, LocalDateTime.now()),
+			new Ticket(user1, schedule1, LocalDateTime.now())));
+
+		// when
+		List<ResponseFindTicket> ticketsOfSchedule = ticketService.findTicketsOfSchedule(schedule1.getId());
+
+		// then
+		assertAll(
+			() -> assertThat(ticketsOfSchedule).hasSize(2),
+			() -> assertThat(ticketsOfSchedule.get(0).schedule().getId()).isEqualTo(schedule1.getId())
+		);
 	}
 
 	private void initData() {

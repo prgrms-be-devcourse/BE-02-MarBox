@@ -30,7 +30,7 @@ public class TicketService {
 		this.ticketConverter = ticketConverter;
 	}
 
-	public List<ResponseFindTicket> findOneUserTickets(Long userId) {
+	public List<ResponseFindTicket> findTicketsOfUser(Long userId) {
 		return ticketRepository.findAllTicketByUserId(userId)
 			.stream()
 			.map(ticketConverter::convertFromTicketToResponseFindTicket)
@@ -48,6 +48,13 @@ public class TicketService {
 		return ticketRepository.findAllTicketByUserId(userId)
 			.stream()
 			.filter(ticket -> ticket.getSchedule().getEndTime().isAfter(LocalDateTime.now()))
+			.map(ticketConverter::convertFromTicketToResponseFindTicket)
+			.collect(Collectors.toList());
+	}
+
+	public List<ResponseFindTicket> findTicketsOfSchedule(Long scheduleId) {
+		return ticketRepository.findAllByScheduleId(scheduleId)
+			.stream()
 			.map(ticketConverter::convertFromTicketToResponseFindTicket)
 			.collect(Collectors.toList());
 	}

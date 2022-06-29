@@ -8,4 +8,6 @@ import prgrms.marco.be02marbox.domain.reservation.Ticket;
 
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 	List<Ticket> findAllTicketByUserId(Long userId);
+
+	List<Ticket> findAllByScheduleId(Long scheduleId);
 }
