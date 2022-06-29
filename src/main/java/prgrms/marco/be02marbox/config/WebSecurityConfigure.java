@@ -2,6 +2,7 @@ package prgrms.marco.be02marbox.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -9,8 +10,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
+import prgrms.marco.be02marbox.domain.user.jwt.CustomAccessDeniedHandler;
 import prgrms.marco.be02marbox.domain.user.jwt.Jwt;
+import prgrms.marco.be02marbox.domain.user.jwt.JwtAuthenticationFilter;
 import prgrms.marco.be02marbox.domain.user.jwt.JwtAuthenticationProvider;
 import prgrms.marco.be02marbox.domain.user.service.UserService;
 
@@ -48,11 +53,24 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 		return super.authenticationManagerBean();
 	}
 
+	public JwtAuthenticationFilter jwtAuthenticationFilter() {
+		Jwt jwt = getApplicationContext().getBean(Jwt.class);
+		return new JwtAuthenticationFilter(jwtConfigure.header(), jwt);
+	}
+
+	@Bean
+	public AccessDeniedHandler accessDeniedHandler() {
+		return new CustomAccessDeniedHandler();
+	}
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-			.anyRequest().permitAll()
+			.antMatchers("/users/sign-up", "/users/sign-in").permitAll()
+			.antMatchers(HttpMethod.GET, "/theaters", "/schedules/current-movies")
+			.hasAnyRole("ADMIN", "CUSTOMER")
+			.anyRequest().hasAnyRole("ADMIN")
 			.and()
 
 			.formLogin()
@@ -74,6 +92,12 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 			.disable()
 
 			.sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+
+			.addFilterAfter(jwtAuthenticationFilter(), SecurityContextPersistenceFilter.class)
+
+			.exceptionHandling()
+			.accessDeniedHandler(accessDeniedHandler());
 	}
 }
