@@ -15,7 +15,7 @@ import prgrms.marco.be02marbox.domain.theater.Seat;
 @Table(name = "reserved_seat")
 public class ReservedSeat {
 
-	private static final String ID_SEPARATOR = "_";
+	public static final String ID_SEPARATOR = "_";
 
 	@Id
 	@Column(name = "id", nullable = false)
