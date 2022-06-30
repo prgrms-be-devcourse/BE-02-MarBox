@@ -8,6 +8,7 @@ import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -36,14 +37,14 @@ class UserControllerTest {
 	@MockBean
 	private UserService userService;
 
+	@MockBean
+	private Jwt jwt;
+
 	@Autowired
 	private MockMvc mockMvc;
 
 	@Autowired
 	private ObjectMapper objectMapper;
-
-	@Autowired
-	private Jwt jwt;
 
 	@Test
 	@DisplayName("회원 가입 실패 - Role 바인딩 실패해 UserSignUpReq role 필드에 null이 들어감")
@@ -132,14 +133,15 @@ class UserControllerTest {
 		ResponseLoginUser responseLoginUser = new ResponseLoginUser(name, role);
 		given(userService.login(email, password)).willReturn(responseLoginUser);
 
-		String token = jwt.sign(Jwt.Claims.from(name, role));
+		String token = "access-token";
+		given(this.jwt.sign(ArgumentMatchers.any(Jwt.Claims.class))).willReturn(token);
 
 		//when then
 		mockMvc.perform(post("/users/sign-in")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(requestSignInUser)))
 			.andExpect(status().isNoContent())
-			.andExpect(header().string("token", token));
+			.andExpect(cookie().value("access-token", token));
 	}
 
 	@Test
