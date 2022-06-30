@@ -3,6 +3,7 @@ package prgrms.marco.be02marbox.domain.theater.controller;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -52,7 +53,9 @@ public class ScheduleController {
 			return ResponseEntity.ok().body(scheduleService.findMovieListAndDateListByTheaterId(theaterId));
 		}
 
-		return ResponseEntity.ok().body(new ResponseFindSchedule(List.of(), List.of(), List.of(), List.of()));
+		return ResponseEntity.ok()
+			.body(new ResponseFindSchedule(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+				Collections.emptyList()));
 	}
 
 }

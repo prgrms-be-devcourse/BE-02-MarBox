@@ -1,6 +1,7 @@
 package prgrms.marco.be02marbox.domain.theater.service;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -93,7 +94,7 @@ public class ScheduleService {
 			.distinct()
 			.toList();
 
-		return new ResponseFindSchedule(movieList, null, dateList, null);
+		return new ResponseFindSchedule(movieList, Collections.emptyList(), dateList, Collections.emptyList());
 	}
 
 	private List<Schedule> findShowingMoviesSchedules() {
