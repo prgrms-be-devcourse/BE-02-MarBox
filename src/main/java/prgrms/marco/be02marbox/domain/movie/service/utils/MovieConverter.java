@@ -19,8 +19,7 @@ public class MovieConverter {
 		return new Movie(requestCreateMovie.name(),
 			requestCreateMovie.limitAge(),
 			requestCreateMovie.genre(),
-			requestCreateMovie.runningTime(),
-			requestCreateMovie.originalFileName());
+			requestCreateMovie.runningTime());
 	}
 
 	/**
