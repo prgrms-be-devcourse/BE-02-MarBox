@@ -181,8 +181,8 @@ class ScheduleServiceTest {
 			theater.getId());
 
 		assertAll(
-			() -> assertThat(movieListAndDateList.movieList().size()).isEqualTo(2),
-			() -> assertThat(movieListAndDateList.dateList().size()).isEqualTo(3)
+			() -> assertThat(movieListAndDateList.movieList()).hasSize(2),
+			() -> assertThat(movieListAndDateList.dateList()).hasSize(3)
 		);
 	}
 
