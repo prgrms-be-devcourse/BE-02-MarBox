@@ -93,7 +93,7 @@ public class ScheduleService {
 			.distinct()
 			.toList();
 
-		return new ResponseFindSchedule(movieList, List.of(), dateList, List.of());
+		return new ResponseFindSchedule(movieList, null, dateList, null);
 	}
 
 	private List<Schedule> findShowingMoviesSchedules() {

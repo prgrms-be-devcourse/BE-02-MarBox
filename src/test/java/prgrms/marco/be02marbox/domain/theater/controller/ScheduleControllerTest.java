@@ -136,7 +136,7 @@ class ScheduleControllerTest {
 		List<LocalDate> dateList = List.of(LocalDate.now(), LocalDate.now().plusDays(1));
 
 		ResponseFindSchedule responseFindMovieListAndDateList =
-			new ResponseFindSchedule(movieList, List.of(), dateList, List.of());
+			new ResponseFindSchedule(movieList, null, dateList, null);
 
 		given(scheduleService.findMovieListAndDateListByTheaterId(1L)).willReturn(responseFindMovieListAndDateList);
 
@@ -152,8 +152,8 @@ class ScheduleControllerTest {
 					fieldWithPath("movieList[].runningTime").type(JsonFieldType.NUMBER).description("상영시간"),
 					fieldWithPath("movieList[].posterImgLocation").type(JsonFieldType.STRING).description("포스터 이미지 경로"),
 					fieldWithPath("dateList[]").type(JsonFieldType.ARRAY).description("상영 날짜 리스트"),
-					fieldWithPath("theaterList[]").type(JsonFieldType.ARRAY).description("상영관 리스트"),
-					fieldWithPath("timeList[]").type(JsonFieldType.ARRAY).description("상영 시간 리스트")
+					fieldWithPath("theaterList").type(JsonFieldType.NULL).description("영화관 리스트"),
+					fieldWithPath("timeList").type(JsonFieldType.NULL).description("상영 시간 리스트")
 				)));
 	}
 
