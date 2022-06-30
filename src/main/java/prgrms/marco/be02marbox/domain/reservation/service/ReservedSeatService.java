@@ -31,7 +31,7 @@ public class ReservedSeatService {
 	 * @return 예약 좌석 리스트
 	 */
 	public List<ResponseFindSeat> findByScheduleId(Long scheduleId) {
-		return reservedSeatRepository.searchByIdStartsWith(makeFindByScheduleParam(scheduleId)).stream()
+		return reservedSeatRepository.searchByScheduleIdStartsWith(makeFindByScheduleParam(scheduleId)).stream()
 			.map((reservedSeat -> seatConverter.convertFromSeatToResponseFindSeat(reservedSeat.getSeat())))
 			.collect(toList());
 	}

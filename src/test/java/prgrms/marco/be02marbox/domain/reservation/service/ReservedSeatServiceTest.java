@@ -28,6 +28,7 @@ class ReservedSeatServiceTest extends RepositoryTestUtil {
 		int seatCount = 3;
 		Schedule schedule = saveReservedSeatMultiSeat(seatCount);
 
+		em.flush();
 		List<ResponseFindSeat> seatList = reservedSeatService.findByScheduleId(schedule.getId());
 		assertThat(seatList).hasSize(seatCount);
 	}
