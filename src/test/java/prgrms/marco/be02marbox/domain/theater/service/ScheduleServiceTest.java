@@ -134,7 +134,6 @@ class ScheduleServiceTest {
 		Movie movie4 = new Movie("테스트4", LimitAge.ADULT, Genre.ANIMATION, 150);
 		Movie movie5 = new Movie("테스트5", LimitAge.CHILD, Genre.ROMANCE, 160);
 
-
 		movieRepository.save(movie2);
 		movieRepository.save(movie3);
 		movieRepository.save(movie4);
