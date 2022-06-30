@@ -6,12 +6,15 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -66,7 +69,17 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 	}
 
 	private String getToken(HttpServletRequest request) {
-		String token = request.getHeader(headerKey);
+		Cookie[] cookies = request.getCookies();
+		if (Objects.isNull(cookies)) {
+			return null;
+		}
+
+		String token = Arrays.stream(cookies)
+			.filter(cookie -> cookie.getName().equals(this.headerKey))
+			.map(Cookie::getValue)
+			.findFirst()
+			.orElse(null);
+
 		if (isNotEmpty(token)) {
 			log.debug("요청 헤더에 jwt token이 존재합니다: {} ", token);
 			return URLDecoder.decode(token, StandardCharsets.UTF_8);
