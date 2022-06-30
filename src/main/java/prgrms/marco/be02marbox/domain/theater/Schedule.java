@@ -48,6 +48,10 @@ public class Schedule {
 		this.endTime = builder.endTime;
 	}
 
+	public static Builder builder() {
+		return new Builder();
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -68,14 +72,10 @@ public class Schedule {
 		return endTime;
 	}
 
-	public static Builder builder() {
-		return new Builder();
-	}
-
 	public static class Builder {
 		private Long id;
 		private TheaterRoom theaterRoom;
-		public Movie movie;
+		private Movie movie;
 		private LocalDateTime startTime;
 		private LocalDateTime endTime;
 
