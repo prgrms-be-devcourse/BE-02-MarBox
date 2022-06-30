@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Min;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -31,9 +32,11 @@ public class Seat {
 	private TheaterRoom theaterRoom;
 
 	@Column(name = "seat_row", nullable = false)
+	@Min(0)
 	private Integer row;
 
 	@Column(name = "seat_col", nullable = false)
+	@Min(0)
 	private Integer column;
 
 	protected Seat() {

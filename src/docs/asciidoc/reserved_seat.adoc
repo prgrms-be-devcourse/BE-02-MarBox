@@ -1,0 +1,15 @@
+:hardbreaks:
+ifndef::snippets[]
+:snippets: ../../../target/generated-snippets
+endif::[]
+
+== 예매좌석 조회
+
+### 스케줄 별 예매좌석 조회
+
+.Request
+include::{snippets}/reserved-seat-findBy-theaterId/http-request.adoc[]
+
+.Response
+include::{snippets}/reserved-seat-findBy-theaterId/http-response.adoc[]
+include::{snippets}/reserved-seat-findBy-theaterId/response-fields.adoc[]
