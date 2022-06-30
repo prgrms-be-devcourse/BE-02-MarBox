@@ -1,6 +1,6 @@
 package prgrms.marco.be02marbox.domain.theater.dto;
 
-import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
-public record ResponseFindSeat(@Min(0) int row, @Min(0) int col) {
+public record ResponseFindSeat(@NotNull Integer row, @NotNull int col) {
 }
