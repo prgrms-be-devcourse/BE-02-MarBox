@@ -47,42 +47,16 @@ class ReservedSeatRepositoryTest extends RepositoryTestUtil {
 	void testSearchByIdStartsWith(int expectCount) {
 		Schedule schedule = saveReservedSeatMultiSeat(expectCount);
 
-		String paramId = makeFindByScheduleParam(schedule.getId());
-		List<ReservedSeat> reservedSeats = reservedSeatRepository.searchByScheduleIdStartsWith(paramId);
-
+		List<ReservedSeat> reservedSeats = reservedSeatRepository.searchByScheduleIdStartsWith(schedule.getId());
 		assertThat(reservedSeats).hasSize(expectCount);
 	}
 
 	@Test
-	@DisplayName("like 조건 잘못된 id형식으로 조회하는 경우")
-	void testSearchByIdStartsWithBadParam() {
-		Schedule schedule = saveReservedSeatMultiSeat(1);
-		String paramId = new StringBuilder().append(schedule.getId()).append("\\_\\_").toString();
-		String paramId2 = new StringBuilder().append(schedule.getId()).append("*").toString();
-		String paramId3 = new StringBuilder().append(schedule.getId()).append("?").toString();
-
-		List<ReservedSeat> reservedSeats = reservedSeatRepository.searchByScheduleIdStartsWith(paramId);
-		List<ReservedSeat> reservedSeats2 = reservedSeatRepository.searchByScheduleIdStartsWith(paramId2);
-		List<ReservedSeat> reservedSeats3 = reservedSeatRepository.searchByScheduleIdStartsWith(paramId3);
-
-		assertAll(
-			() -> assertThat(reservedSeats).isEmpty(),
-			() -> assertThat(reservedSeats2).isEmpty(),
-			() -> assertThat(reservedSeats3).isEmpty()
-		);
-	}
-
-	@Test
-	@DisplayName("저장되지 않은 {schedule_id})_ 로 조회하는 경우")
+	@DisplayName("저장되지 않은 {schedule_id}) 로 조회하는 경우")
 	void testSearchByIdStartsWithBadParam2() {
-		Schedule schedule = saveReservedSeatMultiSeat(3);
-		String paramId = makeFindByScheduleParam(schedule.getId() + 1);
-		List<ReservedSeat> reservedSeats = reservedSeatRepository.searchByScheduleIdStartsWith(paramId);
+		Schedule schedule = saveReservedSeatMultiSeat(1);
+		List<ReservedSeat> reservedSeats = reservedSeatRepository.searchByScheduleIdStartsWith(schedule.getId() + 1);
 
 		assertThat(reservedSeats).isEmpty();
-	}
-
-	private String makeFindByScheduleParam(Long scheduleId) {
-		return new StringBuilder().append(scheduleId).append(ID_SEPARATOR).toString();
 	}
 }
