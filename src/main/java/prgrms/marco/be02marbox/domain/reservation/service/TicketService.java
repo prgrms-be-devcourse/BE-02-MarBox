@@ -10,22 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 import prgrms.marco.be02marbox.domain.reservation.dto.ResponseFindTicket;
 import prgrms.marco.be02marbox.domain.reservation.repository.TicketRepository;
 import prgrms.marco.be02marbox.domain.reservation.service.utils.TicketConverter;
-import prgrms.marco.be02marbox.domain.theater.repository.ScheduleRepository;
-import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
 @Service
 @Transactional(readOnly = true)
 public class TicketService {
 
-	private final UserRepository userRepository;
-	private final ScheduleRepository scheduleRepository;
 	private final TicketRepository ticketRepository;
 	private final TicketConverter ticketConverter;
 
-	public TicketService(UserRepository userRepository, ScheduleRepository scheduleRepository,
-		TicketRepository ticketRepository, TicketConverter ticketConverter) {
-		this.userRepository = userRepository;
-		this.scheduleRepository = scheduleRepository;
+	public TicketService(TicketRepository ticketRepository, TicketConverter ticketConverter) {
 		this.ticketRepository = ticketRepository;
 		this.ticketConverter = ticketConverter;
 	}
