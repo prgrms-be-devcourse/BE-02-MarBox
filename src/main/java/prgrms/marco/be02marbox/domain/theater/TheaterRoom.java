@@ -34,7 +34,7 @@ public class TheaterRoom {
 	@NotNull
 	private Theater theater;
 
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
 	@NotNull
 	private String name;
 

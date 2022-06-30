@@ -9,7 +9,6 @@ import prgrms.marco.be02marbox.domain.movie.Movie;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
-import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindMovieListAndDateList;
 
 @Component
 public class ScheduleConverter {
@@ -24,16 +23,11 @@ public class ScheduleConverter {
 			.build();
 	}
 
-	public ResponseFindMovieListAndDateList convertFromScheduleListToResponseFindMovieListAndDateList(
-		List<Schedule> scheduleList) {
-		List<LocalDate> dateList = scheduleList.stream()
+	public List<LocalDate> convertFromScheduleListToDateList(List<Schedule> scheduleList) {
+		return scheduleList.stream()
 			.map(schedule -> schedule.getStartTime().toLocalDate())
-			.distinct().toList();
-
-		List<String> movieList = scheduleList.stream()
-			.map(schedule -> schedule.getMovie().getName())
-			.distinct().toList();
-
-		return new ResponseFindMovieListAndDateList(movieList, dateList);
+			.distinct()
+			.toList();
 	}
+
 }

@@ -21,7 +21,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 	@UniqueConstraint(columnNames = {"theater_room_id", "seat_row", "seat_col"})
 })
 public class Seat {
-
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,10 +30,10 @@ public class Seat {
 	@JoinColumn(name = "theater_room_id")
 	private TheaterRoom theaterRoom;
 
-	@Column(name = "seat_row")
+	@Column(name = "seat_row", nullable = false)
 	private Integer row;
 
-	@Column(name = "seat_col")
+	@Column(name = "seat_col", nullable = false)
 	private Integer column;
 
 	protected Seat() {
