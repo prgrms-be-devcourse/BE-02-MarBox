@@ -21,7 +21,7 @@ public class Ticket {
 
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -46,5 +46,17 @@ public class Ticket {
 
 	public Schedule getSchedule() {
 		return schedule;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public LocalDateTime getReservedAt() {
+		return reservedAt;
 	}
 }
