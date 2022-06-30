@@ -129,7 +129,7 @@ class UserControllerTest {
 		RequestSignInUser requestSignInUser = new RequestSignInUser(email, password);
 
 		String name = "pang";
-		String role = "ROLE_ADMIN";
+		Role role = Role.ROLE_ADMIN;
 		ResponseLoginUser responseLoginUser = new ResponseLoginUser(name, role);
 		given(userService.login(email, password)).willReturn(responseLoginUser);
 

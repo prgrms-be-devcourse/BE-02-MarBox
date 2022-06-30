@@ -16,6 +16,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import prgrms.marco.be02marbox.config.JwtConfigure;
+import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginUser;
 import prgrms.marco.be02marbox.domain.user.service.UserService;
 
@@ -36,7 +37,7 @@ class JwtAuthenticationProviderTest {
 		//given
 		String email = "pang@mail.com";
 		String password = "1234";
-		ResponseLoginUser responseLoginUser = new ResponseLoginUser("pang", "ROLE_ADMIN");
+		ResponseLoginUser responseLoginUser = new ResponseLoginUser("pang", Role.ROLE_ADMIN);
 		given(userService.login(email, password)).willReturn(responseLoginUser);
 
 		JwtAuthenticationProvider jwtAuthenticationProvider = new JwtAuthenticationProvider(jwt, userService);

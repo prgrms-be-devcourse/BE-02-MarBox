@@ -60,6 +60,6 @@ public class UserService {
 
 		user.checkPassword(passwordEncoder, password);
 
-		return new ResponseLoginUser(user.getName(), user.getRoleName());
+		return new ResponseLoginUser(user.getName(), user.getRole());
 	}
 }
