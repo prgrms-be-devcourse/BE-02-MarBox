@@ -23,6 +23,12 @@ public class TicketService {
 		this.ticketConverter = ticketConverter;
 	}
 
+	/**
+	 *
+	 * @param userId 유저 Id
+	 * @return 티켓 정보 조회 리스트
+	 */
+
 	public List<ResponseFindTicket> findTicketsOfUser(Long userId) {
 		return ticketRepository.findAllTicketByUserId(userId)
 			.stream()
@@ -30,12 +36,23 @@ public class TicketService {
 			.collect(Collectors.toList());
 	}
 
+	/**
+	 *
+	 * @return 전체 고객의 전체 티켓 정보 리스트
+	 */
+
 	public List<ResponseFindTicket> findTickets() {
 		return ticketRepository.findAll()
 			.stream()
 			.map(ticketConverter::convertFromTicketToResponseFindTicket)
 			.collect(Collectors.toList());
 	}
+
+	/**
+	 *
+	 * @param userId 유저 ID
+	 * @return 특정 고객의 전체 예매 내역 리스트
+	 */
 
 	public List<ResponseFindTicket> findValidTicketsOfUser(Long userId) {
 		return ticketRepository.findAllTicketByUserId(userId)
@@ -45,6 +62,11 @@ public class TicketService {
 			.collect(Collectors.toList());
 	}
 
+	/**
+	 *
+	 * @param scheduleId 스케줄 ID
+	 * @return 특정 스케줄의 전체 예매 내역 리스트
+	 */
 	public List<ResponseFindTicket> findTicketsOfSchedule(Long scheduleId) {
 		return ticketRepository.findAllByScheduleId(scheduleId)
 			.stream()
