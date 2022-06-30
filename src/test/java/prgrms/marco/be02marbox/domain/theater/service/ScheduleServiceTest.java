@@ -63,7 +63,7 @@ class ScheduleServiceTest {
 		theaterRepository.save(theater);
 		theaterRoom = new TheaterRoom(theater, "A관");
 		theaterRoomRepository.save(theaterRoom);
-		movie = new Movie("test", LimitAge.ADULT, Genre.ACTION, 100, "test");
+		movie = new Movie("test", LimitAge.ADULT, Genre.ACTION, 100);
 		movieRepository.save(movie);
 	}
 
@@ -199,7 +199,7 @@ class ScheduleServiceTest {
 	}
 
 	private Movie createAndSaveTempMovieInstance(String name) {
-		Movie movie = new Movie(name, LimitAge.ADULT, Genre.ACTION, 100, "test/location");
+		Movie movie = new Movie(name, LimitAge.ADULT, Genre.ACTION, 100);
 		movieRepository.save(movie);
 		return movie;
 	}

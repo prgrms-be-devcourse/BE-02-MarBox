@@ -46,12 +46,11 @@ public class Movie {
 	protected Movie() {
 	}
 
-	public Movie(String name, LimitAge limitAge, Genre genre, Integer runningTime, String posterImgLocation) {
+	public Movie(String name, LimitAge limitAge, Genre genre, Integer runningTime) {
 		this.name = name;
 		this.limitAge = limitAge;
 		this.genre = genre;
 		this.runningTime = runningTime;
-		this.posterImgLocation = posterImgLocation;
 	}
 
 	public Long getId() {
@@ -76,5 +75,9 @@ public class Movie {
 
 	public String getPosterImgLocation() {
 		return posterImgLocation;
+	}
+
+	public void updatePosterImgLocation(String posterImgLocation) {
+		this.posterImgLocation = posterImgLocation;
 	}
 }
