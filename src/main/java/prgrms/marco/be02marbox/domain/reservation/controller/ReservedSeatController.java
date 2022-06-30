@@ -26,5 +26,4 @@ public class ReservedSeatController {
 		return ResponseEntity.ok(reservedSeatService.findByScheduleId(scheduleId));
 	}
 
-
 }
