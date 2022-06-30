@@ -24,7 +24,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class Seat {
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
