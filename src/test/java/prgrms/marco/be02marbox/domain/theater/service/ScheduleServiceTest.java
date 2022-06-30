@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +26,7 @@ import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
-import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindMovieListAndDateList;
+import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindSchedule;
 import prgrms.marco.be02marbox.domain.theater.repository.ScheduleRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
@@ -109,7 +111,7 @@ class ScheduleServiceTest {
 
 	@Test
 	@DisplayName("같은 영화에 대해서는 중복을 제거해서 리스트를 생성함")
-	void testGetCurrentMovieList_No_Duplicate() {
+	void testFindShowingMovieList_No_Duplicate() {
 		Theater theater2 = new Theater(Region.SEOUL, "테스트2");
 		theaterRepository.save(theater2);
 		TheaterRoom theaterRoom2 = new TheaterRoom(theater2, "테스트관");
@@ -121,7 +123,7 @@ class ScheduleServiceTest {
 		createAndSaveSchedule(theaterRoom2, movie, LocalDateTime.now().plusDays(2), LocalDateTime.now());
 		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now().plusDays(4), LocalDateTime.now());
 
-		assertThat(scheduleService.findCurrentMovieList().size()).isEqualTo(1);
+		assertThat(scheduleService.findShowingMovieList().size()).isEqualTo(1);
 	}
 
 	@Test
@@ -143,12 +145,12 @@ class ScheduleServiceTest {
 		createAndSaveSchedule(theaterRoom, movie4, LocalDateTime.now().plusDays(19), LocalDateTime.now().plusDays(19));
 		createAndSaveSchedule(theaterRoom, movie5, LocalDateTime.now().plusDays(20), LocalDateTime.now().plusDays(20));
 
-		assertThat(scheduleService.findCurrentMovieList().size()).isEqualTo(4);
+		assertThat(scheduleService.findShowingMovieList().size()).isEqualTo(4);
 	}
 
 	@Test
 	@DisplayName("한 영화관(theater)에서만 상영하는 영화 리스트, 날짜 리스트를 가져옴")
-	void testFindMovieListAndDateListInOneTheater_Only_In_One_Theater() {
+	void testFindMovieListAndDateListByTheaterId_Only_In_One_Theater() {
 		// given
 		Movie movie2 = createAndSaveTempMovieInstance("영화2");
 		Movie movie3 = createAndSaveTempMovieInstance("영화3");
@@ -175,13 +177,25 @@ class ScheduleServiceTest {
 		createAndSaveSchedule(theaterRoom, movie4, LocalDateTime.now().plusDays(19), LocalDateTime.now().plusDays(19));
 		createAndSaveSchedule(theaterRoom, movie4, LocalDateTime.now().plusDays(20), LocalDateTime.now().plusDays(20));
 
-		ResponseFindMovieListAndDateList scheduleInOneTheater = scheduleService.findMovieListAndDateListInOneTheater(
+		ResponseFindSchedule movieListAndDateList = scheduleService.findMovieListAndDateListByTheaterId(
 			theater.getId());
 
 		assertAll(
-			() -> assertThat(scheduleInOneTheater.movieList().size()).isEqualTo(2),
-			() -> assertThat(scheduleInOneTheater.dateList().size()).isEqualTo(3)
+			() -> assertThat(movieListAndDateList.movieList()).hasSize(2),
+			() -> assertThat(movieListAndDateList.dateList()).hasSize(3)
 		);
+	}
+
+	@Test
+	@DisplayName("존재하지 않는 극장 정보를 조회하면 Entity Not Found 에러")
+	void testFindMovieListAndDateListByTheaterId_Fail_Invalid_Theater_Id() {
+		Theater lastTheater = new Theater(Region.SEOUL, "마지막 영화관");
+		theaterRepository.save(lastTheater);
+
+		long invalidTheaterId = lastTheater.getId() + 1;
+
+		assertThrows(EntityNotFoundException.class,
+			() -> scheduleService.findMovieListAndDateListByTheaterId(invalidTheaterId));
 	}
 
 	private Movie createAndSaveTempMovieInstance(String name) {

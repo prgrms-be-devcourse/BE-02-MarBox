@@ -20,7 +20,7 @@ public class Schedule {
 
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -73,9 +73,9 @@ public class Schedule {
 	}
 
 	public static class Builder {
+		public Movie movie;
 		private Long id;
 		private TheaterRoom theaterRoom;
-		private Movie movie;
 		private LocalDateTime startTime;
 		private LocalDateTime endTime;
 
