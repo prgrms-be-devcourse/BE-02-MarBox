@@ -8,10 +8,12 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -24,6 +26,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -136,7 +139,7 @@ class ScheduleControllerTest {
 		List<LocalDate> dateList = List.of(LocalDate.now(), LocalDate.now().plusDays(1));
 
 		ResponseFindSchedule responseFindMovieListAndDateList =
-			new ResponseFindSchedule(movieList, null, dateList, null);
+			new ResponseFindSchedule(movieList, Collections.emptyList(), dateList, Collections.emptyList());
 
 		given(scheduleService.findMovieListAndDateListByTheaterId(1L)).willReturn(responseFindMovieListAndDateList);
 
@@ -152,8 +155,8 @@ class ScheduleControllerTest {
 					fieldWithPath("movieList[].runningTime").type(JsonFieldType.NUMBER).description("상영시간"),
 					fieldWithPath("movieList[].posterImgLocation").type(JsonFieldType.STRING).description("포스터 이미지 경로"),
 					fieldWithPath("dateList[]").type(JsonFieldType.ARRAY).description("상영 날짜 리스트"),
-					fieldWithPath("theaterList").type(JsonFieldType.NULL).description("영화관 리스트"),
-					fieldWithPath("timeList").type(JsonFieldType.NULL).description("상영 시간 리스트")
+					fieldWithPath("theaterList[]").type(JsonFieldType.ARRAY).description("빈 배열 - 영화관 리스트"),
+					fieldWithPath("timeList[]").type(JsonFieldType.ARRAY).description("빈 배열 - 상영 시간 리스트")
 				)));
 	}
 
@@ -166,7 +169,10 @@ class ScheduleControllerTest {
 
 		mockMvc.perform(get("/schedules")
 				.param("theaterId", "200"))
-			.andExpect(status().isNotFound());
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("$.messages").exists())
+			.andExpect(jsonPath("$.messages[0]").value(Message.INVALID_THEATER_EXP_MSG.getMessage()))
+			.andExpect(jsonPath("$.statusCode").value(HttpStatus.NOT_FOUND.value()));
 	}
 
 }
