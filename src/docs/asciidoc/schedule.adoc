@@ -23,7 +23,7 @@ include::{snippets}/schedule-get-current-movies/http-request.adoc[]
 include::{snippets}/schedule-get-current-movies/http-response.adoc[]
 include::{snippets}/schedule-get-current-movies/response-fields.adoc[]
 
-### 영화관을 요청하여 영화 리스트, 상영 날짜 리스트 가져오기
+### 한 영화관의 영화, 날짜 정보 가져오기
 
 .Request
 include::{snippets}/schedule-get-movie-and-date-in-theater/http-request.adoc[]
@@ -32,7 +32,7 @@ include::{snippets}/schedule-get-movie-and-date-in-theater/http-request.adoc[]
 include::{snippets}/schedule-get-movie-and-date-in-theater/http-response.adoc[]
 include::{snippets}/schedule-get-movie-and-date-in-theater/response-fields.adoc[]
 
-### 영화관과 상영 날짜를 요청하여 영화 리스트 가져오기
+### 특정 영화관, 특정 날짜의 영화 리스트 가져오기
 
 .Request
 include::{snippets}/schedule-get-movie-by-date-and-theater/http-request.adoc[]

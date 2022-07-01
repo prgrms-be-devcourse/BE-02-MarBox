@@ -51,13 +51,15 @@ public class ScheduleController {
 		@RequestParam(required = false) Long theaterId,
 		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
-		ResponseFindSchedule responseFindSchedule = (new ResponseFindSchedule(Collections.emptyList(),
-			Collections.emptyList(), Collections.emptyList(), Collections.emptyList()));
+		ResponseFindSchedule responseFindSchedule;
 
 		if (movieId == null && theaterId != null && date == null) {
 			responseFindSchedule = scheduleService.findMovieListAndDateListByTheaterId(theaterId);
 		} else if (movieId == null && theaterId != null && date != null) {
 			responseFindSchedule = scheduleService.findMovieListByTheaterIdAndDate(theaterId, date);
+		} else {
+			responseFindSchedule = new ResponseFindSchedule(Collections.emptyList(), Collections.emptyList(),
+				Collections.emptyList(), Collections.emptyList());
 		}
 
 		return ResponseEntity.ok().body(responseFindSchedule);

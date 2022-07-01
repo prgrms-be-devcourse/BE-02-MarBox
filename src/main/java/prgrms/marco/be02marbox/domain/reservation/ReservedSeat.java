@@ -6,19 +6,24 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.data.domain.Persistable;
 
 import prgrms.marco.be02marbox.domain.theater.Seat;
 
 @Entity
 @Table(name = "reserved_seat")
-public class ReservedSeat {
+public class ReservedSeat implements Persistable<String> {
 
 	public static final String ID_SEPARATOR = "_";
 
 	@Id
-	@Column(name = "id", nullable = false)
+	@Column(name = "id")
 	private String id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -30,6 +35,9 @@ public class ReservedSeat {
 	@JoinColumn(name = "seat_id", nullable = false)
 	@NotNull
 	private Seat seat;
+
+	@Transient
+	private boolean isNew = true;
 
 	protected ReservedSeat() {
 	}
@@ -48,8 +56,20 @@ public class ReservedSeat {
 		this.seat = seat;
 	}
 
+	@Override
+	public boolean isNew() {
+		return isNew;
+	}
+
+	@PrePersist
+	@PostLoad
+	void markNotNew() {
+		this.isNew = false;
+	}
+
+	@Override
 	public String getId() {
-		return id;
+		return this.id;
 	}
 
 	public Ticket getTicket() {
