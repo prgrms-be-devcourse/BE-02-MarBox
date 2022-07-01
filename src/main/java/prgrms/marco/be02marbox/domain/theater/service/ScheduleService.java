@@ -100,11 +100,11 @@ public class ScheduleService {
 
 	@Transactional(readOnly = true)
 	public ResponseFindSchedule findMovieListByTheaterIdAndDate(Long theaterId, LocalDate date) {
-		theaterRepository.findById(theaterId)
-			.orElseThrow(() -> new EntityNotFoundException(Message.INVALID_THEATER_EXP_MSG.getMessage()));
 		if (LocalDate.now().plusDays(CURRENT_SCHEDULE_PERIOD).isBefore(date) || LocalDate.now().isAfter(date)) {
 			throw new DateTimeException(Message.INVALID_DATE_EXP_MSG.getMessage());
 		}
+		theaterRepository.findById(theaterId)
+			.orElseThrow(() -> new EntityNotFoundException(Message.INVALID_THEATER_EXP_MSG.getMessage()));
 
 		Set<TheaterRoom> theaterRooms = theaterRoomRepository.findAllByTheaterId(theaterId);
 		List<Schedule> schedulesOfDate = scheduleRepository.findScheduleByDate(date);
