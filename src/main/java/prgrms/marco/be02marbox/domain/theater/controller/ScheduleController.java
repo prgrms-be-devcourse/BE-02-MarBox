@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,14 +49,18 @@ public class ScheduleController {
 	public ResponseEntity<ResponseFindSchedule> getSchedulesByRequestParam(
 		@RequestParam(required = false) Long movieId,
 		@RequestParam(required = false) Long theaterId,
-		@RequestParam(required = false) LocalDate date) {
+		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+		ResponseFindSchedule responseFindSchedule = (new ResponseFindSchedule(Collections.emptyList(),
+			Collections.emptyList(), Collections.emptyList(), Collections.emptyList()));
+
 		if (movieId == null && theaterId != null && date == null) {
-			return ResponseEntity.ok().body(scheduleService.findMovieListAndDateListByTheaterId(theaterId));
+			responseFindSchedule = scheduleService.findMovieListAndDateListByTheaterId(theaterId);
+		} else if (movieId == null && theaterId != null && date != null) {
+			responseFindSchedule = scheduleService.findMovieListByTheaterIdAndDate(theaterId, date);
 		}
 
-		return ResponseEntity.ok()
-			.body(new ResponseFindSchedule(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
-				Collections.emptyList()));
+		return ResponseEntity.ok().body(responseFindSchedule);
 	}
 
 }

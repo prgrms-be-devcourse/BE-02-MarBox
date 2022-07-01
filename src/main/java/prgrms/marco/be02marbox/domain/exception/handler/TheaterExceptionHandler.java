@@ -1,5 +1,6 @@
 package prgrms.marco.be02marbox.domain.exception.handler;
 
+import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class TheaterExceptionHandler {
 		return ResponseEntity.badRequest().body(new ResponseApiError(messages, HttpStatus.BAD_REQUEST.value()));
 	}
 
-	@ExceptionHandler(EntityNotFoundException.class)
+	@ExceptionHandler({EntityNotFoundException.class, DateTimeException.class})
 	public ResponseEntity<ResponseApiError> handlerBadRequestException(EntityNotFoundException exception) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND)
 			.body(new ResponseApiError(List.of(exception.getMessage()), HttpStatus.NOT_FOUND.value()));

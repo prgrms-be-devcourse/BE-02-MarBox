@@ -4,7 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -19,6 +22,7 @@ import org.springframework.context.annotation.Import;
 import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
 import prgrms.marco.be02marbox.domain.movie.Movie;
+import prgrms.marco.be02marbox.domain.movie.dto.ResponseFindMovie;
 import prgrms.marco.be02marbox.domain.movie.repository.MovieRepository;
 import prgrms.marco.be02marbox.domain.movie.service.utils.MovieConverter;
 import prgrms.marco.be02marbox.domain.theater.Region;
@@ -196,6 +200,51 @@ class ScheduleServiceTest {
 
 		assertThrows(EntityNotFoundException.class,
 			() -> scheduleService.findMovieListAndDateListByTheaterId(invalidTheaterId));
+	}
+
+	@Test
+	@DisplayName("영화관과 날짜를 선택하면 해당하는 영화 리스트를 보여줌")
+	void testFindMovieListByTheaterIdAndDate() {
+		// given
+		Movie movie2 = createAndSaveTempMovieInstance("영화2");
+		Movie movie3 = createAndSaveTempMovieInstance("영화3");
+		Movie movie4 = createAndSaveTempMovieInstance("영화4");
+
+		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now(), LocalDateTime.now());
+		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(1));
+		createAndSaveSchedule(theaterRoom, movie4, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(1));
+		createAndSaveSchedule(theaterRoom, movie2, LocalDateTime.now().plusDays(19), LocalDateTime.now().plusDays(19));
+		createAndSaveSchedule(theaterRoom, movie3, LocalDateTime.now().plusDays(19), LocalDateTime.now().plusDays(19));
+		createAndSaveSchedule(theaterRoom, movie4, LocalDateTime.now().plusDays(20), LocalDateTime.now().plusDays(20));
+
+		// when
+		ResponseFindSchedule movieListTodayInTheater1 = scheduleService.findMovieListByTheaterIdAndDate(theater.getId(),
+			LocalDate.now());
+		ResponseFindSchedule movieListTomorrowInTheater1 = scheduleService.findMovieListByTheaterIdAndDate(
+			theater.getId(),
+			LocalDate.now().plusDays(1));
+
+		// then
+		assertAll(
+			() -> assertThat(movieListTodayInTheater1.movieList()).hasSize(1),
+			() -> assertThat(movieListTomorrowInTheater1.movieList()).hasSize(2)
+		);
+	}
+
+	@Test
+	@DisplayName("오늘 날짜 보다 이전 날짜를 보내거나 현재 날짜 보다 20일 넘은 날짜로 요청하면 에러 테스트")
+	void testFindMovieListByTheaterIdAndDate_Fail_Invalid_Date() {
+		LocalDate lastDateOfCurrentSchedule = LocalDate.now().plusDays(19);
+		LocalDate today = LocalDate.now();
+
+		assertAll(
+			() -> assertThrows(DateTimeException.class,
+				() -> scheduleService.findMovieListByTheaterIdAndDate(theater.getId(),
+					lastDateOfCurrentSchedule.plusDays(1))),
+			() -> assertThrows(DateTimeException.class,
+				() -> scheduleService.findMovieListByTheaterIdAndDate(theater.getId(),
+					today.minusDays(1)))
+		);
 	}
 
 	private Movie createAndSaveTempMovieInstance(String name) {
