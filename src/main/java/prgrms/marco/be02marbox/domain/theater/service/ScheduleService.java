@@ -100,22 +100,26 @@ public class ScheduleService {
 
 	@Transactional(readOnly = true)
 	public ResponseFindSchedule findMovieListByTheaterIdAndDate(Long theaterId, LocalDate date) {
-		theaterRepository.findById(theaterId)
-			.orElseThrow(() -> new EntityNotFoundException(Message.INVALID_THEATER_EXP_MSG.getMessage()));
-		if (LocalDate.now().plusDays(CURRENT_SCHEDULE_PERIOD).isBefore(date) || LocalDate.now().isAfter(date)) {
+		if (!isValidateDate(date)) {
 			throw new DateTimeException(Message.INVALID_DATE_EXP_MSG.getMessage());
 		}
+		theaterRepository.findById(theaterId)
+			.orElseThrow(() -> new EntityNotFoundException(Message.INVALID_THEATER_EXP_MSG.getMessage()));
 
-		Set<TheaterRoom> theaterRooms = theaterRoomRepository.findAllByTheaterId(theaterId);
+		Set<TheaterRoom> theaterRoomsOfTheater = theaterRoomRepository.findAllByTheaterId(theaterId);
 		List<Schedule> schedulesOfDate = scheduleRepository.findScheduleByDate(date);
 
 		List<ResponseFindMovie> movieList = schedulesOfDate.stream()
-			.filter(schedule -> theaterRooms.contains(schedule.getTheaterRoom()))
+			.filter(schedule -> theaterRoomsOfTheater.contains(schedule.getTheaterRoom()))
 			.map(schedule -> movieConverter.convertFromMovieToResponseFindMovie(schedule.getMovie()))
 			.distinct().toList();
 
 		return new ResponseFindSchedule(movieList, Collections.emptyList(), Collections.emptyList(),
 			Collections.emptyList());
+	}
+
+	private boolean isValidateDate(LocalDate date) {
+		return !LocalDate.now().plusDays(CURRENT_SCHEDULE_PERIOD).isBefore(date) && !LocalDate.now().isAfter(date);
 	}
 
 	private List<Schedule> findShowingMoviesSchedules() {
