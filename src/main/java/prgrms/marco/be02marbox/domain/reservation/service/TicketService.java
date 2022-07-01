@@ -4,9 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import prgrms.marco.be02marbox.domain.reservation.Ticket;
+import prgrms.marco.be02marbox.domain.reservation.dto.RequestCreateTicket;
 import prgrms.marco.be02marbox.domain.reservation.dto.ResponseFindTicket;
 import prgrms.marco.be02marbox.domain.reservation.repository.TicketRepository;
 import prgrms.marco.be02marbox.domain.reservation.service.utils.TicketConverter;
@@ -21,6 +25,17 @@ public class TicketService {
 	public TicketService(TicketRepository ticketRepository, TicketConverter ticketConverter) {
 		this.ticketRepository = ticketRepository;
 		this.ticketConverter = ticketConverter;
+	}
+
+	@Transactional
+	public Long createTicket(RequestCreateTicket request) {
+		Ticket saveTicket = ticketRepository.save(ticketConverter.convertFromRequestCreateTicketToTicket(request));
+		return saveTicket.getId();
+	}
+
+	public ResponseFindTicket findTicket(Long ticketId) {
+		Ticket findTicket = ticketRepository.findById(ticketId).orElseThrow(EntityNotFoundException::new);
+		return ticketConverter.convertFromTicketToResponseFindTicket(findTicket);
 	}
 
 	/**
