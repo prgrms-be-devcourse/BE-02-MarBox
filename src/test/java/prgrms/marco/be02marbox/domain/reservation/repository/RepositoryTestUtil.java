@@ -38,8 +38,8 @@ import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 @DataJpaTest
 public class RepositoryTestUtil {
 
-	private static final int maxRow = 10;
-	private static final int maxCount = (maxRow * maxRow);
+	private static final int MAX_ROW = 10;
+	private static final int MAX_COUNT = (MAX_ROW * MAX_ROW);
 
 	@PersistenceContext
 	public EntityManager em;
@@ -222,15 +222,15 @@ public class RepositoryTestUtil {
 	 */
 
 	private int validateSeatCount(int seatCount) {
-		return Math.min(seatCount, maxCount);
+		return Math.min(seatCount, MAX_COUNT);
 	}
 
 	private int seqToRow(int seq) {
-		return (seq / maxRow);
+		return (seq / MAX_ROW);
 	}
 
 	private int seqToCol(int seq) {
-		return (seq % maxRow);
+		return (seq % MAX_ROW);
 	}
 
 	public void queryCall() {
