@@ -137,7 +137,7 @@ public class ScheduleService {
 			.toList();
 
 		List<ResponseFindTime> startTimeList = scheduleConverter
-			.convertFromScheduleListToResponseFindTimeScheduleList(schedulesInRequestTheater,
+			.convertFromScheduleInTheaterToResponseFindTimeList(schedulesInRequestTheater,
 				theaterRoomsOfRequestTheater);
 
 		return new ResponseFindSchedule(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
