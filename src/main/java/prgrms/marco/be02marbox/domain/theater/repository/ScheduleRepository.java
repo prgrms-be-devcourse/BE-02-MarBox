@@ -22,4 +22,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 		+ "WHERE CAST(s.startTime AS LocalDate) = :date")
 	List<Schedule> findScheduleByDate(LocalDate date);
 
+	@Query("SELECT s FROM Schedule s "
+		+ "WHERE s.movie.id = :movieId AND CAST(s.startTime AS LocalDate) = :date")
+	List<Schedule> findSchedulesByMovieIdAndDate(Long movieId, LocalDate date);
 }
