@@ -64,7 +64,30 @@ class ReservedSeatControllerTest {
 			.with(SecurityMockMvcRequestPostProcessors.csrf())
 		)
 			.andExpect(status().isOk())
-			.andDo(document("reserved-seat-findBy-theaterId",
+			.andDo(document("reserved-seat",
+				responseFields()
+					.andWithPrefix(ARRAY_PREFIX.getField(), ResponseCreateSeatDoc.get())
+			));
+	}
+
+	@Test
+	@WithMockUser(roles = {"USER", "ADMIN"})
+	@DisplayName("선택 된 스케줄에 예약된 좌석 정보 조회")
+	void testFindReservePossibleSeatsd() throws Exception {
+		Long scheduleId = 1L;
+
+		List<ResponseFindSeat> seatList = List.of(
+			new ResponseFindSeat(0, 0),
+			new ResponseFindSeat(0, 1)
+		);
+
+		given(reservedSeatService.findReservePossibleSeats(scheduleId)).willReturn(seatList);
+
+		mockMvc.perform(get(RESERVED_SEAT_URL + "/possible/{scheduleId}", scheduleId)
+			.with(SecurityMockMvcRequestPostProcessors.csrf())
+		)
+			.andExpect(status().isOk())
+			.andDo(document("reserved-possible-seat",
 				responseFields()
 					.andWithPrefix(ARRAY_PREFIX.getField(), ResponseCreateSeatDoc.get())
 			));
