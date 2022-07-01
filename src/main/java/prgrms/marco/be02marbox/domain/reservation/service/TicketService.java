@@ -24,7 +24,7 @@ public class TicketService {
 	}
 
 	/**
-	 *
+	 * 고객, 관리자가 특정 고객의 예매 내역을 조회하는 메서드
 	 * @param userId 유저 Id
 	 * @return 티켓 정보 조회 리스트
 	 */
@@ -37,7 +37,7 @@ public class TicketService {
 	}
 
 	/**
-	 *
+	 * 관리자가 전체 예매 내역을 조회하는 메서드
 	 * @return 전체 고객의 전체 티켓 정보 리스트
 	 */
 
@@ -49,7 +49,7 @@ public class TicketService {
 	}
 
 	/**
-	 *
+	 * 고객, 관리자가 특정 고객의 사용 가능한 예매 내역을 조회하는 메서드
 	 * @param userId 유저 ID
 	 * @return 특정 고객의 전체 예매 내역 리스트
 	 */
@@ -63,7 +63,7 @@ public class TicketService {
 	}
 
 	/**
-	 *
+	 * 관리자가 특정 스케줄의 예매 내역을 조회하는 메서드
 	 * @param scheduleId 스케줄 ID
 	 * @return 특정 스케줄의 전체 예매 내역 리스트
 	 */

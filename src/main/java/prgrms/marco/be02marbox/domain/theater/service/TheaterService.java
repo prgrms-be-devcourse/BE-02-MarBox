@@ -32,7 +32,7 @@ public class TheaterService {
 	}
 
 	/**
-	 *
+	 * 관리자가 영화관을 추가하는 메서드
 	 * @param request 지역, 영화관 이름
 	 * @return 생성된 영화관 ID
 	 * @throws DuplicateTheaterNameException 영화관 이름이 중복되는 경우
@@ -50,7 +50,7 @@ public class TheaterService {
 	}
 
 	/**
-	 *
+	 * 고객과 관리자가 특정 영화관을 찾는 메서드
 	 * @param id 영화관 ID
 	 * @return 특정 영화관 지역, 영화관 이름
 	 * @throws EntityNotFoundException 영화관이 존재하지 않는 경우
@@ -64,7 +64,7 @@ public class TheaterService {
 	}
 
 	/**
-	 *
+	 * 고객, 관리자가 전체 영화관을 조회하는 메서드
 	 * @return 전체 영화관 리스트
 	 */
 
@@ -76,7 +76,7 @@ public class TheaterService {
 	}
 
 	/**
-	 *
+	 * 고객, 관리자가 특정 지역의 영화관들을 조회하는 메서드
 	 * @param region 지역이름
 	 * @return 특정 지역의 전체 영화관 리스트
 	 */
