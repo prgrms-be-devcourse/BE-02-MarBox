@@ -16,4 +16,10 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 		+ "WHERE CAST(s.startTime AS LocalDate) BETWEEN :startDay AND :endDay")
 	List<Schedule> findSchedulesBetweenStartDateAndEndDate(LocalDate startDay, LocalDate endDay);
 
+	@Query("SELECT s FROM Schedule s "
+		+ "JOIN FETCH s.theaterRoom "
+		+ "JOIN FETCH s.movie "
+		+ "WHERE CAST(s.startTime AS LocalDate) = :date")
+	List<Schedule> findScheduleByDate(LocalDate date);
+
 }
