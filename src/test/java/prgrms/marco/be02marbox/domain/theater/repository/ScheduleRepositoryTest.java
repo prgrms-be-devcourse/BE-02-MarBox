@@ -52,7 +52,7 @@ class ScheduleRepositoryTest {
 
 	@Test
 	@DisplayName("원하는 두 날짜 사이의 스케줄 리스트 가져오기 테스트")
-	void testGetSchedulesBetweenStartDateAndEndDate() {
+	void testFindSchedulesBetweenStartDateAndEndDate() {
 		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now(), LocalDateTime.now());
 		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now().plusDays(2), LocalDateTime.now().plusDays(2));
 		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now().plusDays(3), LocalDateTime.now().plusDays(3));
@@ -61,6 +61,30 @@ class ScheduleRepositoryTest {
 			LocalDate.now().plusDays(2));
 
 		assertThat(schedules.size()).isEqualTo(2);
+	}
+
+	@Test
+	void testFindSchedulesByDate() {
+		Movie movie2 = createAndSaveTempMovieInstance("영화2");
+		Movie movie3 = createAndSaveTempMovieInstance("영화3");
+		Movie movie4 = createAndSaveTempMovieInstance("영화4");
+
+		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now().minusDays(1), LocalDateTime.now().minusDays(1));
+		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now(), LocalDateTime.now());
+		createAndSaveSchedule(theaterRoom, movie, LocalDateTime.now(), LocalDateTime.now());
+		createAndSaveSchedule(theaterRoom, movie2, LocalDateTime.now(), LocalDateTime.now());
+		createAndSaveSchedule(theaterRoom, movie3, LocalDateTime.now().plusDays(2), LocalDateTime.now().plusDays(2));
+		createAndSaveSchedule(theaterRoom, movie4, LocalDateTime.now().plusDays(3), LocalDateTime.now().plusDays(3));
+
+		List<Schedule> todaySchedules = scheduleRepository.findScheduleByDate(LocalDate.now());
+
+		assertThat(todaySchedules).hasSize(3);
+	}
+
+	private Movie createAndSaveTempMovieInstance(String name) {
+		Movie movie = new Movie(name, LimitAge.ADULT, Genre.ACTION, 100);
+		movieRepository.save(movie);
+		return movie;
 	}
 
 	private void createAndSaveSchedule(TheaterRoom theaterRoom, Movie movie, LocalDateTime startTime,
