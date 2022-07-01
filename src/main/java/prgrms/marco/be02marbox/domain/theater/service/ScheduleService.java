@@ -1,5 +1,6 @@
 package prgrms.marco.be02marbox.domain.theater.service;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -95,6 +96,26 @@ public class ScheduleService {
 			.toList();
 
 		return new ResponseFindSchedule(movieList, Collections.emptyList(), dateList, Collections.emptyList());
+	}
+
+	@Transactional(readOnly = true)
+	public ResponseFindSchedule findMovieListByTheaterIdAndDate(Long theaterId, LocalDate date) {
+		theaterRepository.findById(theaterId)
+			.orElseThrow(() -> new EntityNotFoundException(Message.INVALID_THEATER_EXP_MSG.getMessage()));
+		if (LocalDate.now().plusDays(CURRENT_SCHEDULE_PERIOD).isBefore(date) || LocalDate.now().isAfter(date)) {
+			throw new DateTimeException(Message.INVALID_DATE_EXP_MSG.getMessage());
+		}
+
+		Set<TheaterRoom> theaterRooms = theaterRoomRepository.findAllByTheaterId(theaterId);
+		List<Schedule> schedulesOfDate = scheduleRepository.findScheduleByDate(date);
+
+		List<ResponseFindMovie> movieList = schedulesOfDate.stream()
+			.filter(schedule -> theaterRooms.contains(schedule.getTheaterRoom()))
+			.map(schedule -> movieConverter.convertFromMovieToResponseFindMovie(schedule.getMovie()))
+			.distinct().toList();
+
+		return new ResponseFindSchedule(movieList, Collections.emptyList(), Collections.emptyList(),
+			Collections.emptyList());
 	}
 
 	private List<Schedule> findShowingMoviesSchedules() {

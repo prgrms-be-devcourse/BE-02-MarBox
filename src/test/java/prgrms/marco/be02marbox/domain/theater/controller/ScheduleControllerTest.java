@@ -155,8 +155,8 @@ class ScheduleControllerTest {
 					fieldWithPath("movieList[].runningTime").type(JsonFieldType.NUMBER).description("상영시간"),
 					fieldWithPath("movieList[].posterImgLocation").type(JsonFieldType.STRING).description("포스터 이미지 경로"),
 					fieldWithPath("dateList[]").type(JsonFieldType.ARRAY).description("상영 날짜 리스트"),
-					fieldWithPath("theaterList[]").type(JsonFieldType.ARRAY).description("빈 배열 - 영화관 리스트"),
-					fieldWithPath("timeList[]").type(JsonFieldType.ARRAY).description("빈 배열 - 상영 시간 리스트")
+					fieldWithPath("theaterList[]").type(JsonFieldType.ARRAY).description("빈 배열"),
+					fieldWithPath("timeList[]").type(JsonFieldType.ARRAY).description("빈 배열")
 				)));
 	}
 
@@ -173,6 +173,39 @@ class ScheduleControllerTest {
 			.andExpect(jsonPath("$.messages").exists())
 			.andExpect(jsonPath("$.messages[0]").value(Message.INVALID_THEATER_EXP_MSG.getMessage()))
 			.andExpect(jsonPath("$.statusCode").value(HttpStatus.NOT_FOUND.value()));
+	}
+
+	@Test
+	@DisplayName("영화관 ID와 날짜로 요청하면 영화 리스트 반환 테스트")
+	@WithMockUser(roles = {"ADMIN", "USER"})
+	void testGetMovieListByTheaterIdAndDate() throws Exception {
+		List<ResponseFindMovie> movieList = List.of(
+			new ResponseFindMovie("영화1", LimitAge.CHILD, Genre.ACTION, 100, "test/location"),
+			new ResponseFindMovie("영화2", LimitAge.ADULT, Genre.ROMANCE, 120, "test/location"),
+			new ResponseFindMovie("영화3", LimitAge.CHILD, Genre.ANIMATION, 150, "test/location")
+		);
+
+		ResponseFindSchedule responseFindMovieList = new ResponseFindSchedule(movieList, Collections.emptyList(),
+			Collections.emptyList(), Collections.emptyList());
+
+		given(scheduleService.findMovieListByTheaterIdAndDate(1L, LocalDate.now())).willReturn(responseFindMovieList);
+
+		mockMvc.perform(get("/schedules")
+				.param("theaterId", "1")
+				.param("date", LocalDate.now().toString()))
+			.andExpect(status().isOk())
+			.andDo(document("schedule-get-movie-by-date-and-theater",
+				responseFields(
+					fieldWithPath("movieList[]").type(JsonFieldType.ARRAY).description("영화 리스트"),
+					fieldWithPath("movieList[].name").type(JsonFieldType.STRING).description("영화 이름"),
+					fieldWithPath("movieList[].limitAge").type(JsonFieldType.STRING).description("영화 관람 등급"),
+					fieldWithPath("movieList[].genre").type(JsonFieldType.STRING).description("장르"),
+					fieldWithPath("movieList[].runningTime").type(JsonFieldType.NUMBER).description("상영시간"),
+					fieldWithPath("movieList[].posterImgLocation").type(JsonFieldType.STRING).description("포스터 이미지 경로"),
+					fieldWithPath("dateList[]").type(JsonFieldType.ARRAY).description("빈 배열"),
+					fieldWithPath("theaterList[]").type(JsonFieldType.ARRAY).description("빈 배열"),
+					fieldWithPath("timeList[]").type(JsonFieldType.ARRAY).description("빈 배열")
+				)));
 	}
 
 }
