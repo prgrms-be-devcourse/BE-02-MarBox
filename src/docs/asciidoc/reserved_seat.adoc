@@ -5,11 +5,20 @@ endif::[]
 
 == 예매좌석 조회
 
-### 스케줄 별 예매좌석 조회
+### 스케줄 별 예매(되어있는)좌석 조회
 
 .Request
-include::{snippets}/reserved-seat-findBy-theaterId/http-request.adoc[]
+include::{snippets}/reserved-seat/http-request.adoc[]
 
 .Response
-include::{snippets}/reserved-seat-findBy-theaterId/http-response.adoc[]
-include::{snippets}/reserved-seat-findBy-theaterId/response-fields.adoc[]
+include::{snippets}/reserved-seat/http-response.adoc[]
+include::{snippets}/reserved-seat/response-fields.adoc[]
+
+### 스케줄 별 예매(가능한)좌석 조회
+
+.Request
+include::{snippets}/reserved-possible-seat/http-request.adoc[]
+
+.Response
+include::{snippets}/reserved-possible-seat/http-response.adoc[]
+include::{snippets}/reserved-possible-seat/response-fields.adoc[]
