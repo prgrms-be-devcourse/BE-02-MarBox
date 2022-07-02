@@ -7,6 +7,7 @@ import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
 
 import javax.servlet.http.Cookie;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,13 @@ class SecurityTest {
 	@MockBean
 	private UserService userService;
 
+	private static RequestCreateTheater requestCreateTheater;
+
+	@BeforeAll
+	static void setUp() {
+		requestCreateTheater = new RequestCreateTheater("SEOUL", "theater01");
+	}
+
 	@Test
 	@DisplayName("인증 성공 테스트")
 	void testAuthenticationSuccess() throws Exception {
@@ -54,16 +62,20 @@ class SecurityTest {
 		String accessToken = this.jwt.sign(Jwt.Claims.from("pang", "ROLE_ADMIN"));
 
 		//when then
-		this.mockMvc.perform(get("/theaters")
-				.cookie(new Cookie(this.jwtConfigure.header(), accessToken)))
-			.andExpect(status().isOk());
+		this.mockMvc.perform(post("/theaters")
+				.cookie(new Cookie(this.jwtConfigure.header(), accessToken))
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(requestCreateTheater)))
+			.andExpect(status().isCreated());
 	}
 
 	@Test
 	@DisplayName("인증 실패 - 쿠키 없음")
 	void testFailAuthenticationBecauseNoCookie() throws Exception {
 		//give when then
-		this.mockMvc.perform(get("/theaters"))
+		this.mockMvc.perform(post("/theaters")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(requestCreateTheater)))
 			.andExpect(status().isUnauthorized())
 			.andExpect(jsonPath("$.messages.[0]").value(equalTo(UN_AUTHORIZED_EXP_MSG.getMessage())))
 			.andExpect(jsonPath("$.statusCode").value(equalTo(HttpStatus.UNAUTHORIZED.value())));
@@ -74,8 +86,6 @@ class SecurityTest {
 	void testFailAuthorityBecauseInvalidRole() throws Exception {
 		//given
 		String accessToken = this.jwt.sign(Jwt.Claims.from("pang", "ROLE_CUSTOMER"));
-
-		RequestCreateTheater requestCreateTheater = new RequestCreateTheater("SEOUL", "theaterName");
 
 		//when then
 		this.mockMvc.perform(post("/theaters")
