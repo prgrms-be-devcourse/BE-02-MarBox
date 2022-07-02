@@ -17,8 +17,8 @@ include::{snippets}/reserved-seat/response-fields.adoc[]
 ### 스케줄 별 예매(가능한)좌석 조회
 
 .Request
-include::{snippets}/reserved-possible-seat/http-request.adoc[]
+include::{snippets}/reserved-seat-possible/http-request.adoc[]
 
 .Response
-include::{snippets}/reserved-possible-seat/http-response.adoc[]
-include::{snippets}/reserved-possible-seat/response-fields.adoc[]
+include::{snippets}/reserved-seat-possible/http-response.adoc[]
+include::{snippets}/reserved-seat-possible/response-fields.adoc[]

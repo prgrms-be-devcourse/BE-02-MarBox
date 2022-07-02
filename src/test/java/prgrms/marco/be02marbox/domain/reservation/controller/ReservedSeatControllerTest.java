@@ -83,11 +83,11 @@ class ReservedSeatControllerTest {
 
 		given(reservedSeatService.findReservePossibleSeats(scheduleId)).willReturn(seatList);
 
-		mockMvc.perform(get(RESERVED_SEAT_URL + "/possible/{scheduleId}", scheduleId)
+		mockMvc.perform(get(RESERVED_SEAT_URL + "/{scheduleId}/possible", scheduleId)
 			.with(SecurityMockMvcRequestPostProcessors.csrf())
 		)
 			.andExpect(status().isOk())
-			.andDo(document("reserved-possible-seat",
+			.andDo(document("reserved-seat-possible",
 				responseFields()
 					.andWithPrefix(ARRAY_PREFIX.getField(), ResponseCreateSeatDoc.get())
 			));

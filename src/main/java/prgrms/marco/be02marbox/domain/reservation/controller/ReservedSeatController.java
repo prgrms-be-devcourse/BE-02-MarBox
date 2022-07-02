@@ -26,7 +26,7 @@ public class ReservedSeatController {
 		return ResponseEntity.ok(reservedSeatService.findByScheduleId(scheduleId));
 	}
 
-	@GetMapping("/possible/{scheduleId}")
+	@GetMapping("/{scheduleId}/possible")
 	public ResponseEntity<List<ResponseFindSeat>> findReservePossibleSeats(@PathVariable Long scheduleId) {
 		return ResponseEntity.ok(reservedSeatService.findReservePossibleSeats(scheduleId));
 	}
