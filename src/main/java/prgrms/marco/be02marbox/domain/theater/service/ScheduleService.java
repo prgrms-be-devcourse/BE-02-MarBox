@@ -21,6 +21,7 @@ import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
 import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindSchedule;
+import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindTime;
 import prgrms.marco.be02marbox.domain.theater.repository.ScheduleRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
@@ -55,9 +56,9 @@ public class ScheduleService {
 	@Transactional
 	public Long createSchedule(RequestCreateSchedule requestCreateSchedule) {
 		TheaterRoom theaterRoom = theaterRoomRepository.findById(requestCreateSchedule.theaterRoomId())
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상영관 ID"));
+			.orElseThrow(() -> new IllegalArgumentException(Message.INVALID_THEATER_ROOM_EXP_MSG.getMessage()));
 		Movie movie = movieRepository.findById(requestCreateSchedule.movieId())
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 영화 ID"));
+			.orElseThrow(() -> new IllegalArgumentException(Message.INVALID_MOVIE_EXP_MSG.getMessage()));
 
 		Schedule schedule = scheduleConverter.convertFromRequestCreateScheduleToSchedule(requestCreateSchedule,
 			theaterRoom,
@@ -82,6 +83,7 @@ public class ScheduleService {
 	public ResponseFindSchedule findMovieListAndDateListByTheaterId(Long theaterId) {
 		theaterRepository.findById(theaterId).orElseThrow(
 			() -> new EntityNotFoundException(Message.INVALID_THEATER_EXP_MSG.getMessage()));
+
 		Set<TheaterRoom> theaterRooms = theaterRoomRepository.findAllByTheaterId(theaterId);
 		List<Schedule> showingMoviesSchedules = findShowingMoviesSchedules();
 
@@ -116,6 +118,30 @@ public class ScheduleService {
 
 		return new ResponseFindSchedule(movieList, Collections.emptyList(), Collections.emptyList(),
 			Collections.emptyList());
+	}
+
+	@Transactional(readOnly = true)
+	public ResponseFindSchedule findTimeScheduleList(Long movieId, Long theaterId, LocalDate date) {
+		if (!isValidateDate(date)) {
+			throw new DateTimeException(Message.INVALID_DATE_EXP_MSG.getMessage());
+		}
+		movieRepository.findById(movieId)
+			.orElseThrow(() -> new IllegalArgumentException(Message.INVALID_MOVIE_EXP_MSG.getMessage()));
+		theaterRepository.findById(theaterId)
+			.orElseThrow(() -> new EntityNotFoundException(Message.INVALID_THEATER_EXP_MSG.getMessage()));
+
+		List<Schedule> schedulesOfAllTheaters = scheduleRepository.findSchedulesByMovieIdAndDate(movieId, date);
+		Set<TheaterRoom> theaterRoomsOfTheater = theaterRoomRepository.findAllByTheaterId(theaterId);
+
+		List<Schedule> schedulesInTheater = schedulesOfAllTheaters.stream()
+			.filter(schedule -> theaterRoomsOfTheater.contains(schedule.getTheaterRoom()))
+			.toList();
+
+		List<ResponseFindTime> timeList = scheduleConverter
+			.convertFromScheduleListToResponseFindTimeList(schedulesInTheater);
+
+		return new ResponseFindSchedule(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+			timeList);
 	}
 
 	private boolean isValidateDate(LocalDate date) {

@@ -53,7 +53,9 @@ public class ScheduleController {
 
 		ResponseFindSchedule responseFindSchedule;
 
-		if (movieId == null && theaterId != null && date == null) {
+		if (movieId != null && theaterId != null && date != null) {
+			responseFindSchedule = scheduleService.findTimeScheduleList(movieId, theaterId, date);
+		} else if (movieId == null && theaterId != null && date == null) {
 			responseFindSchedule = scheduleService.findMovieListAndDateListByTheaterId(theaterId);
 		} else if (movieId == null && theaterId != null && date != null) {
 			responseFindSchedule = scheduleService.findMovieListByTheaterIdAndDate(theaterId, date);
