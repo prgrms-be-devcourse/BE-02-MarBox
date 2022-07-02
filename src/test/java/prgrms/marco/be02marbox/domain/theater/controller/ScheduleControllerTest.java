@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,6 +43,7 @@ import prgrms.marco.be02marbox.domain.movie.LimitAge;
 import prgrms.marco.be02marbox.domain.movie.dto.ResponseFindMovie;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSchedule;
 import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindSchedule;
+import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindTime;
 import prgrms.marco.be02marbox.domain.theater.service.ScheduleService;
 
 @WebMvcTest(controllers = ScheduleController.class,
@@ -206,6 +208,48 @@ class ScheduleControllerTest {
 					fieldWithPath("theaterList[]").type(JsonFieldType.ARRAY).description("빈 배열"),
 					fieldWithPath("timeList[]").type(JsonFieldType.ARRAY).description("빈 배열")
 				)));
+	}
+
+	@Test
+	@DisplayName("영화 ID, 영화관 ID, 날짜로 요청하면 시간 리스트 반환 테스트")
+	@WithMockUser(roles = {"ADMIN", "USER"})
+	void testGetTimeScheduleList() throws Exception {
+		List<LocalTime> startTimeListInTheater1 = List.of(LocalTime.of(9, 30), LocalTime.of(14, 25),
+			LocalTime.of(16, 45),
+			LocalTime.of(19, 30));
+
+		List<LocalTime> startTimeListInTheater2 = List.of(LocalTime.of(20, 40));
+
+		List<ResponseFindTime> timeList = List.of(
+			new ResponseFindTime("상영관1", 75, startTimeListInTheater1),
+			new ResponseFindTime("상영관2", 100, startTimeListInTheater2)
+		);
+
+		ResponseFindSchedule responseFindMovieList = new ResponseFindSchedule(
+			Collections.emptyList(),
+			Collections.emptyList(),
+			Collections.emptyList(),
+			timeList);
+
+		given(scheduleService.findTimeScheduleList(1L, 1L, LocalDate.now())).willReturn(responseFindMovieList);
+
+		mockMvc.perform(get("/schedules")
+				.param("movieId", "1")
+				.param("theaterId", "1")
+				.param("date", LocalDate.now().toString()))
+			.andExpect(status().isOk())
+			.andDo(document("schedule-get-timeList-by-movie-and-theater-and-date",
+				responseFields(
+					fieldWithPath("timeList[]").type(JsonFieldType.ARRAY).description("상영 시간 정보"),
+					fieldWithPath("timeList[].theaterRoomName").type(JsonFieldType.STRING).description("상영관 이름"),
+					fieldWithPath("timeList[].totalSeatCount").type(JsonFieldType.NUMBER).description("상영관 총 좌석 수"),
+					fieldWithPath("timeList[].startTimeList[]").type(JsonFieldType.ARRAY)
+						.description("상영관의 영화 시작 시간 배열"),
+					fieldWithPath("movieList[]").type(JsonFieldType.ARRAY).description("빈 배열"),
+					fieldWithPath("theaterList[]").type(JsonFieldType.ARRAY).description("빈 배열"),
+					fieldWithPath("dateList[]").type(JsonFieldType.ARRAY).description("빈 배열")
+				)));
+
 	}
 
 }
