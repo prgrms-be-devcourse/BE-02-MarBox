@@ -13,6 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginUser;
 import prgrms.marco.be02marbox.domain.user.service.UserService;
 
@@ -47,7 +48,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 			String token = getToken(responseLoginUser.name(), responseLoginUser.role());
 
 			List<GrantedAuthority> authorities = new ArrayList<>();
-			authorities.add(new SimpleGrantedAuthority(responseLoginUser.role()));
+			authorities.add(new SimpleGrantedAuthority(responseLoginUser.role().name()));
 			return new JwtAuthenticationToken(
 				new JwtAuthentication(token, responseLoginUser.name()), null, authorities);
 		} catch (DataAccessException e) {
@@ -55,7 +56,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 		}
 	}
 
-	private String getToken(String username, String role) {
-		return jwt.sign(Jwt.Claims.from(username, role));
+	private String getToken(String username, Role role) {
+		return jwt.sign(Jwt.Claims.from(username, role.name()));
 	}
 }

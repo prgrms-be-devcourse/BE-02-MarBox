@@ -24,7 +24,7 @@ class JwtConfigureTest {
 	void testJwtConfigureSuccess() {
 		//given when then
 		assertAll(
-			() -> assertThat(jwtConfigure.header()).isEqualTo("testToken"),
+			() -> assertThat(jwtConfigure.header()).isEqualTo("test-token"),
 			() -> assertThat(jwtConfigure.issuer()).isEqualTo("testIssuer"),
 			() -> assertThat(jwtConfigure.clientSecret())
 				.isEqualTo("lsuvomkeoiotkbzdjrejfgdsfngusviykzsvjoriyukscpmxiijmpfsdwveljsml"),
