@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,6 +84,7 @@ public class ScheduleService {
 	public ResponseFindSchedule findMovieListAndDateListByTheaterId(Long theaterId) {
 		theaterRepository.findById(theaterId).orElseThrow(
 			() -> new EntityNotFoundException(Message.INVALID_THEATER_EXP_MSG.getMessage()));
+
 		Set<TheaterRoom> theaterRooms = theaterRoomRepository.findAllByTheaterId(theaterId);
 		List<Schedule> showingMoviesSchedules = findShowingMoviesSchedules();
 
@@ -121,27 +123,26 @@ public class ScheduleService {
 
 	@Transactional(readOnly = true)
 	public ResponseFindSchedule findTimeScheduleList(Long movieId, Long theaterId, LocalDate date) {
+		if (!isValidateDate(date)) {
+			throw new DateTimeException(Message.INVALID_DATE_EXP_MSG.getMessage());
+		}
 		movieRepository.findById(movieId)
 			.orElseThrow(() -> new IllegalArgumentException(Message.INVALID_MOVIE_EXP_MSG.getMessage()));
 		theaterRepository.findById(theaterId)
 			.orElseThrow(() -> new EntityNotFoundException(Message.INVALID_THEATER_EXP_MSG.getMessage()));
-		if (LocalDate.now().plusDays(CURRENT_SCHEDULE_PERIOD).isBefore(date) || LocalDate.now().isAfter(date)) {
-			throw new DateTimeException(Message.INVALID_DATE_EXP_MSG.getMessage());
-		}
 
 		List<Schedule> schedulesOfAllTheaters = scheduleRepository.findSchedulesByMovieIdAndDate(movieId, date);
-		Set<TheaterRoom> theaterRoomsOfRequestTheater = theaterRoomRepository.findAllByTheaterId(theaterId);
+		Set<TheaterRoom> theaterRoomsOfTheater = theaterRoomRepository.findAllByTheaterId(theaterId);
 
-		List<Schedule> schedulesInRequestTheater = schedulesOfAllTheaters.stream()
-			.filter(schedule -> theaterRoomsOfRequestTheater.contains(schedule.getTheaterRoom()))
+		List<Schedule> schedulesInTheater = schedulesOfAllTheaters.stream()
+			.filter(schedule -> theaterRoomsOfTheater.contains(schedule.getTheaterRoom()))
 			.toList();
 
-		List<ResponseFindTime> startTimeList = scheduleConverter
-			.convertFromScheduleInTheaterToResponseFindTimeList(schedulesInRequestTheater,
-				theaterRoomsOfRequestTheater);
+		List<ResponseFindTime> timeList = scheduleConverter
+			.convertFromScheduleListToResponseFindTimeList(schedulesInTheater);
 
 		return new ResponseFindSchedule(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
-			startTimeList);
+			timeList);
 	}
 
 	private boolean isValidateDate(LocalDate date) {
