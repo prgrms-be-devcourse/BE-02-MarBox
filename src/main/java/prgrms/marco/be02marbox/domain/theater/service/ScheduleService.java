@@ -120,6 +120,11 @@ public class ScheduleService {
 			Collections.emptyList());
 	}
 
+	/**
+	 * 특정 스케줄 조회
+	 * @param scheduleId 스케줄 id
+	 * @return 스케줄 정보
+	 */
 	@Transactional(readOnly = true)
 	public Schedule findById(Long scheduleId) {
 		return scheduleRepository.findById(scheduleId)
