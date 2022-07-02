@@ -122,6 +122,17 @@ public class ScheduleService {
 			Collections.emptyList());
 	}
 
+	/**
+	 * 특정 스케줄 조회
+	 * @param scheduleId 스케줄 id
+	 * @return 스케줄 정보
+	 */
+	@Transactional(readOnly = true)
+	public Schedule findById(Long scheduleId) {
+		return scheduleRepository.findById(scheduleId)
+			.orElseThrow(() -> new IllegalArgumentException(INVALID_SCHEDULE_EXP_MSG.getMessage()));
+	}
+
 	@Transactional(readOnly = true)
 	public ResponseFindSchedule findTimeScheduleList(Long movieId, Long theaterId, LocalDate date) {
 		if (!isValidateDate(date)) {
@@ -144,17 +155,6 @@ public class ScheduleService {
 
 		return new ResponseFindSchedule(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
 			timeList);
-	}
-
-	/**
-	 * 특정 스케줄 조회
-	 * @param scheduleId 스케줄 id
-	 * @return 스케줄 정보
-	 */
-	@Transactional(readOnly = true)
-	public Schedule findById(Long scheduleId) {
-		return scheduleRepository.findById(scheduleId)
-			.orElseThrow(() -> new IllegalArgumentException(INVALID_SCHEDULE_EXP_MSG.getMessage()));
 	}
 
 	private boolean isValidateDate(LocalDate date) {
