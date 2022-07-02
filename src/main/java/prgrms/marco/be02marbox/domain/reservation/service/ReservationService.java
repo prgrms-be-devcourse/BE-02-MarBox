@@ -31,7 +31,6 @@ public class ReservationService {
 	 * @param scheduleId 스케줄 id
 	 * @return 예약(되어있는) 좌석의 id 리스트
 	 */
-	@Transactional
 	public List<ResponseFindSeat> findReservePossibleSeatList(Long scheduleId) {
 		Schedule schedule = scheduleService.findById(scheduleId);
 
