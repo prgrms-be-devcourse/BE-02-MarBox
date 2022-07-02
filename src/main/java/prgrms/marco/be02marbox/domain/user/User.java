@@ -58,8 +58,8 @@ public class User {
 		return this.name;
 	}
 
-	public String getRoleName() {
-		return this.role.name();
+	public Role getRole() {
+		return this.role;
 	}
 
 	public String getEmail() {

@@ -3,7 +3,7 @@ spring:
     default: dev
 
 jwt:
-  header: token
+  header: access-token
   issuer: marbox
   client-secret: EENY5W0eegTf1naQB2eDeyCLl5kRS2b8xa5c4qLdS0hmVjtbvo8tOyhPMcAmtPuQ
   expiry-seconds: 600

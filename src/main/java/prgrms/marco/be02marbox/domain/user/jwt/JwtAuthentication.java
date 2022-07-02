@@ -1,5 +1,7 @@
 package prgrms.marco.be02marbox.domain.user.jwt;
 
+import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -10,10 +12,10 @@ public class JwtAuthentication {
 
 	JwtAuthentication(String token, String username) {
 		if (token.isEmpty()) {
-			throw new IllegalArgumentException("token must be provided");
+			throw new IllegalArgumentException(EMPTY_TOKEN_EXP_MSG.getMessage());
 		}
 		if (username.isEmpty()) {
-			throw new IllegalArgumentException("username must be provided");
+			throw new IllegalArgumentException(EMPTY_USERNAME_EXP_MSG.getMessage());
 		}
 
 		this.token = token;

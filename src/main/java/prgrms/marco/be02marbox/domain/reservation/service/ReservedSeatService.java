@@ -1,7 +1,6 @@
 package prgrms.marco.be02marbox.domain.reservation.service;
 
 import static java.util.stream.Collectors.*;
-import static prgrms.marco.be02marbox.domain.reservation.ReservedSeat.*;
 
 import java.util.List;
 
@@ -31,15 +30,8 @@ public class ReservedSeatService {
 	 * @return 예약 좌석 리스트
 	 */
 	public List<ResponseFindSeat> findByScheduleId(Long scheduleId) {
-		return reservedSeatRepository.searchByScheduleIdStartsWith(makeFindByScheduleParam(scheduleId)).stream()
+		return reservedSeatRepository.searchByScheduleIdStartsWith(scheduleId).stream()
 			.map((reservedSeat -> seatConverter.convertFromSeatToResponseFindSeat(reservedSeat.getSeat())))
 			.collect(toList());
-	}
-
-	private String makeFindByScheduleParam(Long scheduleId) {
-		return new StringBuilder()
-			.append(scheduleId)
-			.append(ID_SEPARATOR)
-			.toString();
 	}
 }
