@@ -41,7 +41,7 @@ include::{snippets}/schedule-get-movie-by-date-and-theater/http-request.adoc[]
 include::{snippets}/schedule-get-movie-by-date-and-theater/http-response.adoc[]
 include::{snippets}/schedule-get-movie-by-date-and-theater/response-fields.adoc[]
 
-### 영화, 영화관, 상영 날짜를 요청하여 상영 시간 리스트 가져오기
+### 영화, 영화관, 날짜의 상영 시간 리스트 가져오기
 
 .Request
 include::{snippets}/schedule-get-timeList-by-movie-and-theater-and-date/http-request.adoc[]
