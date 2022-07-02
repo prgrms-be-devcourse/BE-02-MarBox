@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.mock.web.MockMultipartFile;
 
 import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
@@ -37,12 +37,13 @@ class ScheduleRepositoryTest {
 	@Autowired
 	private MovieRepository movieRepository;
 
+	private Theater theater;
 	private TheaterRoom theaterRoom;
 	private Movie movie;
 
 	@BeforeEach
 	void setup() {
-		Theater theater = new Theater(Region.SEOUL, "강남");
+		theater = new Theater(Region.SEOUL, "강남");
 		theaterRepository.save(theater);
 		theaterRoom = new TheaterRoom(theater, "A관");
 		theaterRoomRepository.save(theaterRoom);
@@ -79,6 +80,39 @@ class ScheduleRepositoryTest {
 		List<Schedule> todaySchedules = scheduleRepository.findScheduleByDate(LocalDate.now());
 
 		assertThat(todaySchedules).hasSize(3);
+	}
+
+	@Test
+	@DisplayName("영화 ID와 날짜로 스케줄 조회 테스트")
+	void testFindSchedulesByMovieIdAndDate() {
+		TheaterRoom theaterRoom2 = new TheaterRoom(theater, "상영관2");
+		theaterRoomRepository.save(theaterRoom2);
+		Movie movie2 = createAndSaveTempMovieInstance("영화2");
+
+		createAndSaveSchedule(theaterRoom, movie,
+			LocalDateTime.of(LocalDate.now(), LocalTime.of(11, 30)),
+			LocalDateTime.of(LocalDate.now(), LocalTime.of(13, 30)));
+		createAndSaveSchedule(theaterRoom, movie2,
+			LocalDateTime.of(LocalDate.now(), LocalTime.of(14, 30)),
+			LocalDateTime.of(LocalDate.now(), LocalTime.of(16, 30)));
+		createAndSaveSchedule(theaterRoom, movie,
+			LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(14, 30)),
+			LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(16, 30)));
+		createAndSaveSchedule(theaterRoom2, movie,
+			LocalDateTime.of(LocalDate.now(), LocalTime.of(9, 0)),
+			LocalDateTime.of(LocalDate.now(), LocalTime.of(11, 0)));
+		createAndSaveSchedule(theaterRoom2, movie2,
+			LocalDateTime.of(LocalDate.now(), LocalTime.of(12, 30)),
+			LocalDateTime.of(LocalDate.now(), LocalTime.of(14, 30)));
+		createAndSaveSchedule(theaterRoom2, movie,
+			LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(12, 30)),
+			LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(14, 30)));
+
+		Long movieId = movie.getId();
+		LocalDate searchDate = LocalDate.now();
+		List<Schedule> schedules = scheduleRepository.findSchedulesByMovieIdAndDate(movieId, searchDate);
+
+		assertThat(schedules).hasSize(2);
 	}
 
 	private Movie createAndSaveTempMovieInstance(String name) {

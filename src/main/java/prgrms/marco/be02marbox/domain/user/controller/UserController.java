@@ -2,6 +2,9 @@ package prgrms.marco.be02marbox.domain.user.controller;
 
 import java.net.URI;
 
+import org.springframework.boot.web.server.Cookie;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -47,13 +50,22 @@ public class UserController {
 	@PostMapping("/sign-in")
 	public ResponseEntity<Void> signIn(
 		@Validated @RequestBody RequestSignInUser requestSignInUser) {
+
 		JwtAuthenticationToken authToken = new JwtAuthenticationToken(
 			requestSignInUser.email(), requestSignInUser.password());
 		Authentication resultToken = authenticationManager.authenticate(authToken);
 		JwtAuthentication principal = (JwtAuthentication)resultToken.getPrincipal();
+
+		ResponseCookie cookie = ResponseCookie.from("access-token", principal.getToken())
+			.httpOnly(true)
+			.path("/")
+			.sameSite(Cookie.SameSite.LAX.attributeValue())
+			.domain("localhost")
+			.build();
+
 		return ResponseEntity
 			.noContent()
-			.header("token", principal.getToken())
+			.header(HttpHeaders.SET_COOKIE, cookie.toString())
 			.build();
 	}
 }

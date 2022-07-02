@@ -1,12 +1,11 @@
 package prgrms.marco.be02marbox.domain.theater.dto;
 
 import java.time.LocalTime;
-
-import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
+import java.util.List;
 
 public record ResponseFindTime(
-	LocalTime startTime,
-	LocalTime endTime,
-	TheaterRoom theaterRoom
+	String theaterRoomName,
+	int totalSeatCount,
+	List<LocalTime> startTimeList
 ) {
 }

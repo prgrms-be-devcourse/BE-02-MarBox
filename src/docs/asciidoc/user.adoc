@@ -5,7 +5,7 @@ endif::[]
 
 == 사용자
 
-### 회원가입
+### 회원가입 API
 
 .Request
 include::{snippets}/user-sign-up/http-request.adoc[]
@@ -14,3 +14,13 @@ include::{snippets}/user-sign-up/request-fields.adoc[]
 .Response
 include::{snippets}/user-sign-up/http-response.adoc[]
 include::{snippets}/user-sign-up/response-headers.adoc[]
+
+### 로그인 API
+
+.Request
+include::{snippets}/user-sign-in/http-request.adoc[]
+include::{snippets}/user-sign-in/request-fields.adoc[]
+
+.Response
+include::{snippets}/user-sign-in/http-response.adoc[]
+include::{snippets}/user-sign-in/response-headers.adoc[]
