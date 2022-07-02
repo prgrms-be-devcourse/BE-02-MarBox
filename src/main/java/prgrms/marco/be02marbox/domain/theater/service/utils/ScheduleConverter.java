@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -34,22 +35,30 @@ public class ScheduleConverter {
 			.toList();
 	}
 
-	public List<ResponseFindTime> convertFromScheduleInTheaterToResponseFindTimeList(
-		List<Schedule> schedules, Set<TheaterRoom> theaterRooms) {
+	public List<ResponseFindTime> convertFromScheduleListToResponseFindTimeList(List<Schedule> schedules) {
 		List<ResponseFindTime> responseFindTimeSchedules = new ArrayList<>();
 
-		for (TheaterRoom theaterRoom : theaterRooms) {
-			List<LocalTime> startTimeListInTheater = schedules.stream()
-				.filter(schedule -> schedule.getTheaterRoom().equals(theaterRoom))
-				.map(schedule -> schedule.getStartTime().toLocalTime())
-				.toList();
+		Set<TheaterRoom> theaterRooms = schedules.stream()
+			.map(Schedule::getTheaterRoom)
+			.collect(Collectors.toSet());
 
-			responseFindTimeSchedules.add(
-				new ResponseFindTime(theaterRoom.getName(), theaterRoom.getTotalAmount(),
-					startTimeListInTheater));
+		for (TheaterRoom theaterRoom : theaterRooms) {
+			List<LocalTime> startTimeListInTheaterRoom =
+				getStartTimeListOfSchedulesInTheaterRoom(schedules, theaterRoom);
+
+			responseFindTimeSchedules.add(new ResponseFindTime(theaterRoom.getName(),
+				theaterRoom.getTotalAmount(), startTimeListInTheaterRoom));
 		}
 
 		return responseFindTimeSchedules;
+	}
+
+	private List<LocalTime> getStartTimeListOfSchedulesInTheaterRoom(List<Schedule> schedules,
+		TheaterRoom theaterRoom) {
+		return schedules.stream()
+			.filter(schedule -> schedule.getTheaterRoom().equals(theaterRoom))
+			.map(schedule -> schedule.getStartTime().toLocalTime())
+			.toList();
 	}
 
 }
