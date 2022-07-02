@@ -11,6 +11,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +47,7 @@ class JwtAuthenticationFilterTest {
 	@BeforeEach
 	void setUp() {
 		SecurityContextHolder.clearContext();
-		this.filter = new JwtAuthenticationFilter("token", this.jwt);
+		this.filter = new JwtAuthenticationFilter("access-token", this.jwt);
 	}
 
 	@AfterEach
@@ -59,7 +60,7 @@ class JwtAuthenticationFilterTest {
 	void testAuthenticationSuccess() throws ServletException, IOException {
 		//given
 		String token = "jwt-token";
-		given(this.req.getHeader("token")).willReturn(token);
+		given(this.req.getCookies()).willReturn(new Cookie[] {new Cookie("access-token", token)});
 
 		String username = "pang";
 		String role = "ROLE_ADMIN";

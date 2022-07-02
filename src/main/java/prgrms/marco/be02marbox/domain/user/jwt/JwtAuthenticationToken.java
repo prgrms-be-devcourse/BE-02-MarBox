@@ -15,7 +15,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 	//인증 안된 토큰 생성
 	public JwtAuthenticationToken(String principal, String credential) {
 		super(null);
-		setAuthenticated(false);
+		super.setAuthenticated(false);
 
 		this.principal = principal;
 		this.credential = credential;
@@ -28,15 +28,6 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
 		this.principal = principal;
 		this.credential = credential;
-	}
-
-	@Override
-	public void setAuthenticated(boolean authenticated) throws IllegalArgumentException {
-		if (super.isAuthenticated()) {
-			throw new IllegalArgumentException(
-				"Cannot set this token to trusted - use constructor which takes a GrantedAuthority list instead");
-		}
-		super.setAuthenticated(false);
 	}
 
 	@Override

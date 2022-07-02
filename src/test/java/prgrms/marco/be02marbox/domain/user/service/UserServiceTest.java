@@ -93,7 +93,7 @@ class UserServiceTest {
 		//then
 		assertAll(
 			() -> assertThat(responseLoginUser.name()).isEqualTo(savedUser.getName()),
-			() -> assertThat(responseLoginUser.role()).isEqualTo(savedUser.getRoleName())
+			() -> assertThat(responseLoginUser.role()).isEqualTo(savedUser.getRole())
 		);
 	}
 

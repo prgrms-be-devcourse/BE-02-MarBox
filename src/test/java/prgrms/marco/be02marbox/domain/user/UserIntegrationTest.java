@@ -109,7 +109,7 @@ class UserIntegrationTest {
 					fieldWithPath("password").type(JsonFieldType.STRING).description("사용자 비밀번호")
 				),
 				responseHeaders(
-					headerWithName("token").description("Jwt Token")
+					headerWithName(HttpHeaders.SET_COOKIE).description("쿠키 세팅")
 				)));
 	}
 }
