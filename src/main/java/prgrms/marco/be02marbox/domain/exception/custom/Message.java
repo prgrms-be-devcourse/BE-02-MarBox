@@ -12,6 +12,8 @@ public enum Message {
 	NO_USER_TICKET_INFO_EXP_MSG("존재하지 않는 유저의 티켓 정보입니다."),
 	INVALID_DATE_EXP_MSG("해당 날짜에 영화를 상영하지 않습니다."),
 	INVALID_SCHEDULE_EXP_MSG("존재하지 않는 스케줄 ID 입니다.");
+	INVALID_MOVIE_EXP_MSG("존재하지 않는 영화 ID 입니다."),
+	INVALID_THEATER_ROOM_EXP_MSG("존재하지 않는 상영관 ID 입니다.");
 
 	private final String message;
 
