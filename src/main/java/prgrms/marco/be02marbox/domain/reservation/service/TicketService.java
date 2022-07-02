@@ -14,22 +14,34 @@ import prgrms.marco.be02marbox.domain.reservation.dto.RequestCreateTicket;
 import prgrms.marco.be02marbox.domain.reservation.dto.ResponseFindTicket;
 import prgrms.marco.be02marbox.domain.reservation.repository.TicketRepository;
 import prgrms.marco.be02marbox.domain.reservation.service.utils.TicketConverter;
+import prgrms.marco.be02marbox.domain.theater.Schedule;
+import prgrms.marco.be02marbox.domain.theater.repository.ScheduleRepository;
+import prgrms.marco.be02marbox.domain.user.User;
+import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
 @Service
 @Transactional(readOnly = true)
 public class TicketService {
 
+	private final UserRepository userRepository;
+	private final ScheduleRepository scheduleRepository;
 	private final TicketRepository ticketRepository;
 	private final TicketConverter ticketConverter;
 
-	public TicketService(TicketRepository ticketRepository, TicketConverter ticketConverter) {
+	public TicketService(UserRepository userRepository, ScheduleRepository scheduleRepository,
+		TicketRepository ticketRepository, TicketConverter ticketConverter) {
+		this.userRepository = userRepository;
+		this.scheduleRepository = scheduleRepository;
 		this.ticketRepository = ticketRepository;
 		this.ticketConverter = ticketConverter;
 	}
 
 	@Transactional
 	public Long createTicket(RequestCreateTicket request) {
-		Ticket saveTicket = ticketRepository.save(ticketConverter.convertFromRequestCreateTicketToTicket(request));
+		User user = userRepository.findById(request.userId()).orElseThrow(EntityNotFoundException::new);
+		Schedule schedule = scheduleRepository.findById(request.scheduleId()).orElseThrow(EntityNotFoundException::new);
+		Ticket saveTicket = ticketRepository.save(
+			ticketConverter.convertFromRequestCreateTicketToTicket(user, schedule, request.reservedAt()));
 		return saveTicket.getId();
 	}
 
