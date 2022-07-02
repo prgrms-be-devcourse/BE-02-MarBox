@@ -24,15 +24,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.config.WebSecurityConfigure;
+import prgrms.marco.be02marbox.domain.reservation.service.ReservationService;
 import prgrms.marco.be02marbox.domain.reservation.service.ReservedSeatService;
-import prgrms.marco.be02marbox.domain.theater.Region;
-import prgrms.marco.be02marbox.domain.theater.Schedule;
-import prgrms.marco.be02marbox.domain.theater.Theater;
-import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindSeat;
 import prgrms.marco.be02marbox.domain.theater.dto.document.ResponseCreateSeatDoc;
-import prgrms.marco.be02marbox.domain.theater.service.ScheduleService;
-import prgrms.marco.be02marbox.domain.theater.service.SeatService;
 
 @WebMvcTest(controllers = ReservedSeatController.class,
 	excludeFilters = {
@@ -48,10 +43,7 @@ class ReservedSeatControllerTest {
 	private ReservedSeatService reservedSeatService;
 
 	@MockBean
-	private SeatService seatService;
-
-	@MockBean
-	private ScheduleService scheduleService;
+	private ReservationService reservationService;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -88,18 +80,11 @@ class ReservedSeatControllerTest {
 	void testFindReservedIdListByScheduleId() throws Exception {
 		Long scheduleId = 1L;
 
-		List<Long> seatIdList = List.of(1L, 2L);
 		List<ResponseFindSeat> seatList = List.of(
 			new ResponseFindSeat(0, 0),
 			new ResponseFindSeat(0, 1));
 
-		Schedule schedule = Schedule.builder()
-			.theaterRoom(new TheaterRoom(new Theater(Region.SEOUL, "강남"), "A관"))
-			.build();
-
-		given(scheduleService.findById(scheduleId)).willReturn(schedule);
-		given(reservedSeatService.findReservedIdListByScheduleId(schedule.getId())).willReturn(seatIdList);
-		given(seatService.findRemainSeats(schedule.getTheaterRoom().getId(), seatIdList)).willReturn(seatList);
+		given(reservationService.findReservePossibleSeatList(scheduleId)).willReturn(seatList);
 
 		mockMvc.perform(get(RESERVED_SEAT_URL + "/{scheduleId}/possible", scheduleId)
 			.with(SecurityMockMvcRequestPostProcessors.csrf())
