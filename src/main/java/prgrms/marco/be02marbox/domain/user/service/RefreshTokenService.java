@@ -17,6 +17,11 @@ public class RefreshTokenService {
 		this.refreshTokenRepository = refreshTokenRepository;
 	}
 
+	/**
+	 * refreshToken 갱신 (존재하면 수정, 없으면 만들기)
+	 * @param user
+	 * @param refreshToken
+	 */
 	@Transactional
 	public void updateRefreshToken(User user, String refreshToken) {
 		refreshTokenRepository.findByUser(user)
