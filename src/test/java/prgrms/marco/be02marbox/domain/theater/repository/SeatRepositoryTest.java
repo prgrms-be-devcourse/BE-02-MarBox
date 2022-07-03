@@ -37,28 +37,17 @@ class SeatRepositoryTest extends RepositoryTestUtil {
 	@Test
 	@DisplayName("예매 가능한 좌석을 조회할 수 있다.")
 	void testFindByTheaterRoomIdAndIdNotIn() {
-		// 5개 좌석 저장
-		TheaterRoom theaterRoom = saveSeatMulti(5);
-		List<Seat> savedSeats = seatRepository.findByTheaterRoomId(theaterRoom.getId());
-
-		List<Seat> reservedSeatList = new ArrayList<>();
-		// 그 중 2개 좌석을 예약한다.
-		reservedSeatList.add(savedSeats.get(0));
-		reservedSeatList.add(savedSeats.get(1));
-		Schedule schedule = saveReservedSeatMultiSeat(reservedSeatList);
+		int totalSeatCount = 5;
+		int reservedCount = 2;
+		Schedule schedule = saveSeatAndReserveSeat(totalSeatCount, reservedCount);
 
 		List<Long> reservedSeatIdList = new ArrayList<>();
 		reservedSeatRepository.searchByScheduleIdStartsWith(schedule.getId())
 			.forEach(reservedSeat -> reservedSeatIdList.add(reservedSeat.getSeat().getId()));
 
-		List<Seat> reservePossibleSeats = seatRepository.findByTheaterRoomIdAndIdNotIn(theaterRoom.getId(),
-			reservedSeatIdList);
-		assertAll(
-			() -> assertThat(reservePossibleSeats).hasSize(3),
-			() -> assertThat(reservePossibleSeats).doesNotContain(savedSeats.get(0)),
-			() -> assertThat(reservePossibleSeats).doesNotContain(savedSeats.get(1)),
-			() -> assertThat(reservePossibleSeats).contains(savedSeats.get(2))
-		);
+		List<Seat> reservePossibleSeats = seatRepository.findByTheaterRoomIdAndIdNotIn(
+			schedule.getTheaterRoom().getId(), reservedSeatIdList);
+		assertThat(reservePossibleSeats).hasSize(totalSeatCount - reservedCount);
 	}
 
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import prgrms.marco.be02marbox.domain.reservation.service.ReservationService;
 import prgrms.marco.be02marbox.domain.reservation.service.ReservedSeatService;
 import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindSeat;
 
@@ -16,9 +17,11 @@ import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindSeat;
 public class ReservedSeatController {
 
 	private final ReservedSeatService reservedSeatService;
+	private final ReservationService reservationService;
 
-	public ReservedSeatController(ReservedSeatService reservedSeatService) {
+	public ReservedSeatController(ReservedSeatService reservedSeatService, ReservationService reservationService) {
 		this.reservedSeatService = reservedSeatService;
+		this.reservationService = reservationService;
 	}
 
 	@GetMapping("/{scheduleId}")
@@ -26,4 +29,8 @@ public class ReservedSeatController {
 		return ResponseEntity.ok(reservedSeatService.findByScheduleId(scheduleId));
 	}
 
+	@GetMapping("/{scheduleId}/possible")
+	public ResponseEntity<List<ResponseFindSeat>> findReservePossibleSeats(@PathVariable Long scheduleId) {
+		return ResponseEntity.ok(reservationService.findReservePossibleSeatList(scheduleId));
+	}
 }

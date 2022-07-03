@@ -27,11 +27,23 @@ public class ReservedSeatService {
 	 * 스케줄 별 예약좌석 조회
 	 *
 	 * @param scheduleId 스케줄 id
-	 * @return 예약 좌석 리스트
+	 * @return 예약(되어있는) 좌석 리스트
 	 */
 	public List<ResponseFindSeat> findByScheduleId(Long scheduleId) {
 		return reservedSeatRepository.searchByScheduleIdStartsWith(scheduleId).stream()
 			.map((reservedSeat -> seatConverter.convertFromSeatToResponseFindSeat(reservedSeat.getSeat())))
+			.collect(toList());
+	}
+
+	/**
+	 * 스케줄 별 예약좌석 조회
+	 *
+	 * @param scheduleId 스케줄 id
+	 * @return 예약(되어있는) 좌석의 id 리스트
+	 */
+	public List<Long> findReservedIdListByScheduleId(Long scheduleId) {
+		return reservedSeatRepository.searchByScheduleIdStartsWith(scheduleId).stream()
+			.map((reservedSeat) -> reservedSeat.getSeat().getId())
 			.collect(toList());
 	}
 }

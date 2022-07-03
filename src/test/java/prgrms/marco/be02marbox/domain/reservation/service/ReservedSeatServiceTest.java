@@ -18,7 +18,6 @@ import prgrms.marco.be02marbox.domain.theater.service.utils.SeatConverter;
 
 @Import({ReservedSeatService.class, SeatConverter.class})
 class ReservedSeatServiceTest extends RepositoryTestUtil {
-
 	@Autowired
 	ReservedSeatService reservedSeatService;
 
@@ -28,7 +27,6 @@ class ReservedSeatServiceTest extends RepositoryTestUtil {
 		int seatCount = 3;
 		Schedule schedule = saveReservedSeatMultiSeat(seatCount);
 
-		em.flush();
 		List<ResponseFindSeat> seatList = reservedSeatService.findByScheduleId(schedule.getId());
 		assertThat(seatList).hasSize(seatCount);
 	}
@@ -65,5 +63,35 @@ class ReservedSeatServiceTest extends RepositoryTestUtil {
 
 		List<ResponseFindSeat> seatList = reservedSeatService.findByScheduleId(-1L);
 		assertThat(seatList).isEmpty();
+	}
+
+	@Test
+	@DisplayName("예매 좌석 조회")
+	void testFindReservePossibleSeats() {
+		int totalSeatCount = 5;
+		int reservedCount = 2;
+		Schedule schedule = saveSeatAndReserveSeat(totalSeatCount, reservedCount);
+
+		List<Long> reservePossibleSeats = reservedSeatService.findReservedIdListByScheduleId(schedule.getId());
+		assertThat(reservePossibleSeats).hasSize(reservedCount);
+	}
+
+	@Test
+	@DisplayName("예매 좌석 없는 경우")
+	void testFindReservePossibleSeatsEmpty() {
+		Schedule schedule = saveSchedule();
+
+		List<Long> reservePossibleSeats = reservedSeatService.findReservedIdListByScheduleId(schedule.getId());
+		assertThat(reservePossibleSeats).isEmpty();
+	}
+
+	@Test
+	@DisplayName("모든 좌석이 예매 된 경우")
+	void testFindReservePossibleSeatsAllReserved() {
+		int totalSeatCount = 2;
+		Schedule schedule = saveSeatAndReserveSeat(totalSeatCount, totalSeatCount);
+
+		List<Long> reservePossibleSeats = reservedSeatService.findReservedIdListByScheduleId(schedule.getId());
+		assertThat(reservePossibleSeats).hasSize(totalSeatCount);
 	}
 }
