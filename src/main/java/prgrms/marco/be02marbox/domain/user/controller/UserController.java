@@ -2,12 +2,9 @@ package prgrms.marco.be02marbox.domain.user.controller;
 
 import java.net.URI;
 
-import org.springframework.boot.web.server.Cookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,20 +13,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignInUser;
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignUpUser;
-import prgrms.marco.be02marbox.domain.user.jwt.JwtAuthentication;
-import prgrms.marco.be02marbox.domain.user.jwt.JwtAuthenticationToken;
+import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginToken;
+import prgrms.marco.be02marbox.domain.user.service.JwtService;
 import prgrms.marco.be02marbox.domain.user.service.UserService;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-	private final UserService userService;
-	private final AuthenticationManager authenticationManager;
+	public static final String ACCESS_TOKEN = "access-token";
+	public static final String REFRESH_TOKEN = "refresh-token";
 
-	public UserController(UserService userService, AuthenticationManager authenticationManager) {
+	private final UserService userService;
+	private final JwtService jwtService;
+
+	public UserController(UserService userService, JwtService jwtService) {
 		this.userService = userService;
-		this.authenticationManager = authenticationManager;
+		this.jwtService = jwtService;
 	}
 
 	@PostMapping("/sign-up")
@@ -51,21 +51,21 @@ public class UserController {
 	public ResponseEntity<Void> signIn(
 		@Validated @RequestBody RequestSignInUser requestSignInUser) {
 
-		JwtAuthenticationToken authToken = new JwtAuthenticationToken(
-			requestSignInUser.email(), requestSignInUser.password());
-		Authentication resultToken = authenticationManager.authenticate(authToken);
-		JwtAuthentication principal = (JwtAuthentication)resultToken.getPrincipal();
-
-		ResponseCookie cookie = ResponseCookie.from("access-token", principal.getToken())
+		ResponseLoginToken responseLoginToken = jwtService.login(requestSignInUser.email(),
+			requestSignInUser.password());
+		
+		ResponseCookie accessToken = ResponseCookie.from(ACCESS_TOKEN, responseLoginToken.accessToken())
 			.httpOnly(true)
 			.path("/")
-			.sameSite(Cookie.SameSite.LAX.attributeValue())
-			.domain("localhost")
+			.build();
+
+		ResponseCookie refreshToken = ResponseCookie.from(REFRESH_TOKEN, responseLoginToken.refreshToken())
+			.path("/users/refresh")
 			.build();
 
 		return ResponseEntity
 			.noContent()
-			.header(HttpHeaders.SET_COOKIE, cookie.toString())
+			.header(HttpHeaders.SET_COOKIE, accessToken.toString(), refreshToken.toString())
 			.build();
 	}
 }
