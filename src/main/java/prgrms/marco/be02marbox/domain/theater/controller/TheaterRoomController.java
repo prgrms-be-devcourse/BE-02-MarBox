@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheaterRoom;
-import prgrms.marco.be02marbox.domain.theater.service.TheaterRoomService;
+import prgrms.marco.be02marbox.domain.theater.service.TheaterCommonService;
 
 @RestController
 @RequestMapping("/theater-rooms")
@@ -21,17 +21,17 @@ public class TheaterRoomController {
 
 	private static final String SLASH = "/";
 
-	private final TheaterRoomService theaterRoomService;
+	private final TheaterCommonService theaterCommonService;
 
-	public TheaterRoomController(TheaterRoomService theaterRoomService) {
-		this.theaterRoomService = theaterRoomService;
+	public TheaterRoomController(TheaterCommonService theaterCommonService) {
+		this.theaterCommonService = theaterCommonService;
 	}
 
 	@PostMapping
 	public ResponseEntity<Void> save(HttpServletRequest request,
 		@RequestBody @Validated RequestCreateTheaterRoom requestCreateTheaterRoom
 	) throws URISyntaxException {
-		Long savedId = theaterRoomService.save(requestCreateTheaterRoom);
+		Long savedId = theaterCommonService.saveTheaterRoomWithSeatList(requestCreateTheaterRoom);
 		URI redirectUri = new URI(request.getRequestURI() + SLASH + savedId);
 		return ResponseEntity.created(redirectUri).build();
 	}
