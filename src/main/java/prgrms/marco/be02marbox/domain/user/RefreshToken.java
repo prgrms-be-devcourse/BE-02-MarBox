@@ -34,6 +34,10 @@ public class RefreshToken {
 		this.token = token;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
 	public User getUser() {
 		return user;
 	}
