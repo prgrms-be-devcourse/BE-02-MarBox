@@ -46,13 +46,19 @@ public class UserService {
 	}
 
 	/**
-	 * 특정 email을 가진 사용자를 찾는다.
+	 * 이메일과 비밀번호를 받아, 사용자를 인증한다.
 	 * @param email
-	 * @return User
-	 * @throws InvalidEmailException 존재하지 않는 이메일
+	 * @param password
+	 * @return ResponseLoginToken
+	 * @throws @throws InvalidEmailException 이메일이 DB에 존재하지 않는 경우
+	 * @throws org.springframework.security.authentication.BadCredentialsException 비밀번호가 틀린 경우
 	 */
-	public User findByEmail(String email) {
-		return userRepository.findByEmail(email)
+	public User login(String email, String password) {
+		User user = userRepository.findByEmail(email)
 			.orElseThrow(() -> new InvalidEmailException(INVALID_EMAIL_EXP_MSG));
+
+		user.checkPassword(passwordEncoder, password);
+
+		return user;
 	}
 }
