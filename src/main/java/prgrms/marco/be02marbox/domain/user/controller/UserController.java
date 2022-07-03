@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,18 +55,39 @@ public class UserController {
 		ResponseLoginToken responseLoginToken = jwtService.authenticateUser(requestSignInUser.email(),
 			requestSignInUser.password());
 
-		ResponseCookie accessToken = ResponseCookie.from(ACCESS_TOKEN, responseLoginToken.accessToken())
+		ResponseCookie accessTokenCookie = generateAccessTokenCookie(responseLoginToken.accessToken());
+		ResponseCookie refreshTokenCookie = generateRefreshTokenCookie(responseLoginToken.refreshToken());
+		return ResponseEntity
+			.noContent()
+			.header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString(), refreshTokenCookie.toString())
+			.build();
+	}
+
+	@PostMapping("/refresh")
+	public ResponseEntity<Void> refreshToken(
+		@CookieValue("access-token") String accessToken,
+		@CookieValue("refresh-token") String refreshToken) {
+
+		ResponseLoginToken responseLoginToken = jwtService.refreshToken(accessToken, refreshToken);
+
+		ResponseCookie accessTokenCookie = generateAccessTokenCookie(responseLoginToken.accessToken());
+		ResponseCookie refreshTokenCookie = generateRefreshTokenCookie(responseLoginToken.refreshToken());
+		return ResponseEntity
+			.noContent()
+			.header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString(), refreshTokenCookie.toString())
+			.build();
+	}
+
+	private ResponseCookie generateAccessTokenCookie(String accessToken) {
+		return ResponseCookie.from(ACCESS_TOKEN, accessToken)
 			.httpOnly(true)
 			.path("/")
 			.build();
+	}
 
-		ResponseCookie refreshToken = ResponseCookie.from(REFRESH_TOKEN, responseLoginToken.refreshToken())
+	private ResponseCookie generateRefreshTokenCookie(String refreshToken) {
+		return ResponseCookie.from(REFRESH_TOKEN, refreshToken)
 			.path("/users/refresh")
-			.build();
-
-		return ResponseEntity
-			.noContent()
-			.header(HttpHeaders.SET_COOKIE, accessToken.toString(), refreshToken.toString())
 			.build();
 	}
 }

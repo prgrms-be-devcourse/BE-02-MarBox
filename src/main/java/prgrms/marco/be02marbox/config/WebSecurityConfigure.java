@@ -60,7 +60,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-			.antMatchers(HttpMethod.POST, "/users/sign-up", "/users/sign-in").permitAll()
+			.antMatchers(HttpMethod.POST, "/users/sign-up", "/users/sign-in", "/users/refresh").permitAll()
 			.antMatchers(HttpMethod.GET, "/theaters", "/schedules/current-movies", "/schedules").permitAll()
 			.anyRequest().hasAnyRole("ADMIN")
 			.and()

@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
 
+import javax.servlet.http.Cookie;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -177,5 +179,24 @@ class UserControllerTest {
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.messages.[0]").value(equalTo("비밀번호가 틀렸습니다.")))
 			.andExpect(jsonPath("$.statusCode").value(equalTo(HttpStatus.BAD_REQUEST.value())));
+	}
+
+	@Test
+	@DisplayName("토큰 재발급 성공")
+	void testRefreshSuccess() throws Exception {
+		//given
+		String oldAccessToken = "old-access-token";
+		String refreshToken = "refresh-token";
+		ResponseLoginToken responseLoginToken = new ResponseLoginToken("new-access-token", "new-refresh-token");
+		given(jwtService.refreshToken(oldAccessToken, refreshToken))
+			.willReturn(responseLoginToken);
+
+		//when then
+		mockMvc.perform(post("/users/refresh")
+				.cookie(new Cookie("access-token", oldAccessToken),
+					new Cookie("refresh-token", refreshToken)))
+			.andExpect(status().isNoContent())
+			.andExpect(cookie().value("access-token", responseLoginToken.accessToken()))
+			.andExpect(cookie().value("refresh-token", responseLoginToken.refreshToken()));
 	}
 }

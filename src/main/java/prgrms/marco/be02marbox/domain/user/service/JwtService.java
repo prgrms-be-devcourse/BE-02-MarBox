@@ -43,4 +43,8 @@ public class JwtService {
 
 		return new ResponseLoginToken(accessToken, refreshToken);
 	}
+
+	public ResponseLoginToken refreshToken(String accessToken, String refreshToken) {
+		return null;
+	}
 }
