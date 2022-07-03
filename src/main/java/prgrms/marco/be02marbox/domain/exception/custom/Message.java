@@ -13,7 +13,8 @@ public enum Message {
 	INVALID_DATE_EXP_MSG("해당 날짜에 영화를 상영하지 않습니다."),
 	INVALID_SCHEDULE_EXP_MSG("존재하지 않는 스케줄 ID 입니다."),
 	INVALID_MOVIE_EXP_MSG("존재하지 않는 영화 ID 입니다."),
-	INVALID_THEATER_ROOM_EXP_MSG("존재하지 않는 상영관 ID 입니다.");
+	INVALID_THEATER_ROOM_EXP_MSG("존재하지 않는 상영관 ID 입니다."),
+	WRONG_PASSWORD_EXP_MSG("비밀번호가 틀렸습니다.");
 
 	private final String message;
 

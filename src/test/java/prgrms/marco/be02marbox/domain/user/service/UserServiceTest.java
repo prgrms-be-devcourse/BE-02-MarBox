@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -19,7 +18,6 @@ import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateEmailExcept
 import prgrms.marco.be02marbox.domain.exception.custom.user.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.User;
-import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginUser;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
 @DataJpaTest
@@ -76,56 +74,29 @@ class UserServiceTest {
 	}
 
 	@Test
-	@DisplayName("사용자 로그인 성공")
-	void testLoginSuccess() {
-		//given
-		String rawPassword = "1234";
-		User user = new User(
-			"pang@mail.com",
-			passwordEncoder.encode(rawPassword),
-			"pang",
-			Role.ROLE_ADMIN);
-		User savedUser = userRepository.save(user);
-
-		//when
-		ResponseLoginUser responseLoginUser = userService.login(savedUser.getEmail(), rawPassword);
-
-		//then
-		assertAll(
-			() -> assertThat(responseLoginUser.name()).isEqualTo(savedUser.getName()),
-			() -> assertThat(responseLoginUser.role()).isEqualTo(savedUser.getRole())
-		);
-	}
-
-	@Test
-	@DisplayName("사용자 로그인 실패 - 존재 하지 않는 이메일")
-	void testLoginFailBecauseInvalidEmail() {
-		//given
-		String email = "invalid@mail.com";
-		String password = "1234";
-
-		//when then
-		assertThatThrownBy(() -> userService.login(email, password))
-			.isInstanceOf(InvalidEmailException.class)
-			.hasMessageContaining(INVALID_EMAIL_EXP_MSG.getMessage());
-	}
-
-	@Test
-	@DisplayName("사용자 로그인 실패 - 비밀번호 틀림")
-	void testLoginFailBecauseWrongPassword() {
+	@DisplayName("findByEmail 성공")
+	void testFindByEmailSuccess() {
 		//given
 		User user = new User(
 			"pang@mail.com",
 			"1234",
 			"pang",
-			Role.ROLE_ADMIN);
+			Role.ROLE_CUSTOMER);
 		User savedUser = userRepository.save(user);
 
-		String wrongPassword = "7777";
+		//when
+		User retrievedUser = userService.findByEmail(user.getEmail());
 
-		//when then
-		assertThatThrownBy(() -> userService.login(savedUser.getEmail(), wrongPassword))
-			.isInstanceOf(BadCredentialsException.class)
-			.hasMessageContaining("비밀번호가 틀렸습니다.");
+		//then
+		assertThat(retrievedUser.getId()).isEqualTo(savedUser.getId());
+	}
+
+	@Test
+	@DisplayName("findByEmail 실패 - 존재하지 않는 이메일")
+	void testFindByEmailFailBecauseInvalidEmail() {
+		//given when then
+		assertThatThrownBy(() -> userService.findByEmail("invalid@mail.com"))
+			.isInstanceOf(InvalidEmailException.class)
+			.hasMessageContaining(INVALID_EMAIL_EXP_MSG.getMessage());
 	}
 }
