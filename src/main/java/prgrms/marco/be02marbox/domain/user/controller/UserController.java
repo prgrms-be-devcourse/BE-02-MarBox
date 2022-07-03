@@ -53,7 +53,7 @@ public class UserController {
 
 		ResponseLoginToken responseLoginToken = jwtService.authenticateUser(requestSignInUser.email(),
 			requestSignInUser.password());
-		
+
 		ResponseCookie accessToken = ResponseCookie.from(ACCESS_TOKEN, responseLoginToken.accessToken())
 			.httpOnly(true)
 			.path("/")
