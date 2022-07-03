@@ -51,7 +51,7 @@ public class UserController {
 	public ResponseEntity<Void> signIn(
 		@Validated @RequestBody RequestSignInUser requestSignInUser) {
 
-		ResponseLoginToken responseLoginToken = jwtService.login(requestSignInUser.email(),
+		ResponseLoginToken responseLoginToken = jwtService.authenticateUser(requestSignInUser.email(),
 			requestSignInUser.password());
 		
 		ResponseCookie accessToken = ResponseCookie.from(ACCESS_TOKEN, responseLoginToken.accessToken())

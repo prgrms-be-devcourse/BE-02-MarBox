@@ -130,7 +130,7 @@ class UserControllerTest {
 		RequestSignInUser requestSignInUser = new RequestSignInUser("pang@email.com", "1234");
 
 		ResponseLoginToken responseLoginToken = new ResponseLoginToken("access-token", "refresh-token");
-		given(jwtService.login(requestSignInUser.email(), requestSignInUser.password()))
+		given(jwtService.authenticateUser(requestSignInUser.email(), requestSignInUser.password()))
 			.willReturn(responseLoginToken);
 
 		//when then
@@ -148,7 +148,7 @@ class UserControllerTest {
 		//given
 		RequestSignInUser requestSignInUser = new RequestSignInUser("invalid@email.com", "1234");
 
-		given(jwtService.login(requestSignInUser.email(), requestSignInUser.password()))
+		given(jwtService.authenticateUser(requestSignInUser.email(), requestSignInUser.password()))
 			.willThrow(new InvalidEmailException(INVALID_EMAIL_EXP_MSG));
 
 		//when then
@@ -167,7 +167,7 @@ class UserControllerTest {
 		RequestSignInUser requestSignInUser = new RequestSignInUser(
 			"pang@mail.com", "invalid");
 
-		given(jwtService.login(requestSignInUser.email(), requestSignInUser.password()))
+		given(jwtService.authenticateUser(requestSignInUser.email(), requestSignInUser.password()))
 			.willThrow(new BadCredentialsException("비밀번호가 틀렸습니다."));
 
 		//when then
