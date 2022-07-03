@@ -32,7 +32,7 @@ public class TheaterRoomController {
 		@RequestBody @Validated RequestCreateTheaterRoom requestCreateTheaterRoom
 	) throws URISyntaxException {
 		Long savedId = theaterCommonService.saveTheaterRoomWithSeatList(requestCreateTheaterRoom);
-		URI redirectUri = new URI(request.getRequestURI() + SLASH + savedId);
-		return ResponseEntity.created(redirectUri).build();
+		String redirectUri = new StringBuilder(request.getRequestURI()).append(SLASH).append(savedId).toString();
+		return ResponseEntity.created(URI.create(redirectUri)).build();
 	}
 }
