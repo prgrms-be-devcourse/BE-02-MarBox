@@ -1,6 +1,7 @@
 package prgrms.marco.be02marbox.domain.reservation.repository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
@@ -8,6 +9,8 @@ import java.util.stream.IntStream;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
@@ -31,18 +34,23 @@ import prgrms.marco.be02marbox.domain.user.User;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
 /**
- * Entity 저장을 위한 클래스
+ * Entity 저장을 위한 클래스, 데이터 저장 후 영속성 컨텍스트를 비운다. clear 호출..
  *
  * save{Entity} 함수는 1개의 고정된 데이터의 Entity 를 저장 후 반환한다. (unique 컬럼이 존재하면 2번 호출 시 Exception)
  */
 @DataJpaTest
 public class RepositoryTestUtil {
 
+	void clear() {
+		em.flush();
+		em.clear();
+	}
+
 	private static final int MAX_ROW = 10;
 	private static final int MAX_COUNT = (MAX_ROW * MAX_ROW);
 
 	@PersistenceContext
-	public EntityManager em;
+	private EntityManager em;
 
 	@Autowired
 	public ReservedSeatRepository reservedSeatRepository;
@@ -87,7 +95,9 @@ public class RepositoryTestUtil {
 	 */
 	public Seat saveSeat(TheaterRoom theaterRoom, int row, int col) {
 		Seat seat = new Seat(theaterRoom, row, col);
-		return seatRepository.save(seat);
+		Seat savedSeat = seatRepository.save(seat);
+		clear();
+		return savedSeat;
 	}
 
 	/**
@@ -112,7 +122,9 @@ public class RepositoryTestUtil {
 	public TheaterRoom saveTheaterRoom(String name) {
 		Theater theater = saveTheater("강남");
 		TheaterRoom theaterRoom = new TheaterRoom(theater, name);
-		return theaterRoomRepository.save(theaterRoom);
+		TheaterRoom savedTheaterRoom = theaterRoomRepository.save(theaterRoom);
+		clear();
+		return savedTheaterRoom;
 	}
 
 	/**
@@ -121,7 +133,9 @@ public class RepositoryTestUtil {
 
 	public Theater saveTheater(String name) {
 		Theater theater = new Theater(Region.SEOUL, name);
-		return theaterRepository.save(theater);
+		Theater savedTheater = theaterRepository.save(theater);
+		clear();
+		return savedTheater;
 	}
 
 	/**
@@ -134,7 +148,9 @@ public class RepositoryTestUtil {
 			"1234",
 			"test",
 			Role.ROLE_CUSTOMER);
-		return userRepository.save(user);
+		User savedUser = userRepository.save(user);
+		clear();
+		return savedUser;
 	}
 
 	/**
@@ -145,7 +161,18 @@ public class RepositoryTestUtil {
 		User user = saveUser();
 		Schedule schedule = saveSchedule();
 		Ticket ticket = new Ticket(user, schedule, LocalDateTime.now());
-		return ticketRepository.save(ticket);
+		Ticket savedTicket = ticketRepository.save(ticket);
+		clear();
+		return savedTicket;
+	}
+
+	public Ticket saveTicket(Schedule schedule) {
+		User user = saveUser();
+		Ticket ticket = new Ticket(user, schedule, LocalDateTime.now());
+
+		Ticket savedTicket = ticketRepository.save(ticket);
+		clear();
+		return savedTicket;
 	}
 
 	/**
@@ -161,7 +188,22 @@ public class RepositoryTestUtil {
 			.startTime(LocalDateTime.now())
 			.endTime(LocalDateTime.now())
 			.build();
-		return scheduleRepository.save(schedule);
+		Schedule savedSchedule = scheduleRepository.save(schedule);
+		clear();
+		return savedSchedule;
+	}
+
+	public Schedule saveSchedule(TheaterRoom theaterRoom) {
+		Movie movie = saveMovie("범죄도시2");
+		Schedule schedule = Schedule.builder()
+			.theaterRoom(theaterRoom)
+			.movie(movie)
+			.startTime(LocalDateTime.now())
+			.endTime(LocalDateTime.now())
+			.build();
+		Schedule savedSchedule = scheduleRepository.save(schedule);
+		clear();
+		return savedSchedule;
 	}
 
 	/**
@@ -170,7 +212,9 @@ public class RepositoryTestUtil {
 
 	public Movie saveMovie(String name) {
 		Movie movie = new Movie(name, LimitAge.ADULT, Genre.ACTION, 100);
-		return movieRepository.save(movie);
+		Movie savedMovie = movieRepository.save(movie);
+		clear();
+		return savedMovie;
 	}
 
 	/**
@@ -182,7 +226,9 @@ public class RepositoryTestUtil {
 		Seat seat = saveSeat();
 
 		ReservedSeat reservedSeat = new ReservedSeat(ticket, seat);
-		return reservedSeatRepository.save(reservedSeat);
+		ReservedSeat savedReservedSeat = reservedSeatRepository.save(reservedSeat);
+		clear();
+		return savedReservedSeat;
 	}
 
 	/**
@@ -198,29 +244,42 @@ public class RepositoryTestUtil {
 			Seat seat = saveSeat(ticket.getSchedule().getTheaterRoom(), seqToRow(seq), seqToCol(seq));
 			ReservedSeat reservedSeat = new ReservedSeat(ticket, seat);
 			reservedSeatRepository.save(reservedSeat);
-
 		});
+		clear();
 		return ticket.getSchedule();
 	}
 
 	/**
-	 * 지정한 좌석 리스트를 1개의 티켓에 저장한다.
-	 * @param reserveSeatList 예매 할 좌석 리스트
-	 * @return Schedule 티켓의 스케줄 정보
+	 * 상영관에 totalSeatCount 만큼 좌석을 만들고
+	 * 그 중 reserveCount 만큼 예약한다.
+	 *
+	 * @param totalSeatCount 저장 할 좌석의 개수
+	 * @param reserveCount 예약 할 좌석의 개수
+	 * @return 스케줄
 	 */
-	public Schedule saveReservedSeatMultiSeat(List<Seat> reserveSeatList) {
-		Ticket ticket = saveTicket();
-		reserveSeatList.forEach((seat) -> {
+	public Schedule saveSeatAndReserveSeat(int totalSeatCount, int reserveCount) {
+		// seatCount 좌석 저장
+		TheaterRoom theaterRoom = saveSeatMulti(totalSeatCount);
+		List<Seat> savedSeats = seatRepository.findByTheaterRoomId(theaterRoom.getId());
+
+		List<Seat> rserveSeatList = new ArrayList<>();
+		// 그 중 reserveCount 만큼 좌석을 예약한다.
+		for (int i = 0; i < reserveCount; i++) {
+			rserveSeatList.add(savedSeats.get(i));
+		}
+		Schedule schedule = saveSchedule(theaterRoom);
+		Ticket ticket = saveTicket(schedule);
+		rserveSeatList.forEach((seat) -> {
 			ReservedSeat reservedSeat = new ReservedSeat(ticket, seat);
 			reservedSeatRepository.save(reservedSeat);
 		});
-		return ticket.getSchedule();
+		clear();
+		return schedule;
 	}
 
 	/**
 	 * private 함수
 	 */
-
 	private int validateSeatCount(int seatCount) {
 		return Math.min(seatCount, MAX_COUNT);
 	}

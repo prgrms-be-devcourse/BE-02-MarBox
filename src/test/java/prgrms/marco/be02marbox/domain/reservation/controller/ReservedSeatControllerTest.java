@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.config.WebSecurityConfigure;
+import prgrms.marco.be02marbox.domain.reservation.service.ReservationService;
 import prgrms.marco.be02marbox.domain.reservation.service.ReservedSeatService;
 import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindSeat;
 import prgrms.marco.be02marbox.domain.theater.dto.document.ResponseCreateSeatDoc;
@@ -40,6 +41,9 @@ class ReservedSeatControllerTest {
 
 	@MockBean
 	private ReservedSeatService reservedSeatService;
+
+	@MockBean
+	private ReservationService reservationService;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -64,7 +68,29 @@ class ReservedSeatControllerTest {
 			.with(SecurityMockMvcRequestPostProcessors.csrf())
 		)
 			.andExpect(status().isOk())
-			.andDo(document("reserved-seat-findBy-theaterId",
+			.andDo(document("reserved-seat",
+				responseFields()
+					.andWithPrefix(ARRAY_PREFIX.getField(), ResponseCreateSeatDoc.get())
+			));
+	}
+
+	@Test
+	@WithMockUser(roles = {"USER", "ADMIN"})
+	@DisplayName("선택 된 스케줄에 예약된 좌석 정보 조회 - id 리스트 반환")
+	void testFindReservedIdListByScheduleId() throws Exception {
+		Long scheduleId = 1L;
+
+		List<ResponseFindSeat> seatList = List.of(
+			new ResponseFindSeat(0, 0),
+			new ResponseFindSeat(0, 1));
+
+		given(reservationService.findReservePossibleSeatList(scheduleId)).willReturn(seatList);
+
+		mockMvc.perform(get(RESERVED_SEAT_URL + "/{scheduleId}/possible", scheduleId)
+			.with(SecurityMockMvcRequestPostProcessors.csrf())
+		)
+			.andExpect(status().isOk())
+			.andDo(document("reserved-seat-possible",
 				responseFields()
 					.andWithPrefix(ARRAY_PREFIX.getField(), ResponseCreateSeatDoc.get())
 			));

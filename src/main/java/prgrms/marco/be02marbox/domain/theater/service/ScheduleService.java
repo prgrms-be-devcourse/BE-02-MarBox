@@ -1,5 +1,7 @@
 package prgrms.marco.be02marbox.domain.theater.service;
 
+import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -118,6 +120,17 @@ public class ScheduleService {
 
 		return new ResponseFindSchedule(movieList, Collections.emptyList(), Collections.emptyList(),
 			Collections.emptyList());
+	}
+
+	/**
+	 * 특정 스케줄 조회
+	 * @param scheduleId 스케줄 id
+	 * @return 스케줄 정보
+	 */
+	@Transactional(readOnly = true)
+	public Schedule findById(Long scheduleId) {
+		return scheduleRepository.findById(scheduleId)
+			.orElseThrow(() -> new IllegalArgumentException(INVALID_SCHEDULE_EXP_MSG.getMessage()));
 	}
 
 	@Transactional(readOnly = true)
