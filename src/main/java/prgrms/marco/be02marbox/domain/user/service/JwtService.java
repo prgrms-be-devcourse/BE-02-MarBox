@@ -1,8 +1,13 @@
 package prgrms.marco.be02marbox.domain.user.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
+
+import prgrms.marco.be02marbox.domain.user.RefreshToken;
 import prgrms.marco.be02marbox.domain.user.User;
 import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginToken;
 import prgrms.marco.be02marbox.domain.user.jwt.Jwt;
@@ -10,6 +15,8 @@ import prgrms.marco.be02marbox.domain.user.jwt.Jwt;
 @Service
 @Transactional(readOnly = true)
 public class JwtService {
+
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private final UserService userService;
 	private final RefreshTokenService refreshTokenService;
@@ -44,7 +51,38 @@ public class JwtService {
 		return new ResponseLoginToken(accessToken, refreshToken);
 	}
 
+	/**
+	 * access token, refresh token 재발급한다.
+	 * @param accessToken
+	 * @param refreshToken
+	 * @return JWTVerificationException 유효하지 않은 access token or refresh token
+	 */
+	@Transactional
 	public ResponseLoginToken refreshToken(String accessToken, String refreshToken) {
-		return null;
+		validateAccessTokenExpired(accessToken);
+
+		RefreshToken validRefreshToken = validateRefreshToken(refreshToken);
+
+		String newAccessToken = jwt.generateAccessToken(
+			validRefreshToken.getUser().getName(), validRefreshToken.getUser().getRole());
+		validRefreshToken.updateToken(jwt.generateRefreshToken());
+
+		return new ResponseLoginToken(newAccessToken, validRefreshToken.getToken());
+	}
+
+	private void validateAccessTokenExpired(String accessToken) {
+		try {
+			jwt.verify(accessToken);
+		} catch (TokenExpiredException exception) {
+			log.debug("access-token 기간 만료");
+			return;
+		}
+		throw new IllegalArgumentException("아직 유효한 access token 입니다.");
+	}
+
+	private RefreshToken validateRefreshToken(String refreshToken) {
+		jwt.verify(refreshToken);
+
+		return refreshTokenService.findByToken(refreshToken);
 	}
 }

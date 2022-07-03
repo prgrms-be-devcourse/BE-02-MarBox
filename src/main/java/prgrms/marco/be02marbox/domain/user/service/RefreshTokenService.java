@@ -28,4 +28,8 @@ public class RefreshTokenService {
 			.ifPresentOrElse(token -> token.updateToken(refreshToken),
 				() -> refreshTokenRepository.save(new RefreshToken(user, refreshToken)));
 	}
+
+	public RefreshToken findByToken(String refreshToken) {
+		return null;
+	}
 }
