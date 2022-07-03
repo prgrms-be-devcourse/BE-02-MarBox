@@ -1,8 +1,6 @@
 package prgrms.marco.be02marbox.domain.user.jwt;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -14,11 +12,18 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import prgrms.marco.be02marbox.domain.user.Role;
+
 public final class Jwt {
+
+	private static final String USERNAME = "username";
+	private static final String ROLE = "role";
+	private static final String IAT = "iat";
+	private static final String EXP = "exp";
 
 	private final String issuer;
 	private final String clientSecret;
-	private final int expirySeconds;
+	private final long expirySeconds;
 	private final Algorithm algorithm;
 	private final JWTVerifier jwtVerifier;
 
@@ -32,17 +37,35 @@ public final class Jwt {
 			.build();
 	}
 
-	public String sign(Claims claims) {
+	public String generateAccessToken(String name, Role role) {
 		Date now = new Date();
-		JWTCreator.Builder builder = JWT.create();
-		builder.withIssuer(this.issuer)
-			.withIssuedAt(now);
+		JWTCreator.Builder builder = getJwtBuilder(now);
 		if (this.expirySeconds > 0) {
-			builder.withExpiresAt(new Date(now.getTime() + this.expirySeconds * 1_000L));
+			builder.withExpiresAt(new Date(now.getTime() + this.expirySeconds));
 		}
-		return builder.withClaim("username", claims.username)
-			.withClaim("role", claims.role)
-			.sign(this.algorithm);
+
+		Claims claims = Claims.from(name, role.name());
+		builder.withClaim(USERNAME, claims.username)
+			.withClaim(ROLE, claims.role);
+
+		return builder.sign(this.algorithm);
+	}
+
+	public String generateRefreshToken() {
+		Date now = new Date();
+		JWTCreator.Builder builder = getJwtBuilder(now);
+		if (this.expirySeconds > 0) {
+			builder.withExpiresAt(new Date(now.getTime() + this.expirySeconds * 1_000));
+		}
+
+		return builder.sign(this.algorithm);
+	}
+
+	private JWTCreator.Builder getJwtBuilder(Date now) {
+		JWTCreator.Builder builder = JWT.create();
+		builder.withIssuer(this.issuer);
+		builder.withIssuedAt(now);
+		return builder;
 	}
 
 	public Claims verify(String token) {
@@ -57,7 +80,7 @@ public final class Jwt {
 		return this.clientSecret;
 	}
 
-	public int getExpirySeconds() {
+	public long getExpirySeconds() {
 		return this.expirySeconds;
 	}
 
@@ -80,11 +103,11 @@ public final class Jwt {
 		}
 
 		public Claims(DecodedJWT decodedJwt) {
-			Claim username = decodedJwt.getClaim("username");
+			Claim username = decodedJwt.getClaim(USERNAME);
 			if (!username.isNull()) {
 				this.username = username.asString();
 			}
-			Claim role = decodedJwt.getClaim("role");
+			Claim role = decodedJwt.getClaim(ROLE);
 			if (!role.isNull()) {
 				this.role = role.asString();
 			}
@@ -99,30 +122,13 @@ public final class Jwt {
 			return claims;
 		}
 
-		public Map<String, Object> asMap() {
-			Map<String, Object> map = new HashMap<>();
-			map.put("username", username);
-			map.put("roles", role);
-			map.put("iat", iat());
-			map.put("exp", exp());
-			return map;
-		}
-
-		long iat() {
-			return this.iat != null ? this.iat.getTime() : -1;
-		}
-
-		long exp() {
-			return this.exp != null ? this.exp.getTime() : -1;
-		}
-
 		@Override
 		public String toString() {
 			return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-				.append("username", this.username)
-				.append("role", this.role)
-				.append("iat", this.iat)
-				.append("exp", this.exp)
+				.append(USERNAME, this.username)
+				.append(ROLE, this.role)
+				.append(IAT, this.iat)
+				.append(EXP, this.exp)
 				.toString();
 		}
 	}
