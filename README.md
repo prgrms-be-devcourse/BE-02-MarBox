@@ -1,10 +1,10 @@
 # MarBox
 
-<img src="https://img.shields.io/badge/Java-17-green.svg"/>
-<img src="https://img.shields.io/badge/Spring Boot-2.7.0-green.svg"/>
-<img src="https://img.shields.io/badge/gradle-7.4.1-green.svg"/>
-<img src="https://img.shields.io/github/issues/prgrms-be-devcourse/BE-02-MarBox">
-<img src="https://img.shields.io/github/forks/prgrms-be-devcourse/BE-02-MarBox">
+<img src="https://img.shields.io/badge/Java-17-green.svg" display="inline-block" />
+<img src="https://img.shields.io/badge/Spring Boot-2.7.0-green.svg" display="inline-block" />
+<img src="https://img.shields.io/badge/gradle-7.4.1-green.svg" display="inline-block" />
+<img src="https://img.shields.io/github/issues/prgrms-be-devcourse/BE-02-MarBox" display="inline-block" />
+<img src="https://img.shields.io/github/forks/prgrms-be-devcourse/BE-02-MarBox" display="inline-block" />
 
 ## Index
 - [What is MarBox?](#what-is-marbox?)
