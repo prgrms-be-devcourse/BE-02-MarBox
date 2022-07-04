@@ -6,6 +6,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import javax.servlet.http.Cookie;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignInUser;
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignUpUser;
+import prgrms.marco.be02marbox.domain.user.jwt.Jwt;
+import prgrms.marco.be02marbox.domain.user.repository.RefreshTokenRepository;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 import prgrms.marco.be02marbox.domain.user.service.UserService;
 
@@ -40,10 +44,16 @@ class UserIntegrationTest {
 	private ObjectMapper objectMapper;
 
 	@Autowired
+	private UserService userService;
+
+	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired
-	private UserService userService;
+	private RefreshTokenRepository refreshTokenRepository;
+
+	@Autowired
+	private Jwt jwt;
 
 	@Test
 	@DisplayName("사용자 회원 가입 API 성공")
@@ -110,6 +120,34 @@ class UserIntegrationTest {
 				),
 				responseHeaders(
 					headerWithName(HttpHeaders.SET_COOKIE).description("쿠키 세팅")
+				)));
+	}
+
+	@Test
+	@DisplayName("토큰 재발급 API 성공")
+	void testRefreshApiSuccess() throws Exception {
+		//given
+		User savedUser = userRepository.save(new User(
+			"pang@mail.com",
+			"encrypted",
+			"pang",
+			Role.ROLE_ADMIN));
+
+		String accessToken = jwt.generateAccessToken(savedUser.getName(), savedUser.getRole());
+		String refreshToken = jwt.generateRefreshToken();
+		refreshTokenRepository.save(new RefreshToken(savedUser, refreshToken));
+
+		//access token 유효기간 만료시키기
+		Thread.sleep(1000);
+
+		//when then
+		mockMvc.perform(post("/users/refresh")
+				.cookie(new Cookie("access-token", accessToken),
+					new Cookie("refresh-token", refreshToken)))
+			.andExpect(status().isNoContent())
+			.andDo(document("user-refresh",
+				responseHeaders(
+					headerWithName(HttpHeaders.SET_COOKIE).description("new access token, new refresh token")
 				)));
 	}
 }

@@ -1,5 +1,7 @@
 package prgrms.marco.be02marbox.domain.user;
 
+import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -46,7 +48,7 @@ public class User {
 
 	public void checkPassword(PasswordEncoder passwordEncoder, String password) {
 		if (!passwordEncoder.matches(password, this.password)) {
-			throw new BadCredentialsException("비밀번호가 틀렸습니다.");
+			throw new BadCredentialsException(WRONG_PASSWORD_EXP_MSG.getMessage());
 		}
 	}
 
