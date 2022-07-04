@@ -2,13 +2,11 @@ package prgrms.marco.be02marbox.domain.user.controller;
 
 import java.net.URI;
 
-import org.springframework.boot.web.server.Cookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,20 +14,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignInUser;
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignUpUser;
-import prgrms.marco.be02marbox.domain.user.jwt.JwtAuthentication;
-import prgrms.marco.be02marbox.domain.user.jwt.JwtAuthenticationToken;
+import prgrms.marco.be02marbox.domain.user.dto.ResponseJwtToken;
+import prgrms.marco.be02marbox.domain.user.service.JwtService;
 import prgrms.marco.be02marbox.domain.user.service.UserService;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-	private final UserService userService;
-	private final AuthenticationManager authenticationManager;
+	private static final String ACCESS_TOKEN = "access-token";
+	private static final String REFRESH_TOKEN = "refresh-token";
 
-	public UserController(UserService userService, AuthenticationManager authenticationManager) {
+	private final UserService userService;
+	private final JwtService jwtService;
+
+	public UserController(UserService userService, JwtService jwtService) {
 		this.userService = userService;
-		this.authenticationManager = authenticationManager;
+		this.jwtService = jwtService;
 	}
 
 	@PostMapping("/sign-up")
@@ -51,21 +52,42 @@ public class UserController {
 	public ResponseEntity<Void> signIn(
 		@Validated @RequestBody RequestSignInUser requestSignInUser) {
 
-		JwtAuthenticationToken authToken = new JwtAuthenticationToken(
-			requestSignInUser.email(), requestSignInUser.password());
-		Authentication resultToken = authenticationManager.authenticate(authToken);
-		JwtAuthentication principal = (JwtAuthentication)resultToken.getPrincipal();
+		ResponseJwtToken responseJwtToken = jwtService.authenticateUser(requestSignInUser.email(),
+			requestSignInUser.password());
 
-		ResponseCookie cookie = ResponseCookie.from("access-token", principal.getToken())
-			.httpOnly(true)
-			.path("/")
-			.sameSite(Cookie.SameSite.LAX.attributeValue())
-			.domain("localhost")
-			.build();
-
+		ResponseCookie accessTokenCookie = generateAccessTokenCookie(responseJwtToken.accessToken());
+		ResponseCookie refreshTokenCookie = generateRefreshTokenCookie(responseJwtToken.refreshToken());
 		return ResponseEntity
 			.noContent()
-			.header(HttpHeaders.SET_COOKIE, cookie.toString())
+			.header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString(), refreshTokenCookie.toString())
+			.build();
+	}
+
+	@PostMapping("/refresh")
+	public ResponseEntity<Void> refreshToken(
+		@CookieValue("access-token") String accessToken,
+		@CookieValue("refresh-token") String refreshToken) {
+
+		ResponseJwtToken responseJwtToken = jwtService.refreshToken(accessToken, refreshToken);
+
+		ResponseCookie accessTokenCookie = generateAccessTokenCookie(responseJwtToken.accessToken());
+		ResponseCookie refreshTokenCookie = generateRefreshTokenCookie(responseJwtToken.refreshToken());
+		return ResponseEntity
+			.noContent()
+			.header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString(), refreshTokenCookie.toString())
+			.build();
+	}
+
+	private ResponseCookie generateAccessTokenCookie(String accessToken) {
+		return ResponseCookie.from(ACCESS_TOKEN, accessToken)
+			.httpOnly(true)
+			.path("/")
+			.build();
+	}
+
+	private ResponseCookie generateRefreshTokenCookie(String refreshToken) {
+		return ResponseCookie.from(REFRESH_TOKEN, refreshToken)
+			.path("/users/refresh")
 			.build();
 	}
 }
