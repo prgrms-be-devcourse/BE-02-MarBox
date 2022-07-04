@@ -63,7 +63,6 @@ public class UserController {
 			.build();
 	}
 
-	//개발중
 	@PostMapping("/refresh")
 	public ResponseEntity<Void> refreshToken(
 		@CookieValue("access-token") String accessToken,
