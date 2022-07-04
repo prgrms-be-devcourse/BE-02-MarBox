@@ -11,7 +11,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 
 import prgrms.marco.be02marbox.domain.user.RefreshToken;
 import prgrms.marco.be02marbox.domain.user.User;
-import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginToken;
+import prgrms.marco.be02marbox.domain.user.dto.ResponseJwtToken;
 import prgrms.marco.be02marbox.domain.user.jwt.Jwt;
 
 @Service
@@ -39,7 +39,7 @@ public class JwtService {
 	 * @throws org.springframework.security.authentication.BadCredentialsException 비밀번호가 틀린 경우
 	 */
 	@Transactional
-	public ResponseLoginToken authenticateUser(String email, String password) {
+	public ResponseJwtToken authenticateUser(String email, String password) {
 
 		//사용자 인증
 		User user = userService.login(email, password);
@@ -50,7 +50,7 @@ public class JwtService {
 
 		refreshTokenService.updateRefreshToken(user, refreshToken);
 
-		return new ResponseLoginToken(accessToken, refreshToken);
+		return new ResponseJwtToken(accessToken, refreshToken);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class JwtService {
 	 * @return JWTVerificationException 유효하지 않은 access token or refresh token
 	 */
 	@Transactional
-	public ResponseLoginToken refreshToken(String accessToken, String refreshToken) {
+	public ResponseJwtToken refreshToken(String accessToken, String refreshToken) {
 		validateAccessTokenExpired(accessToken);
 
 		RefreshToken validRefreshToken = validateRefreshToken(refreshToken);
@@ -69,7 +69,7 @@ public class JwtService {
 			validRefreshToken.getUser().getName(), validRefreshToken.getUser().getRole());
 		validRefreshToken.updateToken(jwt.generateRefreshToken());
 
-		return new ResponseLoginToken(newAccessToken, validRefreshToken.getToken());
+		return new ResponseJwtToken(newAccessToken, validRefreshToken.getToken());
 	}
 
 	private void validateAccessTokenExpired(String accessToken) {

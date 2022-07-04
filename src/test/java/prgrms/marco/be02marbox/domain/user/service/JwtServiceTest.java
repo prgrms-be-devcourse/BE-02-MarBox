@@ -16,7 +16,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import prgrms.marco.be02marbox.domain.user.RefreshToken;
 import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.User;
-import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginToken;
+import prgrms.marco.be02marbox.domain.user.dto.ResponseJwtToken;
 import prgrms.marco.be02marbox.domain.user.jwt.Jwt;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,12 +56,12 @@ class JwtServiceTest {
 		given(jwt.generateRefreshToken()).willReturn(refreshToken);
 
 		//when
-		ResponseLoginToken responseLoginToken = jwtService.authenticateUser(user.getEmail(), rawPassword);
+		ResponseJwtToken responseJwtToken = jwtService.authenticateUser(user.getEmail(), rawPassword);
 
 		//then
 		assertAll(
-			() -> assertThat(responseLoginToken.accessToken()).isEqualTo(accessToken),
-			() -> assertThat(responseLoginToken.refreshToken()).isEqualTo(refreshToken)
+			() -> assertThat(responseJwtToken.accessToken()).isEqualTo(accessToken),
+			() -> assertThat(responseJwtToken.refreshToken()).isEqualTo(refreshToken)
 		);
 	}
 
@@ -87,11 +87,11 @@ class JwtServiceTest {
 		given(jwt.generateRefreshToken()).willReturn(newRefreshToken);
 
 		//when
-		ResponseLoginToken responseLoginToken = jwtService.refreshToken(accessToken, refreshToken);
+		ResponseJwtToken responseJwtToken = jwtService.refreshToken(accessToken, refreshToken);
 
 		//then
 		assertAll(
-			() -> assertThat(responseLoginToken.accessToken()).isEqualTo(newAccessToken),
-			() -> assertThat(responseLoginToken.refreshToken()).isEqualTo(newRefreshToken));
+			() -> assertThat(responseJwtToken.accessToken()).isEqualTo(newAccessToken),
+			() -> assertThat(responseJwtToken.refreshToken()).isEqualTo(newRefreshToken));
 	}
 }

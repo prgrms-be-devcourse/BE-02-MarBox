@@ -27,7 +27,7 @@ import prgrms.marco.be02marbox.domain.exception.custom.user.InvalidEmailExceptio
 import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignInUser;
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignUpUser;
-import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginToken;
+import prgrms.marco.be02marbox.domain.user.dto.ResponseJwtToken;
 import prgrms.marco.be02marbox.domain.user.jwt.Jwt;
 import prgrms.marco.be02marbox.domain.user.service.JwtService;
 import prgrms.marco.be02marbox.domain.user.service.UserService;
@@ -131,17 +131,17 @@ class UserControllerTest {
 		//given
 		RequestSignInUser requestSignInUser = new RequestSignInUser("pang@email.com", "1234");
 
-		ResponseLoginToken responseLoginToken = new ResponseLoginToken("access-token", "refresh-token");
+		ResponseJwtToken responseJwtToken = new ResponseJwtToken("access-token", "refresh-token");
 		given(jwtService.authenticateUser(requestSignInUser.email(), requestSignInUser.password()))
-			.willReturn(responseLoginToken);
+			.willReturn(responseJwtToken);
 
 		//when then
 		mockMvc.perform(post("/users/sign-in")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(requestSignInUser)))
 			.andExpect(status().isNoContent())
-			.andExpect(cookie().value("access-token", responseLoginToken.accessToken()))
-			.andExpect(cookie().value("refresh-token", responseLoginToken.refreshToken()));
+			.andExpect(cookie().value("access-token", responseJwtToken.accessToken()))
+			.andExpect(cookie().value("refresh-token", responseJwtToken.refreshToken()));
 	}
 
 	@Test
@@ -187,16 +187,16 @@ class UserControllerTest {
 		//given
 		String oldAccessToken = "old-access-token";
 		String refreshToken = "refresh-token";
-		ResponseLoginToken responseLoginToken = new ResponseLoginToken("new-access-token", "new-refresh-token");
+		ResponseJwtToken responseJwtToken = new ResponseJwtToken("new-access-token", "new-refresh-token");
 		given(jwtService.refreshToken(oldAccessToken, refreshToken))
-			.willReturn(responseLoginToken);
+			.willReturn(responseJwtToken);
 
 		//when then
 		mockMvc.perform(post("/users/refresh")
 				.cookie(new Cookie("access-token", oldAccessToken),
 					new Cookie("refresh-token", refreshToken)))
 			.andExpect(status().isNoContent())
-			.andExpect(cookie().value("access-token", responseLoginToken.accessToken()))
-			.andExpect(cookie().value("refresh-token", responseLoginToken.refreshToken()));
+			.andExpect(cookie().value("access-token", responseJwtToken.accessToken()))
+			.andExpect(cookie().value("refresh-token", responseJwtToken.refreshToken()));
 	}
 }
