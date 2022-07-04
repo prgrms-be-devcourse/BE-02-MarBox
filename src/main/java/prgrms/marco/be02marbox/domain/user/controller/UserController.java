@@ -22,8 +22,8 @@ import prgrms.marco.be02marbox.domain.user.service.UserService;
 @RequestMapping("/users")
 public class UserController {
 
-	public static final String ACCESS_TOKEN = "access-token";
-	public static final String REFRESH_TOKEN = "refresh-token";
+	private static final String ACCESS_TOKEN = "access-token";
+	private static final String REFRESH_TOKEN = "refresh-token";
 
 	private final UserService userService;
 	private final JwtService jwtService;
