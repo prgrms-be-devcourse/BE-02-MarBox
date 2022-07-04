@@ -184,10 +184,19 @@ public class ScheduleService {
 			timeList);
 	}
 
+	/**
+	 * 영화관에서 영화를 상영하는 날짜인지 확인
+	 * @param date
+	 * @return 상영 정보 유무
+	 */
 	private boolean isValidateDate(LocalDate date) {
 		return !LocalDate.now().plusDays(CURRENT_SCHEDULE_PERIOD).isBefore(date) && !LocalDate.now().isAfter(date);
 	}
 
+	/**
+	 * 현재 상영하는 영화들의 스케줄 조회
+	 * @return 스케줄 리스트
+	 */
 	private List<Schedule> findShowingMoviesSchedules() {
 		return scheduleRepository.findSchedulesBetweenStartDateAndEndDate(
 			LocalDate.now(),
