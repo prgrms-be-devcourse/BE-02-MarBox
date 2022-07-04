@@ -9,8 +9,6 @@ import java.util.stream.IntStream;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
@@ -40,11 +38,6 @@ import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
  */
 @DataJpaTest
 public class RepositoryTestUtil {
-
-	void clear() {
-		em.flush();
-		em.clear();
-	}
 
 	private static final int MAX_ROW = 10;
 	private static final int MAX_COUNT = (MAX_ROW * MAX_ROW);
@@ -292,7 +285,8 @@ public class RepositoryTestUtil {
 		return (seq % MAX_ROW);
 	}
 
-	public void queryCall() {
+	private void clear() {
 		em.flush();
+		em.clear();
 	}
 }

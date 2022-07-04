@@ -8,11 +8,8 @@ import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindTheaterRoom;
 
 @Component
 public class TheaterRoomConverter {
-	public ResponseFindTheaterRoom convertFromTheaterRoomToTheaterResponseFindTheaterRoom(
+	public ResponseFindTheaterRoom convertFromTheaterRoomToResponseFindTheaterRoom(
 		ResponseFindTheater responseFindTheater, TheaterRoom theaterRoom) {
-		return new ResponseFindTheaterRoom(responseFindTheater,
-			theaterRoom.getName(),
-			theaterRoom.getTotalAmount()
-		);
+		return new ResponseFindTheaterRoom(responseFindTheater, theaterRoom.getName(), theaterRoom.getTotalAmount());
 	}
 }
