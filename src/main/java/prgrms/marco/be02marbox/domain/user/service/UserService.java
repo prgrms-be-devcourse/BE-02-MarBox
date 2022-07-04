@@ -49,7 +49,7 @@ public class UserService {
 	 * 이메일과 비밀번호를 받아, 사용자를 인증한다.
 	 * @param email
 	 * @param password
-	 * @return ResponseLoginToken
+	 * @return User
 	 * @throws @throws InvalidEmailException 이메일이 DB에 존재하지 않는 경우
 	 * @throws org.springframework.security.authentication.BadCredentialsException 비밀번호가 틀린 경우
 	 */
