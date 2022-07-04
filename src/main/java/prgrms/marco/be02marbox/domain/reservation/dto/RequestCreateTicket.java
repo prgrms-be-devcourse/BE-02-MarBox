@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
-public record RequestCreateTicket(@NotNull Long userId,
-								  @NotNull Long scheduleId,
-								  @NotNull LocalDateTime reservedAt) {
+public record RequestCreateTicket(@NotNull Long userId, @NotNull Long scheduleId, @NotNull LocalDateTime reservedAt) {
 
 }
