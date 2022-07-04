@@ -1,5 +1,7 @@
 package prgrms.marco.be02marbox.domain.user.service;
 
+import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -77,7 +79,7 @@ public class JwtService {
 			log.debug("access-token 기간 만료");
 			return;
 		}
-		throw new IllegalArgumentException("아직 유효한 access token 입니다.");
+		throw new IllegalArgumentException(VALID_ACCESS_TOKEN_EXP_MSG.getMessage());
 	}
 
 	private RefreshToken validateRefreshToken(String refreshToken) {
