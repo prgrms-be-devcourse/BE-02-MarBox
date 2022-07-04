@@ -7,7 +7,8 @@
 <img src="https://img.shields.io/github/forks/prgrms-be-devcourse/BE-02-MarBox">
 
 ## Index
-[What is MarBox?](#what-is-marbox?)
+- [What is MarBox?](#what-is-marbox?)
+- [회고](#회고)
 
 ## 🎬 What is MarBox?
 > marbox는 영화관 api입니다.
