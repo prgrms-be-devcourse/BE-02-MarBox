@@ -1,5 +1,7 @@
 package prgrms.marco.be02marbox.domain.reservation.service;
 
+import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +31,8 @@ public class TicketService {
 	private final TicketConverter ticketConverter;
 
 	public TicketService(UserRepository userRepository, ScheduleRepository scheduleRepository,
-		TicketRepository ticketRepository, TicketConverter ticketConverter) {
+		TicketRepository ticketRepository,
+		TicketConverter ticketConverter) {
 		this.userRepository = userRepository;
 		this.scheduleRepository = scheduleRepository;
 		this.ticketRepository = ticketRepository;
@@ -38,15 +41,16 @@ public class TicketService {
 
 	@Transactional
 	public Long createTicket(RequestCreateTicket request) {
-		User user = userRepository.findById(request.userId()).orElseThrow(EntityNotFoundException::new);
-		Schedule schedule = scheduleRepository.findById(request.scheduleId()).orElseThrow(EntityNotFoundException::new);
-		Ticket saveTicket = ticketRepository.save(
-			ticketConverter.convertFromRequestCreateTicketToTicket(user, schedule, request.reservedAt()));
-		return saveTicket.getId();
+		User user = userRepository.findById(request.userId())
+			.orElseThrow(() -> new EntityNotFoundException(NOT_EXISTS_USER_EXP_MSG.getMessage()));
+		Schedule schedule = scheduleRepository.findById(request.scheduleId())
+			.orElseThrow(() -> new EntityNotFoundException(INVALID_MOVIE_EXP_MSG.getMessage()));
+		return ticketRepository.save(new Ticket(user, schedule, request.reservedAt())).getId();
 	}
 
 	public ResponseFindTicket findTicket(Long ticketId) {
-		Ticket findTicket = ticketRepository.findById(ticketId).orElseThrow(EntityNotFoundException::new);
+		Ticket findTicket = ticketRepository.findById(ticketId).orElseThrow(
+			() -> new EntityNotFoundException(NOT_EXISTS_TICKET_EXP_MSG.getMessage()));
 		return ticketConverter.convertFromTicketToResponseFindTicket(findTicket);
 	}
 
