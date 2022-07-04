@@ -7,7 +7,6 @@ import static prgrms.marco.be02marbox.domain.reservation.ReservedSeat.*;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,11 +16,6 @@ import prgrms.marco.be02marbox.domain.reservation.ReservedSeat;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
 
 class ReservedSeatRepositoryTest extends RepositoryTestUtil {
-	@AfterEach
-	void init() {
-		queryCall();
-	}
-
 	@Test
 	@DisplayName("scheduleId와 seatId로 아이디를 생성한다.")
 	void testMakeReservedSeatId() {

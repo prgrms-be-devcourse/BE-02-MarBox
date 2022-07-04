@@ -30,7 +30,7 @@ import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateSeat;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.dto.document.RequestCreateSeatDoc;
 import prgrms.marco.be02marbox.domain.theater.dto.document.RequestCreateTheaterRoomDoc;
-import prgrms.marco.be02marbox.domain.theater.service.TheaterRoomService;
+import prgrms.marco.be02marbox.domain.theater.service.TheaterCommonService;
 
 @WebMvcTest(controllers = TheaterRoomController.class,
 	excludeFilters = {
@@ -43,7 +43,7 @@ class TheaterRoomControllerTest {
 	private MockMvc mockMvc;
 
 	@MockBean
-	private TheaterRoomService theaterRoomService;
+	private TheaterCommonService theaterCommonService;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -61,7 +61,7 @@ class TheaterRoomControllerTest {
 	void testSave() throws Exception {
 		Long theaterId = 1L;
 		RequestCreateTheaterRoom requestDto = new RequestCreateTheaterRoom(theaterId, "A관", requestCreateSeats);
-		given(theaterRoomService.save(requestDto)).willReturn(theaterId);
+		given(theaterCommonService.saveTheaterRoomWithSeatList(requestDto)).willReturn(theaterId);
 
 		mockMvc.perform(post(THEATER_ROOM_SAVE_URL)
 			.with(SecurityMockMvcRequestPostProcessors.csrf())
@@ -85,7 +85,7 @@ class TheaterRoomControllerTest {
 		Long theaterId = 1L;
 		RequestCreateTheaterRoom requestDto = new RequestCreateTheaterRoom(theaterId, "A관", requestCreateSeats);
 
-		given(theaterRoomService.save(requestDto)).willThrow(
+		given(theaterCommonService.saveTheaterRoomWithSeatList(requestDto)).willThrow(
 			new IllegalArgumentException(INVALID_THEATER_EXP_MSG.getMessage()));
 
 		mockMvc.perform(post(THEATER_ROOM_SAVE_URL)

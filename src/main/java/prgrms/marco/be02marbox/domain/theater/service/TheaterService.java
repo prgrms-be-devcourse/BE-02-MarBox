@@ -86,4 +86,15 @@ public class TheaterService {
 			.map(theaterConverter::convertFromTheaterToResponseFindTheater)
 			.collect(toList());
 	}
+
+	/**
+	 * 상영관 저장시 연관관계 매핑 될 Entity 조회
+	 * @param id 영화관 ID
+	 * @return 영화관 Entity
+	 * @throws EntityNotFoundException 영화관이 존재하지 않는 경우
+	 */
+	public Theater findById(Long id) {
+		return theaterRepository.findById(id)
+			.orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_THEATER_ERR));
+	}
 }
