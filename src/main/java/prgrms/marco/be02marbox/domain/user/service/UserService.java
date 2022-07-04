@@ -10,7 +10,6 @@ import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateEmailExcept
 import prgrms.marco.be02marbox.domain.exception.custom.user.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.User;
-import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginUser;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
 @Service
@@ -47,19 +46,19 @@ public class UserService {
 	}
 
 	/**
-	 * 이메일과 비밀번호를 받아, 존재하는 사용자인지 확인한다.
+	 * 이메일과 비밀번호를 받아, 사용자를 인증한다.
 	 * @param email
 	 * @param password
-	 * @return ResponseLoginUser
-	 * @throws InvalidEmailException 이메일이 DB에 존재하지 않는 경우
+	 * @return User
+	 * @throws @throws InvalidEmailException 이메일이 DB에 존재하지 않는 경우
 	 * @throws org.springframework.security.authentication.BadCredentialsException 비밀번호가 틀린 경우
 	 */
-	public ResponseLoginUser login(String email, String password) {
+	public User login(String email, String password) {
 		User user = userRepository.findByEmail(email)
 			.orElseThrow(() -> new InvalidEmailException(INVALID_EMAIL_EXP_MSG));
 
 		user.checkPassword(passwordEncoder, password);
 
-		return new ResponseLoginUser(user.getName(), user.getRole());
+		return user;
 	}
 }
