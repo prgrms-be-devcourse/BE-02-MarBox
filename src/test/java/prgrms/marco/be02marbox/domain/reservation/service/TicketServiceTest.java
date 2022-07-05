@@ -75,7 +75,6 @@ class TicketServiceTest {
 		.startTime(LocalDateTime.now())
 		.endTime(LocalDateTime.now())
 		.build();
-	
 	@BeforeEach
 	void setup() {
 		userRepository.saveAll(List.of(user1, user2));
