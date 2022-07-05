@@ -1,7 +1,14 @@
 # MarBox
 ![Java](https://img.shields.io/badge/Java-17-green.svg)
 ![Spring Boot](https://img.shields.io/badge/Spring&nbsp;Boot-2.7.0-green.svg)
-![Gradle](https://img.shields.io/badge/gradle-7.4.1-green.svg)
+![Spring Security](https://img.shields.io/badge/Spring&nbsp;Security-5.7.1-green.svg)
+![JPA](https://img.shields.io/badge/JPA-2.7.0-green.svg)
+![Jakarta Validation](https://img.shields.io/badge/Jakarta&nbsp;Validation-2.0.2-green.svg)
+![JUnit5](https://img.shields.io/badge/JUnit5-5.8.2-green.svg)
+![H2](https://img.shields.io/badge/H2-2.1.2-green.svg)
+![My SQL](https://img.shields.io/badge/My&nbsp;SQL-8.0.28-green.svg)
+![Gradle](https://img.shields.io/badge/Gradle-7.4.1-green.svg)
+![Docker](https://img.shields.io/badge/Docker-20.10.14-green.svg)
 ![Issues](https://img.shields.io/github/issues/prgrms-be-devcourse/BE-02-MarBox)
 ![Forks](https://img.shields.io/github/forks/prgrms-be-devcourse/BE-02-MarBox)
 
