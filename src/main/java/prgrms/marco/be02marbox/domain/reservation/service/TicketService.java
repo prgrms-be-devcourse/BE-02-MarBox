@@ -58,7 +58,7 @@ public class TicketService {
 		Schedule schedule = scheduleRepository.findById(request.scheduleId())
 			.orElseThrow(() -> new EntityNotFoundException(INVALID_MOVIE_EXP_MSG.getMessage()));
 		Ticket newTicket = new Ticket(user, schedule, request.reservedAt());
-		List<ReservedSeat> selectedSeat = seatRepository.findByTheaterRoomIdAndIdNotIn(
+		List<ReservedSeat> selectedSeat = seatRepository.findByTheaterRoomIdAndIdIn(
 				schedule.getTheaterRoom().getId(), request.selectedSeatIds())
 			.stream()
 			.map(seat -> new ReservedSeat(newTicket, seat))
