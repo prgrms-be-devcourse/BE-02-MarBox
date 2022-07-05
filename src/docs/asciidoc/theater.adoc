@@ -13,6 +13,7 @@ include::{snippets}/theater-save/request-fields.adoc[]
 
 .Response
 include::{snippets}/theater-save/http-response.adoc[]
+include::{snippets}/theater-save/response-fields.adoc[]
 
 ## 영화관 단건 조회
 
