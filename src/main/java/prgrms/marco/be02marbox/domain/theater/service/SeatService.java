@@ -1,24 +1,22 @@
 package prgrms.marco.be02marbox.domain.theater.service;
 
-import static java.util.stream.Collectors.*;
-
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindSeat;
+import prgrms.marco.be02marbox.domain.reservation.dto.ResponseFindReservedSeat;
+import prgrms.marco.be02marbox.domain.theater.Seat;
 import prgrms.marco.be02marbox.domain.theater.repository.SeatRepository;
-import prgrms.marco.be02marbox.domain.theater.service.utils.SeatConverter;
 
 @Service
 public class SeatService {
 
 	private final SeatRepository seatRepository;
-	private final SeatConverter seatConverter;
 
-	public SeatService(SeatRepository seatRepository, SeatConverter seatConverter) {
+	public SeatService(SeatRepository seatRepository) {
 		this.seatRepository = seatRepository;
-		this.seatConverter = seatConverter;
 	}
 
 	/**
@@ -26,11 +24,16 @@ public class SeatService {
 	 *
 	 * @param theaterRoomId 상영관 ID
 	 * @param reservedSeatIdList 예약 된 좌석리스트
-	 * @return 예약 가능한 좌석 리스트
+	 * @return 예약 가능 좌석 정보
 	 */
-	public List<ResponseFindSeat> findRemainSeats(Long theaterRoomId, List<Long> reservedSeatIdList) {
-		return seatRepository.findByTheaterRoomIdAndIdNotIn(theaterRoomId, reservedSeatIdList).stream()
-			.map(seatConverter::convertFromSeatToResponseFindSeat)
-			.collect(toList());
+	public List<ResponseFindReservedSeat> findAvailableSeatList(Long theaterRoomId, Set<Long> reservedSeatIdList) {
+		List<Seat> allSeat = seatRepository.findByTheaterRoomId(theaterRoomId);
+		List<ResponseFindReservedSeat> seatList = new ArrayList<>();
+
+		allSeat.forEach(seat -> {
+			boolean reserved = reservedSeatIdList.contains(seat.getId());
+			seatList.add(new ResponseFindReservedSeat(seat.getRow(), seat.getColumn(), reserved));
+		});
+		return seatList;
 	}
 }

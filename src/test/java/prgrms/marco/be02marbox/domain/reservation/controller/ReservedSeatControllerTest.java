@@ -6,6 +6,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static prgrms.marco.be02marbox.domain.theater.dto.document.ResponseCreateSeatDoc.*;
+import static prgrms.marco.be02marbox.domain.theater.dto.document.ResponseFindReservedSeatDoc.*;
 
 import java.util.List;
 
@@ -24,10 +25,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.config.WebSecurityConfigure;
+import prgrms.marco.be02marbox.domain.reservation.dto.ResponseFindReservedSeat;
 import prgrms.marco.be02marbox.domain.reservation.service.ReservationService;
 import prgrms.marco.be02marbox.domain.reservation.service.ReservedSeatService;
 import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindSeat;
 import prgrms.marco.be02marbox.domain.theater.dto.document.ResponseCreateSeatDoc;
+import prgrms.marco.be02marbox.domain.theater.dto.document.ResponseFindReservedSeatDoc;
 
 @WebMvcTest(controllers = ReservedSeatController.class,
 	excludeFilters = {
@@ -52,17 +55,15 @@ class ReservedSeatControllerTest {
 
 	@Test
 	@WithMockUser(roles = {"USER", "ADMIN"})
-	@DisplayName("선택 된 스케줄에 예약된 좌석 정보 조회")
-	void testFindByScheduleId() throws Exception {
+	@DisplayName("선택 된 스케줄에 예약된 좌석 정보 조회 - id 리스트 반환")
+	void testFindReservedIdListByScheduleId() throws Exception {
 		Long scheduleId = 1L;
 
-		List<ResponseFindSeat> seatList = List.of(
-			new ResponseFindSeat(0, 0),
-			new ResponseFindSeat(0, 1),
-			new ResponseFindSeat(0, 2)
-		);
+		List<ResponseFindReservedSeat> seatList = List.of(
+			new ResponseFindReservedSeat(0, 0, false),
+			new ResponseFindReservedSeat(0, 1, true));
 
-		given(reservedSeatService.findByScheduleId(scheduleId)).willReturn(seatList);
+		given(reservationService.findReservePossibleSeatList(scheduleId)).willReturn(seatList);
 
 		mockMvc.perform(get(RESERVED_SEAT_URL + "/{scheduleId}", scheduleId)
 			.with(SecurityMockMvcRequestPostProcessors.csrf())
@@ -70,29 +71,7 @@ class ReservedSeatControllerTest {
 			.andExpect(status().isOk())
 			.andDo(document("reserved-seat",
 				responseFields()
-					.andWithPrefix(ARRAY_PREFIX.getField(), ResponseCreateSeatDoc.get())
-			));
-	}
-
-	@Test
-	@WithMockUser(roles = {"USER", "ADMIN"})
-	@DisplayName("선택 된 스케줄에 예약된 좌석 정보 조회 - id 리스트 반환")
-	void testFindReservedIdListByScheduleId() throws Exception {
-		Long scheduleId = 1L;
-
-		List<ResponseFindSeat> seatList = List.of(
-			new ResponseFindSeat(0, 0),
-			new ResponseFindSeat(0, 1));
-
-		given(reservationService.findReservePossibleSeatList(scheduleId)).willReturn(seatList);
-
-		mockMvc.perform(get(RESERVED_SEAT_URL + "/{scheduleId}/possible", scheduleId)
-			.with(SecurityMockMvcRequestPostProcessors.csrf())
-		)
-			.andExpect(status().isOk())
-			.andDo(document("reserved-seat-possible",
-				responseFields()
-					.andWithPrefix(ARRAY_PREFIX.getField(), ResponseCreateSeatDoc.get())
+					.andWithPrefix(ARRAY_PREFIX.getField(), ResponseFindReservedSeatDoc.get())
 			));
 	}
 }
