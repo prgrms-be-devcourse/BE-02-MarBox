@@ -11,19 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
 import prgrms.marco.be02marbox.domain.movie.service.utils.MovieConverter;
+import prgrms.marco.be02marbox.domain.reservation.dto.ResponseFindReservedSeat;
 import prgrms.marco.be02marbox.domain.reservation.repository.RepositoryTestUtil;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
-import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindSeat;
 import prgrms.marco.be02marbox.domain.theater.service.ScheduleService;
 import prgrms.marco.be02marbox.domain.theater.service.SeatService;
 import prgrms.marco.be02marbox.domain.theater.service.utils.ScheduleConverter;
-import prgrms.marco.be02marbox.domain.theater.service.utils.SeatConverter;
 
 @Import({ReservationService.class,
 	ReservedSeatService.class,
 	SeatService.class,
 	ScheduleService.class,
-	SeatConverter.class,
 	ScheduleConverter.class,
 	MovieConverter.class
 })
@@ -44,8 +42,9 @@ class ReservationServiceTest extends RepositoryTestUtil {
 		int reservedCount = 2;
 		Schedule schedule = saveSeatAndReserveSeat(totalSeatCount, reservedCount);
 
-		List<ResponseFindSeat> reservePossibleSeats = reservationService.findReservePossibleSeatList(schedule.getId());
-		assertThat(reservePossibleSeats).hasSize(totalSeatCount - reservedCount);
+		List<ResponseFindReservedSeat> reservePossibleSeats = reservationService.findReservePossibleSeatList(
+			schedule.getId());
+		assertThat(reservePossibleSeats).hasSize(totalSeatCount);
 	}
 
 	@Test
@@ -53,16 +52,8 @@ class ReservationServiceTest extends RepositoryTestUtil {
 	void testFindReservePossibleSeatsEmpty() {
 		Schedule schedule = saveSchedule();
 
-		List<ResponseFindSeat> reservePossibleSeats = reservationService.findReservePossibleSeatList(schedule.getId());
-		assertThat(reservePossibleSeats).isEmpty();
-	}
-
-	@Test
-	@DisplayName("모든 좌석이 예매 된 경우 - 비어있는 리스트 반환")
-	void testFindReservePossibleSeatsAllReserved() {
-		Schedule schedule = saveSeatAndReserveSeat(2, 2);
-
-		List<ResponseFindSeat> reservePossibleSeats = reservationService.findReservePossibleSeatList(schedule.getId());
+		List<ResponseFindReservedSeat> reservePossibleSeats = reservationService.findReservePossibleSeatList(
+			schedule.getId());
 		assertThat(reservePossibleSeats).isEmpty();
 	}
 
@@ -72,7 +63,8 @@ class ReservationServiceTest extends RepositoryTestUtil {
 		int totalSeatCount = 3;
 		Schedule schedule = saveSeatAndReserveSeat(totalSeatCount, 0);
 
-		List<ResponseFindSeat> reservePossibleSeats = reservationService.findReservePossibleSeatList(schedule.getId());
+		List<ResponseFindReservedSeat> reservePossibleSeats = reservationService.findReservePossibleSeatList(
+			schedule.getId());
 		assertThat(reservePossibleSeats).hasSize(totalSeatCount);
 	}
 }
