@@ -8,15 +8,17 @@ import java.util.List;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-public enum ResponseCreateSeatDoc {
+public enum ResponseFindReservedSeatDoc {
+	ARRAY_PREFIX(ARRAY, "[].", "예매 좌석 리스트"),
 	ROW(NUMBER, "row", "행"),
-	COL(NUMBER, "col", "열");
+	COL(NUMBER, "col", "열"),
+	RESERVED(BOOLEAN, "reserved", "예약 유무");
 
 	private JsonFieldType type;
 	private final String field;
 	private final String description;
 
-	ResponseCreateSeatDoc(JsonFieldType type, String field, String description) {
+	ResponseFindReservedSeatDoc(JsonFieldType type, String field, String description) {
 		this.type = type;
 		this.field = field;
 		this.description = description;
@@ -42,7 +44,8 @@ public enum ResponseCreateSeatDoc {
 	public static List<FieldDescriptor> get() {
 		return List.of(
 			ROW.getFieldDescriptor(),
-			COL.getFieldDescriptor()
+			COL.getFieldDescriptor(),
+			RESERVED.getFieldDescriptor()
 		);
 	}
 }

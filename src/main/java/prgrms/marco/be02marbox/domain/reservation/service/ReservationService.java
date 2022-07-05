@@ -1,12 +1,13 @@
 package prgrms.marco.be02marbox.domain.reservation.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import prgrms.marco.be02marbox.domain.reservation.dto.ResponseFindReservedSeat;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
-import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindSeat;
 import prgrms.marco.be02marbox.domain.theater.service.ScheduleService;
 import prgrms.marco.be02marbox.domain.theater.service.SeatService;
 
@@ -29,12 +30,12 @@ public class ReservationService {
 	 * 스케줄 별 예약좌석 조회
 	 *
 	 * @param scheduleId 스케줄 id
-	 * @return 예약(되어있는) 좌석의 id 리스트
+	 * @return 예약 좌석리스트
 	 */
-	public List<ResponseFindSeat> findReservePossibleSeatList(Long scheduleId) {
+	public List<ResponseFindReservedSeat> findReservePossibleSeatList(Long scheduleId) {
 		Schedule schedule = scheduleService.findById(scheduleId);
 
-		List<Long> reservedSeatIdList = reservedSeatService.findReservedIdListByScheduleId(schedule.getId());
-		return seatService.findRemainSeats(schedule.getTheaterRoom().getId(), reservedSeatIdList);
+		Set<Long> reservedSeatIdList = reservedSeatService.findReservedIdListByScheduleId(schedule.getId());
+		return seatService.findAvailableSeatList(schedule.getTheaterRoom().getId(), reservedSeatIdList);
 	}
 }
