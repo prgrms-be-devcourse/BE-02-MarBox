@@ -108,7 +108,7 @@ class TicketServiceTest {
 		Long createdTicketId = ticketService.createTicket(request);
 		Ticket savedTicket = ticketRepository.findById(createdTicketId)
 			.orElseThrow(() -> new EntityNotFoundException(NOT_EXISTS_TICKET_EXP_MSG.getMessage()));
-		
+
 		// then
 		assertThat(savedTicket).isNotNull();
 	}
