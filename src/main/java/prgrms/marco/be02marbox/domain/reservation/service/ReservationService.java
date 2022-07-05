@@ -36,6 +36,6 @@ public class ReservationService {
 		Schedule schedule = scheduleService.findById(scheduleId);
 
 		Set<Long> reservedSeatIdList = reservedSeatService.findReservedIdListByScheduleId(schedule.getId());
-		return seatService.findReservedSeat(schedule.getTheaterRoom().getId(), reservedSeatIdList);
+		return seatService.findAvailableSeatList(schedule.getTheaterRoom().getId(), reservedSeatIdList);
 	}
 }

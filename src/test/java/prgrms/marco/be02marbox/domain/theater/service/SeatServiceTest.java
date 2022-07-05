@@ -33,7 +33,8 @@ class SeatServiceTest extends RepositoryTestUtil {
 		Schedule schedule = saveSeatAndReserveSeat(totalSeatCount, reservedCount);
 
 		Set<Long> reservePossibleSeats = reservedSeatService.findReservedIdListByScheduleId(schedule.getId());
-		List<ResponseFindReservedSeat> reservedSeat = seatService.findReservedSeat(schedule.getTheaterRoom().getId(),
+		List<ResponseFindReservedSeat> reservedSeat = seatService.findAvailableSeatList(
+			schedule.getTheaterRoom().getId(),
 			reservePossibleSeats);
 
 		long resultReservedCount = reservedSeat.stream()

@@ -26,15 +26,12 @@ public class SeatService {
 	 * @param reservedSeatIdList 예약 된 좌석리스트
 	 * @return 예약 가능 좌석 정보
 	 */
-	public List<ResponseFindReservedSeat> findReservedSeat(Long theaterRoomId, Set<Long> reservedSeatIdList) {
+	public List<ResponseFindReservedSeat> findAvailableSeatList(Long theaterRoomId, Set<Long> reservedSeatIdList) {
 		List<Seat> allSeat = seatRepository.findByTheaterRoomId(theaterRoomId);
 		List<ResponseFindReservedSeat> seatList = new ArrayList<>();
 
 		allSeat.forEach(seat -> {
-			boolean reserved = false;
-			if (reservedSeatIdList.contains(seat.getId())) {
-				reserved = true;
-			}
+			boolean reserved = reservedSeatIdList.contains(seat.getId());
 			seatList.add(new ResponseFindReservedSeat(seat.getRow(), seat.getColumn(), reserved));
 		});
 		return seatList;
