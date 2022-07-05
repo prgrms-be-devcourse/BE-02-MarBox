@@ -46,6 +46,11 @@ public class TicketService {
 		this.ticketConverter = ticketConverter;
 	}
 
+	/**
+	 *
+	 * @param request (userId, scheduleId, 예약시간, 선택좌석)
+	 * @return 생성된 티켓의 Id
+	 */
 	@Transactional
 	public Long createTicket(RequestCreateTicket request) {
 		User user = userRepository.findById(request.userId())
@@ -63,6 +68,11 @@ public class TicketService {
 		return ticketRepository.save(newTicket).getId();
 	}
 
+	/**
+	 *
+	 * @param ticketId 티켓Id
+	 * @return 티켓 정보 단건 조회
+	 */
 	public ResponseFindTicket findTicket(Long ticketId) {
 		Ticket findTicket = ticketRepository.findById(ticketId).orElseThrow(
 			() -> new EntityNotFoundException(NOT_EXISTS_TICKET_EXP_MSG.getMessage()));
