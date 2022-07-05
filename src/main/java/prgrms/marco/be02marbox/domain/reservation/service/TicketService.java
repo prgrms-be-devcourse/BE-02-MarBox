@@ -11,13 +11,16 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import prgrms.marco.be02marbox.domain.reservation.ReservedSeat;
 import prgrms.marco.be02marbox.domain.reservation.Ticket;
 import prgrms.marco.be02marbox.domain.reservation.dto.RequestCreateTicket;
 import prgrms.marco.be02marbox.domain.reservation.dto.ResponseFindTicket;
+import prgrms.marco.be02marbox.domain.reservation.repository.ReservedSeatRepository;
 import prgrms.marco.be02marbox.domain.reservation.repository.TicketRepository;
 import prgrms.marco.be02marbox.domain.reservation.service.utils.TicketConverter;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.repository.ScheduleRepository;
+import prgrms.marco.be02marbox.domain.theater.repository.SeatRepository;
 import prgrms.marco.be02marbox.domain.user.User;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
@@ -27,14 +30,18 @@ public class TicketService {
 
 	private final UserRepository userRepository;
 	private final ScheduleRepository scheduleRepository;
+	private final SeatRepository seatRepository;
+	private final ReservedSeatRepository reservedSeatRepository;
 	private final TicketRepository ticketRepository;
 	private final TicketConverter ticketConverter;
 
 	public TicketService(UserRepository userRepository, ScheduleRepository scheduleRepository,
-		TicketRepository ticketRepository,
+		SeatRepository seatRepository, ReservedSeatRepository reservedSeatRepository, TicketRepository ticketRepository,
 		TicketConverter ticketConverter) {
 		this.userRepository = userRepository;
 		this.scheduleRepository = scheduleRepository;
+		this.seatRepository = seatRepository;
+		this.reservedSeatRepository = reservedSeatRepository;
 		this.ticketRepository = ticketRepository;
 		this.ticketConverter = ticketConverter;
 	}
@@ -45,13 +52,23 @@ public class TicketService {
 			.orElseThrow(() -> new EntityNotFoundException(NOT_EXISTS_USER_EXP_MSG.getMessage()));
 		Schedule schedule = scheduleRepository.findById(request.scheduleId())
 			.orElseThrow(() -> new EntityNotFoundException(INVALID_MOVIE_EXP_MSG.getMessage()));
-		return ticketRepository.save(new Ticket(user, schedule, request.reservedAt())).getId();
+		Ticket newTicket = new Ticket(user, schedule, request.reservedAt());
+		List<ReservedSeat> selectedSeat = seatRepository.findByTheaterRoomIdAndIdNotIn(
+				schedule.getTheaterRoom().getId(), request.selectedSeatIds())
+			.stream()
+			.map(seat -> new ReservedSeat(newTicket, seat))
+			.collect(
+				Collectors.toList());
+		reservedSeatRepository.saveAll(selectedSeat);
+		return ticketRepository.save(newTicket).getId();
 	}
 
 	public ResponseFindTicket findTicket(Long ticketId) {
 		Ticket findTicket = ticketRepository.findById(ticketId).orElseThrow(
 			() -> new EntityNotFoundException(NOT_EXISTS_TICKET_EXP_MSG.getMessage()));
-		return ticketConverter.convertFromTicketToResponseFindTicket(findTicket);
+		List<ReservedSeat> findReservedSeats = reservedSeatRepository.searchByScheduleIdStartsWith(
+			findTicket.getSchedule().getId());
+		return ticketConverter.convertFromTicketToResponseFindTicket(findTicket, findReservedSeats);
 	}
 
 	/**
@@ -63,7 +80,9 @@ public class TicketService {
 	public List<ResponseFindTicket> findTicketsOfUser(Long userId) {
 		return ticketRepository.findAllTicketByUserId(userId)
 			.stream()
-			.map(ticketConverter::convertFromTicketToResponseFindTicket)
+			.map(ticket -> ticketConverter.convertFromTicketToResponseFindTicket(ticket,
+				reservedSeatRepository.searchByScheduleIdStartsWith(ticket.getSchedule().getId())
+			))
 			.collect(Collectors.toList());
 	}
 
@@ -75,7 +94,8 @@ public class TicketService {
 	public List<ResponseFindTicket> findTickets() {
 		return ticketRepository.findAll()
 			.stream()
-			.map(ticketConverter::convertFromTicketToResponseFindTicket)
+			.map(ticket -> ticketConverter.convertFromTicketToResponseFindTicket(ticket,
+				reservedSeatRepository.searchByScheduleIdStartsWith(ticket.getSchedule().getId())))
 			.collect(Collectors.toList());
 	}
 
@@ -89,7 +109,8 @@ public class TicketService {
 		return ticketRepository.findAllTicketByUserId(userId)
 			.stream()
 			.filter(ticket -> ticket.getSchedule().getEndTime().isAfter(LocalDateTime.now()))
-			.map(ticketConverter::convertFromTicketToResponseFindTicket)
+			.map(ticket -> ticketConverter.convertFromTicketToResponseFindTicket(ticket,
+				reservedSeatRepository.searchByScheduleIdStartsWith(ticket.getSchedule().getId())))
 			.collect(Collectors.toList());
 	}
 
@@ -101,7 +122,8 @@ public class TicketService {
 	public List<ResponseFindTicket> findTicketsOfSchedule(Long scheduleId) {
 		return ticketRepository.findAllByScheduleId(scheduleId)
 			.stream()
-			.map(ticketConverter::convertFromTicketToResponseFindTicket)
+			.map(ticket -> ticketConverter.convertFromTicketToResponseFindTicket(ticket,
+				reservedSeatRepository.searchByScheduleIdStartsWith(ticket.getSchedule().getId())))
 			.collect(Collectors.toList());
 	}
 }
