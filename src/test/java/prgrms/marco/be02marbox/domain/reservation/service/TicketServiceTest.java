@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -25,13 +26,16 @@ import prgrms.marco.be02marbox.domain.movie.repository.MovieRepository;
 import prgrms.marco.be02marbox.domain.reservation.Ticket;
 import prgrms.marco.be02marbox.domain.reservation.dto.RequestCreateTicket;
 import prgrms.marco.be02marbox.domain.reservation.dto.ResponseFindTicket;
+import prgrms.marco.be02marbox.domain.reservation.repository.ReservedSeatRepository;
 import prgrms.marco.be02marbox.domain.reservation.repository.TicketRepository;
 import prgrms.marco.be02marbox.domain.reservation.service.utils.TicketConverter;
 import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
+import prgrms.marco.be02marbox.domain.theater.Seat;
 import prgrms.marco.be02marbox.domain.theater.Theater;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
 import prgrms.marco.be02marbox.domain.theater.repository.ScheduleRepository;
+import prgrms.marco.be02marbox.domain.theater.repository.SeatRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRepository;
 import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
 import prgrms.marco.be02marbox.domain.user.Role;
@@ -51,7 +55,11 @@ class TicketServiceTest {
 	@Autowired
 	ScheduleRepository scheduleRepository;
 	@Autowired
+	SeatRepository seatRepository;
+	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	ReservedSeatRepository reservedSeatRepository;
 	@Autowired
 	MovieRepository movieRepository;
 	@Autowired
@@ -75,6 +83,7 @@ class TicketServiceTest {
 		.startTime(LocalDateTime.now())
 		.endTime(LocalDateTime.now())
 		.build();
+
 	@BeforeEach
 	void setup() {
 		userRepository.saveAll(List.of(user1, user2));
@@ -88,14 +97,18 @@ class TicketServiceTest {
 	@DisplayName("티켓 생성 테스트")
 	void testCreateTicket() {
 		// given
-		RequestCreateTicket request = new RequestCreateTicket(user1.getId(), schedule1.getId(), LocalDateTime.now(),
-			List.of(1L, 2L));
+		seatRepository.saveAll(List.of(new Seat(theaterRoom1, 0, 0), new Seat(theaterRoom1, 0, 1)));
+		List<Long> collect = seatRepository.findByTheaterRoomId(theaterRoom1.getId()).stream()
+			.map(Seat::getId)
+			.collect(Collectors.toList());
 
+		RequestCreateTicket request = new RequestCreateTicket(user1.getId(), schedule1.getId(), LocalDateTime.now(),
+			collect);
 		// when
 		Long createdTicketId = ticketService.createTicket(request);
 		Ticket savedTicket = ticketRepository.findById(createdTicketId)
 			.orElseThrow(() -> new EntityNotFoundException(NOT_EXISTS_TICKET_EXP_MSG.getMessage()));
-
+		
 		// then
 		assertThat(savedTicket).isNotNull();
 	}
