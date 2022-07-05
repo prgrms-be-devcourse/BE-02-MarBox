@@ -51,7 +51,19 @@
 캡처2
 
 ## 🎬 Get Start
-todo: pang
+```
+//start in dev environment
+git clone https://github.com/prgrms-be-devcourse/BE-02-MarBox.git
+
+cd ./BE-02-MarBox/
+
+//set database
+docker-compose up -d
+
+//build & execute
+./gradlew clean build
+java -jar ./build/libs/BE-02-MarBox-0.0.1-SNAPSHOT.jar
+```
 
 ## 🎬 What we use
 
@@ -89,10 +101,11 @@ todo: pang
 - [Notion]()
 
 ## 🎬 Environment
-### 🍿 Local
-이미지1
-### 🍿 Test
-이미지2
+### 🍿 Dev Server
+![dev-enviornment](https://user-images.githubusercontent.com/29492667/177267082-226a0517-f61d-4dca-bf95-91b318e3fe01.png)
+### 🍿 Test Server
+![local-enviornment](https://user-images.githubusercontent.com/29492667/177266037-f9049043-1b74-4e6f-960f-932d005b4b4d.png)
+
 
 ## 🎬 Member
 |     Name      | Profile                                                                          | GitHub                                |      Role       |
