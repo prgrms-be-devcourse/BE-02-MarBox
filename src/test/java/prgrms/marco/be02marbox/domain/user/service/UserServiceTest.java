@@ -19,7 +19,6 @@ import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateEmailExcept
 import prgrms.marco.be02marbox.domain.exception.custom.user.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.User;
-import prgrms.marco.be02marbox.domain.user.dto.ResponseLoginUser;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
 @DataJpaTest
@@ -88,12 +87,13 @@ class UserServiceTest {
 		User savedUser = userRepository.save(user);
 
 		//when
-		ResponseLoginUser responseLoginUser = userService.login(savedUser.getEmail(), rawPassword);
+		User authenticatedUser = userService.login(savedUser.getEmail(), rawPassword);
 
 		//then
 		assertAll(
-			() -> assertThat(responseLoginUser.name()).isEqualTo(savedUser.getName()),
-			() -> assertThat(responseLoginUser.role()).isEqualTo(savedUser.getRole())
+			() -> assertThat(authenticatedUser.getId()).isEqualTo(savedUser.getId()),
+			() -> assertThat(authenticatedUser.getEmail()).isEqualTo(savedUser.getEmail()),
+			() -> assertThat(authenticatedUser.getPassword()).isEqualTo(savedUser.getPassword())
 		);
 	}
 
@@ -126,6 +126,6 @@ class UserServiceTest {
 		//when then
 		assertThatThrownBy(() -> userService.login(savedUser.getEmail(), wrongPassword))
 			.isInstanceOf(BadCredentialsException.class)
-			.hasMessageContaining("비밀번호가 틀렸습니다.");
+			.hasMessageContaining(WRONG_PASSWORD_EXP_MSG.getMessage());
 	}
 }

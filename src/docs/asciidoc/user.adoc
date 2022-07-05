@@ -24,3 +24,12 @@ include::{snippets}/user-sign-in/request-fields.adoc[]
 .Response
 include::{snippets}/user-sign-in/http-response.adoc[]
 include::{snippets}/user-sign-in/response-headers.adoc[]
+
+### 토큰 재발급 API
+
+.Request
+include::{snippets}/user-refresh/http-request.adoc[]
+
+.Response
+include::{snippets}/user-refresh/http-response.adoc[]
+include::{snippets}/user-refresh/response-headers.adoc[]

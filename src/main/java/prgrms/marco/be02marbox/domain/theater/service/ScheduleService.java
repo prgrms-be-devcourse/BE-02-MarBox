@@ -55,6 +55,11 @@ public class ScheduleService {
 		this.movieConverter = movieConverter;
 	}
 
+	/**
+	 * 스케줄 생성
+	 * @param requestCreateSchedule
+	 * @return 생성된 스케줄 id
+	 */
 	@Transactional
 	public Long createSchedule(RequestCreateSchedule requestCreateSchedule) {
 		TheaterRoom theaterRoom = theaterRoomRepository.findById(requestCreateSchedule.theaterRoomId())
@@ -71,6 +76,10 @@ public class ScheduleService {
 		return savedSchedule.getId();
 	}
 
+	/**
+	 * 현재 상영하는 전체 영화 조회
+	 * @return 영화 리스트
+	 */
 	@Transactional(readOnly = true)
 	public List<ResponseFindMovie> findShowingMovieList() {
 		List<Schedule> showingMoviesSchedules = findShowingMoviesSchedules();
@@ -81,6 +90,11 @@ public class ScheduleService {
 			.collect(Collectors.toList());
 	}
 
+	/**
+	 * 영화관에서 상영하는 영화와 날짜 조회
+	 * @param theaterId
+	 * @return 영화 리스트, 날짜 리스트
+	 */
 	@Transactional(readOnly = true)
 	public ResponseFindSchedule findMovieListAndDateListByTheaterId(Long theaterId) {
 		theaterRepository.findById(theaterId).orElseThrow(
@@ -102,6 +116,12 @@ public class ScheduleService {
 		return new ResponseFindSchedule(movieList, Collections.emptyList(), dateList, Collections.emptyList());
 	}
 
+	/**
+	 * 영화관에서 특정 날짜에 상영하는 영화 조회
+	 * @param theaterId
+	 * @param date
+	 * @return 영화 리스트
+	 */
 	@Transactional(readOnly = true)
 	public ResponseFindSchedule findMovieListByTheaterIdAndDate(Long theaterId, LocalDate date) {
 		if (!isValidateDate(date)) {
@@ -133,6 +153,13 @@ public class ScheduleService {
 			.orElseThrow(() -> new IllegalArgumentException(INVALID_SCHEDULE_EXP_MSG.getMessage()));
 	}
 
+	/**
+	 * 시간 스케줄 조회
+	 * @param movieId
+	 * @param theaterId
+	 * @param date
+	 * @return 시간 리스트
+	 */
 	@Transactional(readOnly = true)
 	public ResponseFindSchedule findTimeScheduleList(Long movieId, Long theaterId, LocalDate date) {
 		if (!isValidateDate(date)) {
@@ -157,10 +184,19 @@ public class ScheduleService {
 			timeList);
 	}
 
+	/**
+	 * 영화관에서 영화를 상영하는 날짜인지 확인
+	 * @param date
+	 * @return 상영 정보 유무
+	 */
 	private boolean isValidateDate(LocalDate date) {
 		return !LocalDate.now().plusDays(CURRENT_SCHEDULE_PERIOD).isBefore(date) && !LocalDate.now().isAfter(date);
 	}
 
+	/**
+	 * 현재 상영하는 영화들의 스케줄 조회
+	 * @return 스케줄 리스트
+	 */
 	private List<Schedule> findShowingMoviesSchedules() {
 		return scheduleRepository.findSchedulesBetweenStartDateAndEndDate(
 			LocalDate.now(),

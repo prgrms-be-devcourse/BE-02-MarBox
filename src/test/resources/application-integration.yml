@@ -22,7 +22,7 @@ spring:
       hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
 
 jwt:
-  header: testToken
+  header: access-token
   issuer: testIssuer
   client-secret: lsuvomkeoiotkbzdjrejfgdsfngusviykzsvjoriyukscpmxiijmpfsdwveljsml
-  expiry-seconds: 100
+  expiry-seconds: 1
