@@ -24,6 +24,7 @@ import prgrms.marco.be02marbox.config.JwtConfigure;
 import prgrms.marco.be02marbox.domain.theater.controller.TheaterController;
 import prgrms.marco.be02marbox.domain.theater.dto.RequestCreateTheater;
 import prgrms.marco.be02marbox.domain.theater.service.TheaterService;
+import prgrms.marco.be02marbox.domain.user.Role;
 import prgrms.marco.be02marbox.domain.user.service.UserService;
 
 @WebMvcTest(TheaterController.class)
@@ -59,7 +60,7 @@ class SecurityTest {
 	@DisplayName("인증 성공 테스트")
 	void testAuthenticationSuccess() throws Exception {
 		//given
-		String accessToken = this.jwt.sign(Jwt.Claims.from("pang", "ROLE_ADMIN"));
+		String accessToken = this.jwt.generateAccessToken("pang", Role.ROLE_ADMIN);
 
 		//when then
 		this.mockMvc.perform(post("/theaters")
@@ -85,7 +86,7 @@ class SecurityTest {
 	@DisplayName("인가 실패 - 적절한 권한 없음")
 	void testFailAuthorityBecauseInvalidRole() throws Exception {
 		//given
-		String accessToken = this.jwt.sign(Jwt.Claims.from("pang", "ROLE_CUSTOMER"));
+		String accessToken = this.jwt.generateAccessToken("pang", Role.ROLE_CUSTOMER);
 
 		//when then
 		this.mockMvc.perform(post("/theaters")
