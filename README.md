@@ -8,18 +8,21 @@
 ![H2](https://img.shields.io/badge/H2-2.1.2-green.svg)
 ![My SQL](https://img.shields.io/badge/My&nbsp;SQL-8.0.28-green.svg)
 ![Gradle](https://img.shields.io/badge/Gradle-7.4.1-green.svg)
+![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04-green.svg)
 ![Docker](https://img.shields.io/badge/Docker-20.10.14-green.svg)
 ![Issues](https://img.shields.io/github/issues/prgrms-be-devcourse/BE-02-MarBox)
 ![Forks](https://img.shields.io/github/forks/prgrms-be-devcourse/BE-02-MarBox)
 
 ## Index
 - [What is MarBox?](#what-is-marbox?)
-- [회고](#회고)
+- Get Start
+- Member
+- 회고
 
 ## 🎬 What is MarBox?
-> Todo: marbox는 영화관 api입니다.
+> MarBox는 CGV 영화 예매 클론 프로젝트입니다.
 
-### 저희는 다음과 같은 기능을 제공합니다
+### 🍿 우리는 다음과 같은 기능을 제공합니다
 - 관리자
   - 영화관 추가
   - 영화 추가
@@ -28,35 +31,77 @@
   - 영화 예매
   - 티켓 조회
 
+### 🍿 목적
+- Agile 방법으로 협업 경험
+- 상용되는 서비스 도메인 분석 및 구현
+- CI 및 배포 경험
+- Restful Api 설계 경험
+- 기한내 목표한 MVP 개발 경험
 
+## 🎬 기획
+- 2022.06.15 ~ 2022.07.06
+- mvp1 (06.15 ~ 06.26)
+  - 도메인 설계, 로그인, 영화 예매정보 조회구현
+
+캡처1
+
+- mvp2 (06.27 ~ 07.06)
+  - 영화 예매 구현
+
+캡처2
+
+## 🎬 Get Start
+todo: pang
+
+## 🎬 What we use
+
+### 🍿 Backend
+- Java
+- Spring Boot
+- Spring Security
+- Jpa
+
+
+### 🍿 Devops
+- AWS
+  - EC2
+  - RDS
+- Docker
+- Nginx
+- Github Action (CI)
+
+### 🍿 Tool
+- IntelliJ
+- Postman
+
+### 🍿 Collaborate
+- Check Style
+- Git
+- Github
+- Notion
+- Slack
+
+
+## 🎬 Convention
+### 🍿 브랜치 전략
+### 🍿 Code Convention
+- Naver
+- [Notion]()
+
+## 🎬 Environment
+### 🍿 Local
+이미지1
+### 🍿 Test
+이미지2
 
 ## 🎬 Member
-|   Name    | Profile                                                                          | GitHub                                |
-|:---------:|----------------------------------------------------------------------------------|:-------------------------------------:|
-| Pawer0223 | <img src="https://avatars.githubusercontent.com/u/26343023?v=4" width = "200px"> | [click](https://github.com/Pawer0223) |
-| wisehero  | <img src="https://avatars.githubusercontent.com/u/54886222?v=4" width = "200px"> | [click](https://github.com/wisehero)  |
-| hyuk0309  | <img src="https://avatars.githubusercontent.com/u/29492667?v=4" width = "200px"> | [click](https://github.com/hyuk0309)  |
-| yanJuicy  | <img src="https://avatars.githubusercontent.com/u/43159295?v=4" width = "200px"> | [click](https://github.com/yanJuicy)  |
-|  sdardew  | <img src="https://avatars.githubusercontent.com/u/86591021?v=4" width = "200px"> | [click](https://github.com/sdardew)   |
+|     Name      | Profile                                                                          | GitHub                                |      Role       |
+|:-------------:|:----------------------------------------------------------------------------------:|:-------------------------------------:|:---------------:|
+|  Taesan Kang  | <img src="https://avatars.githubusercontent.com/u/26343023?v=4" width = "200px"> | [🍿 click](https://github.com/Pawer0223) |  Scrum Master   |
+|  Jiwoong Kim  | <img src="https://avatars.githubusercontent.com/u/54886222?v=4" width = "200px"> | [🍿 click](https://github.com/wisehero)  |    Developer    |
+| Eunhyuk Bang  | <img src="https://avatars.githubusercontent.com/u/29492667?v=4" width = "200px"> | [🍿 click](https://github.com/hyuk0309)  |  Scrum Master   |
+|   Hanju Lee   | <img src="https://avatars.githubusercontent.com/u/43159295?v=4" width = "200px"> | [🍿 click](https://github.com/yanJuicy)  |  Product Owner  |
+| Dahyeon Jeong | <img src="https://avatars.githubusercontent.com/u/86591021?v=4" width = "200px"> | [🍿 click](https://github.com/sdardew)   |    Developer    |
 
 ## 🎬 회고
-### 강태산
-``` text
-
-```
-### 김지웅
-``` text
-
-```
-### 방은혁
-``` text
-
-```
-### 이한주
-``` text
-
-```
-### 정다현
-``` text
-
-```
+[링크]()
