@@ -20,3 +20,6 @@ spring:
       ddl-auto: create-drop
     properties:
       hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+logging:
+  level:
+    root: debug
