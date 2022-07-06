@@ -17,7 +17,7 @@ import prgrms.marco.be02marbox.domain.movie.dto.ResponseCreateMovie;
 import prgrms.marco.be02marbox.domain.movie.dto.ResponseGetMovies;
 import prgrms.marco.be02marbox.domain.movie.service.MovieService;
 
-@RequestMapping("/api/movies")
+@RequestMapping("/movies")
 @RestController
 public class MovieRestController {
 
