@@ -1,7 +1,7 @@
 package prgrms.marco.be02marbox.domain.user;
 
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

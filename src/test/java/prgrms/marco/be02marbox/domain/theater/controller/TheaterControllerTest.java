@@ -1,9 +1,9 @@
 package prgrms.marco.be02marbox.domain.theater.controller;
 
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.*;	// 변경 후
 import static org.mockito.BDDMockito.*;
 import static org.springframework.http.MediaType.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;	// 변경 후
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

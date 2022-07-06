@@ -1,12 +1,13 @@
 package prgrms.marco.be02marbox.domain.theater.controller;
 
-import static org.mockito.BDDMockito.given;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+// import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+// import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.*;
+import static org.mockito.BDDMockito.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -149,6 +150,7 @@ class ScheduleControllerTest {
 				.param("theaterId", "1"))
 			.andExpect(status().isOk())
 			.andDo(document("schedule-get-movie-and-date-in-theater",
+				requestParameters(parameterWithName("theaterId").optional().description("영화관 ID")),
 				responseFields(
 					fieldWithPath("movieList[]").type(JsonFieldType.ARRAY).description("영화 리스트"),
 					fieldWithPath("movieList[].name").type(JsonFieldType.STRING).description("영화 이름"),
@@ -197,6 +199,9 @@ class ScheduleControllerTest {
 				.param("date", LocalDate.now().toString()))
 			.andExpect(status().isOk())
 			.andDo(document("schedule-get-movie-by-date-and-theater",
+				requestParameters(
+					parameterWithName("theaterId").optional().description("영화관 ID"),
+					parameterWithName("date").optional().description("날짜")),
 				responseFields(
 					fieldWithPath("movieList[]").type(JsonFieldType.ARRAY).description("영화 리스트"),
 					fieldWithPath("movieList[].name").type(JsonFieldType.STRING).description("영화 이름"),
@@ -239,6 +244,10 @@ class ScheduleControllerTest {
 				.param("date", LocalDate.now().toString()))
 			.andExpect(status().isOk())
 			.andDo(document("schedule-get-timeList-by-movie-and-theater-and-date",
+				requestParameters(
+					parameterWithName("movieId").optional().description("영화 ID"),
+					parameterWithName("theaterId").optional().description("영화관 ID"),
+					parameterWithName("date").optional().description("날짜")),
 				responseFields(
 					fieldWithPath("timeList[]").type(JsonFieldType.ARRAY).description("상영 시간 정보"),
 					fieldWithPath("timeList[].theaterRoomName").type(JsonFieldType.STRING).description("상영관 이름"),

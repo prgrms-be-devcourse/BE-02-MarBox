@@ -20,3 +20,10 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+  marbox-swagger:
+    image: swaggerapi/swagger-ui
+    container_name: marbox-swagger
+    ports:
+      - 8081:8080
+    environment:
+      API_URL: http://localhost:8080/docs/openapi3.yaml

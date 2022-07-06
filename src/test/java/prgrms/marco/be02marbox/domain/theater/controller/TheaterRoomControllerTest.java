@@ -1,9 +1,9 @@
 package prgrms.marco.be02marbox.domain.theater.controller;
 
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.*;
 import static org.mockito.BDDMockito.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
 import static prgrms.marco.be02marbox.domain.theater.dto.document.RequestCreateTheaterRoomDoc.*;
@@ -64,16 +64,16 @@ class TheaterRoomControllerTest {
 		given(theaterCommonService.saveTheaterRoomWithSeatList(requestDto)).willReturn(theaterId);
 
 		mockMvc.perform(post(THEATER_ROOM_SAVE_URL)
-			.with(SecurityMockMvcRequestPostProcessors.csrf())
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(objectMapper.writeValueAsString(requestDto))
-		)
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(requestDto))
+			)
 			.andExpect(status().isCreated())
 			.andExpect(redirectedUrl(THEATER_ROOM_SAVE_URL + "/" + theaterId))
 			.andDo(document("theater-room-save",
-				requestFields()
-					.andWithPrefix(SEAT_LIST_PREFIX.getField(), RequestCreateSeatDoc.get())
-					.and(RequestCreateTheaterRoomDoc.get())
+					requestFields()
+						.andWithPrefix(SEAT_LIST_PREFIX.getField(), RequestCreateSeatDoc.get())
+						.and(RequestCreateTheaterRoomDoc.get())
 				)
 			);
 	}
@@ -89,10 +89,10 @@ class TheaterRoomControllerTest {
 			new IllegalArgumentException(INVALID_THEATER_EXP_MSG.getMessage()));
 
 		mockMvc.perform(post(THEATER_ROOM_SAVE_URL)
-			.with(SecurityMockMvcRequestPostProcessors.csrf())
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(objectMapper.writeValueAsString(requestDto))
-		)
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(requestDto))
+			)
 			.andExpect(status().isBadRequest()
 			);
 	}

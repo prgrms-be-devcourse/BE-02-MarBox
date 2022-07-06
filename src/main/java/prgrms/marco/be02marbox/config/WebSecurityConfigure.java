@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -61,7 +62,8 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 		http
 			.authorizeRequests()
 			.antMatchers(HttpMethod.POST, "/users/sign-up", "/users/sign-in", "/users/refresh").permitAll()
-			.antMatchers(HttpMethod.GET, "/theaters", "/schedules/current-movies", "/schedules").permitAll()
+			.antMatchers(HttpMethod.GET, "/theaters", "/schedules/current-movies", "/schedules", "/swagger-ui/**",
+				"/swagger-resources/**", "/docs/**").permitAll()
 			.anyRequest().hasAnyRole("ADMIN")
 			.and()
 
@@ -92,5 +94,12 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 			.exceptionHandling()
 			.authenticationEntryPoint(authenticationEntryPoint())
 			.accessDeniedHandler(accessDeniedHandler());
+	}
+
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui",
+			"/swagger-resources", "/configuration/security",
+			"/swagger-ui.html", "/webjars/**", "/swagger/**");
 	}
 }
