@@ -97,9 +97,21 @@ java -jar ./build/libs/BE-02-MarBox-0.0.1-SNAPSHOT.jar
 ## 🎬 Convention
 ### 🍿 브랜치 전략
 ![branch-strategy](https://user-images.githubusercontent.com/86591021/177478080-8cbc253d-4fb6-496a-a43c-f65ca2c29d77.png)
+
 ### 🍿 Code Convention
-- Naver
-- [Notion]()
+- [Naver Java Convention](https://naver.github.io/hackday-conventions-java/)
+- [Custom Convention](https://github.com/hyuk0309/BE-02-MarBox/wiki/Team-Custom-Code-Convention)
+
+### 🍿 Commit Convention
+- [AngularJS commit convention](https://gist.github.com/stephenparish/9941e89d80e2bc58a153)
+
+### 🍿 PR, Issue Convention
+- [PR Convention](https://github.com/prgrms-be-devcourse/BE-02-MarBox/blob/develop/.github/pull_request_template.md)
+- [Issue Convention](https://github.com/prgrms-be-devcourse/BE-02-MarBox/tree/develop/.github/ISSUE_TEMPLATE)
+
+### 🍿 Merge Convention
+- [MarBox CI](https://github.com/prgrms-be-devcourse/BE-02-MarBox/blob/develop/.github/workflows/marbox-ci.yml) 통과
+- Review Approve 2개
 
 ## 🎬 Environment
 ### 🍿 Dev Server
