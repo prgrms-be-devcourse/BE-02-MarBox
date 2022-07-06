@@ -53,11 +53,10 @@
 
 ## 🎬 ERD & EntityDiagram
 ### 🍿 ERD
-<img width="1083" alt="image" src="https://user-images.githubusercontent.com/26343023/177480977-3e62f8b6-a264-4586-9a36-5e33df2e43bb.png">
+![image](https://user-images.githubusercontent.com/26343023/177501829-40eb76e5-adf8-4f3b-8a8f-fbe4e5143806.png)
 
 ### 🍿 EntityDiagram
-<img width="1368" alt="image" src="https://user-images.githubusercontent.com/26343023/177481430-0ebe4122-f836-48b4-bfd7-1132bebad7f7.png">
-
+![marbox_entity](https://user-images.githubusercontent.com/26343023/177499646-da8b6d35-936e-4c35-aa7f-fc51bd1d5626.png)
 
 ## 🎬 Get Start
 ```
