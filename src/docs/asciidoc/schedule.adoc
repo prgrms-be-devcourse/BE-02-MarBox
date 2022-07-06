@@ -27,6 +27,7 @@ include::{snippets}/schedule-get-current-movies/response-fields.adoc[]
 
 .Request
 include::{snippets}/schedule-get-movie-and-date-in-theater/http-request.adoc[]
+include::{snippets}/schedule-get-movie-and-date-in-theater/request-parameters.adoc[]
 
 .Response
 include::{snippets}/schedule-get-movie-and-date-in-theater/http-response.adoc[]
@@ -36,6 +37,7 @@ include::{snippets}/schedule-get-movie-and-date-in-theater/response-fields.adoc[
 
 .Request
 include::{snippets}/schedule-get-movie-by-date-and-theater/http-request.adoc[]
+include::{snippets}/schedule-get-movie-by-date-and-theater/request-parameters.adoc[]
 
 .Response
 include::{snippets}/schedule-get-movie-by-date-and-theater/http-response.adoc[]
@@ -45,6 +47,7 @@ include::{snippets}/schedule-get-movie-by-date-and-theater/response-fields.adoc[
 
 .Request
 include::{snippets}/schedule-get-timeList-by-movie-and-theater-and-date/http-request.adoc[]
+include::{snippets}/schedule-get-timeList-by-movie-and-theater-and-date/request-parameters.adoc[]
 
 .Response
 include::{snippets}/schedule-get-timeList-by-movie-and-theater-and-date/http-response.adoc[]
