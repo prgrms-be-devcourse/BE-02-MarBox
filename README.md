@@ -126,7 +126,7 @@ java -jar ./build/libs/BE-02-MarBox-0.0.1-SNAPSHOT.jar
 ### 🍿 Dev Server
 ![dev-enviornment](https://user-images.githubusercontent.com/29492667/177267082-226a0517-f61d-4dca-bf95-91b318e3fe01.png)
 ### 🍿 Test Server
-![local-enviornment](https://user-images.githubusercontent.com/29492667/177266037-f9049043-1b74-4e6f-960f-932d005b4b4d.png)
+![test-environment](https://user-images.githubusercontent.com/29492667/177497640-e07f521b-c89d-404d-833d-69bd8c9308cd.png)
 
 
 ## 🎬 Member
