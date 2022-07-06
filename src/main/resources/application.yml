@@ -1,6 +1,9 @@
 spring:
   profiles:
     default: dev
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 jwt:
   header: access-token
