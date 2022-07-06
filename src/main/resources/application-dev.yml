@@ -23,3 +23,4 @@ spring:
 logging:
   level:
     root: debug
+  config: classpath:logback-${spring.config.activate.on-profile}.xml

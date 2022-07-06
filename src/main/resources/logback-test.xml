@@ -10,7 +10,6 @@
     <property name="FILE_LOG_PATTERN"
               value="%-5level %date [%thread] [%C{0} :: %M :: %L] - %msg%n"/>
 
-    <springProperty scope="context" name="LOG_LEVEL" source="logging.level.root"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -55,7 +54,7 @@
     </appender>
 
 
-    <root level="${LOG_LEVEL}">
+    <root level="INFO">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
         <appender-ref ref="ERROR"/>
