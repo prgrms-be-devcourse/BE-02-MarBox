@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -61,9 +60,9 @@ class MovieRestControllerTest {
 			.willReturn(list);
 
 		mockMvc.perform(
-				get("/api/movies").params(multiValueMap)
-					.contentType(MediaType.APPLICATION_JSON)
-					.characterEncoding("UTF-8"))
+			get("/movies").params(multiValueMap)
+				.contentType(MediaType.APPLICATION_JSON)
+				.characterEncoding("UTF-8"))
 			.andExpect(status().isOk())
 			.andDo(print());
 	}

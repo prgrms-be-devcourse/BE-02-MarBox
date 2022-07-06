@@ -12,7 +12,7 @@ import prgrms.marco.be02marbox.domain.reservation.dto.ResponseFindReservedSeat;
 import prgrms.marco.be02marbox.domain.reservation.service.ReservationService;
 
 @RestController
-@RequestMapping("/reserved-seat")
+@RequestMapping("/reserved-seats")
 public class ReservedSeatController {
 
 	private final ReservationService reservationService;
