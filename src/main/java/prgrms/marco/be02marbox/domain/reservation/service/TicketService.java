@@ -126,7 +126,7 @@ public class TicketService {
 	}
 
 	/**
-	 * 관리자가 특정 스케줄의 예매 내역을 조회하는 메서드
+	 * 고객, 관리자가 특정 스케줄의 예매 내역을 조회하는 메서드
 	 * @param scheduleId 스케줄 ID
 	 * @return 특정 스케줄의 전체 예매 내역 리스트
 	 */
