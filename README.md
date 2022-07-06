@@ -38,17 +38,26 @@
 - Restful Api 설계 경험
 - 기한내 목표한 MVP 개발 경험
 
+
 ## 🎬 기획
-- 2022.06.15 ~ 2022.07.06
-- mvp1 (06.15 ~ 06.26)
-  - 도메인 설계, 로그인, 영화 예매정보 조회구현
+프로젝트 기간: 2022.06.15 ~ 2022.07.06
+### 🍿 mvp1 (06.15 ~ 06.26)
+- 도메인 설계, 로그인, 영화 예매정보 조회
+- [상세](https://www.notion.so/backend-devcourse/MVP-6-15-6-26-457b4d6d35954604a5edca8f865ef4aa)
+- [BackLog](https://github.com/prgrms-be-devcourse/BE-02-MarBox/projects/1)
 
-캡처1
+### 🍿 mvp2 (06.27 ~ 07.06)
+- 영화 예매 구현
+- [상세](https://www.notion.so/backend-devcourse/MVP-6-27-7-06-aa4c86778af142c296d5e061586b0b68)
+- [BackLog](https://github.com/prgrms-be-devcourse/BE-02-MarBox/projects/2)
 
-- mvp2 (06.27 ~ 07.06)
-  - 영화 예매 구현
+## 🎬 ERD & EntityDiagram
+### 🍿 ERD
+<img width="1083" alt="image" src="https://user-images.githubusercontent.com/26343023/177480977-3e62f8b6-a264-4586-9a36-5e33df2e43bb.png">
 
-캡처2
+### 🍿 EntityDiagram
+<img width="1368" alt="image" src="https://user-images.githubusercontent.com/26343023/177481430-0ebe4122-f836-48b4-bfd7-1132bebad7f7.png">
+
 
 ## 🎬 Get Start
 ```
