@@ -38,17 +38,26 @@
 - Restful Api 설계 경험
 - 기한내 목표한 MVP 개발 경험
 
+
 ## 🎬 기획
-- 2022.06.15 ~ 2022.07.06
-- mvp1 (06.15 ~ 06.26)
-  - 도메인 설계, 로그인, 영화 예매정보 조회구현
+프로젝트 기간: 2022.06.15 ~ 2022.07.06
+### 🍿 mvp1 (06.15 ~ 06.26)
+- 도메인 설계, 로그인, 영화 예매정보 조회
+- [상세](https://www.notion.so/backend-devcourse/MVP-6-15-6-26-457b4d6d35954604a5edca8f865ef4aa)
+- [BackLog](https://github.com/prgrms-be-devcourse/BE-02-MarBox/projects/1)
 
-캡처1
+### 🍿 mvp2 (06.27 ~ 07.06)
+- 영화 예매 구현
+- [상세](https://www.notion.so/backend-devcourse/MVP-6-27-7-06-aa4c86778af142c296d5e061586b0b68)
+- [BackLog](https://github.com/prgrms-be-devcourse/BE-02-MarBox/projects/2)
 
-- mvp2 (06.27 ~ 07.06)
-  - 영화 예매 구현
+## 🎬 ERD & EntityDiagram
+### 🍿 ERD
+<img width="1083" alt="image" src="https://user-images.githubusercontent.com/26343023/177480977-3e62f8b6-a264-4586-9a36-5e33df2e43bb.png">
 
-캡처2
+### 🍿 EntityDiagram
+<img width="1368" alt="image" src="https://user-images.githubusercontent.com/26343023/177481430-0ebe4122-f836-48b4-bfd7-1132bebad7f7.png">
+
 
 ## 🎬 Get Start
 ```
@@ -96,9 +105,22 @@ java -jar ./build/libs/BE-02-MarBox-0.0.1-SNAPSHOT.jar
 
 ## 🎬 Convention
 ### 🍿 브랜치 전략
+![branch-strategy](https://user-images.githubusercontent.com/86591021/177478080-8cbc253d-4fb6-496a-a43c-f65ca2c29d77.png)
+
 ### 🍿 Code Convention
-- Naver
-- [Notion]()
+- [Naver Java Convention](https://naver.github.io/hackday-conventions-java/)
+- [Custom Convention](https://github.com/hyuk0309/BE-02-MarBox/wiki/Team-Custom-Code-Convention)
+
+### 🍿 Commit Convention
+- [AngularJS commit convention](https://gist.github.com/stephenparish/9941e89d80e2bc58a153)
+
+### 🍿 PR, Issue Convention
+- [PR Convention](https://github.com/prgrms-be-devcourse/BE-02-MarBox/blob/develop/.github/pull_request_template.md)
+- [Issue Convention](https://github.com/prgrms-be-devcourse/BE-02-MarBox/tree/develop/.github/ISSUE_TEMPLATE)
+
+### 🍿 Merge Convention
+- [MarBox CI](https://github.com/prgrms-be-devcourse/BE-02-MarBox/blob/develop/.github/workflows/marbox-ci.yml) 통과
+- Review Approve 2개
 
 ## 🎬 Environment
 ### 🍿 Dev Server

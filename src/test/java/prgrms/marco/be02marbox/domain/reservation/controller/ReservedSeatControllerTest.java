@@ -5,7 +5,6 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static prgrms.marco.be02marbox.domain.theater.dto.document.ResponseCreateSeatDoc.*;
 import static prgrms.marco.be02marbox.domain.theater.dto.document.ResponseFindReservedSeatDoc.*;
 
 import java.util.List;
@@ -28,8 +27,6 @@ import prgrms.marco.be02marbox.config.WebSecurityConfigure;
 import prgrms.marco.be02marbox.domain.reservation.dto.ResponseFindReservedSeat;
 import prgrms.marco.be02marbox.domain.reservation.service.ReservationService;
 import prgrms.marco.be02marbox.domain.reservation.service.ReservedSeatService;
-import prgrms.marco.be02marbox.domain.theater.dto.ResponseFindSeat;
-import prgrms.marco.be02marbox.domain.theater.dto.document.ResponseCreateSeatDoc;
 import prgrms.marco.be02marbox.domain.theater.dto.document.ResponseFindReservedSeatDoc;
 
 @WebMvcTest(controllers = ReservedSeatController.class,
@@ -51,7 +48,7 @@ class ReservedSeatControllerTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
-	private static final String RESERVED_SEAT_URL = "/reserved-seat";
+	private static final String RESERVED_SEAT_URL = "/reserved-seats";
 
 	@Test
 	@WithMockUser(roles = {"USER", "ADMIN"})
