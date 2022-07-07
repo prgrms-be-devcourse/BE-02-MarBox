@@ -23,13 +23,7 @@
 > MarBox는 CGV 영화 예매 클론 프로젝트입니다.
 
 ### 🍿 우리는 다음과 같은 기능을 제공합니다
-- 관리자
-  - 영화관 추가
-  - 영화 추가
-  - 영화 스케쥴 추가
-- 손님
-  - 영화 예매
-  - 티켓 조회
+- [API](https://documenter.getpostman.com/view/12334483/UzJJtcka#intro) 
 
 ### 🍿 목적
 - Agile 방법으로 협업 경험
