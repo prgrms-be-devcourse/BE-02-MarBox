@@ -52,8 +52,8 @@
 - [BackLog](https://github.com/prgrms-be-devcourse/BE-02-MarBox/projects/2)
 
 ## 🎬 ERD & EntityDiagram
-### 🍿 ERD
-![image](https://user-images.githubusercontent.com/26343023/177501829-40eb76e5-adf8-4f3b-8a8f-fbe4e5143806.png)
+### 🍿 TableDiagram
+![marbox_table](https://user-images.githubusercontent.com/29492667/177698524-96ffa5f1-4857-4f63-8f0c-5949db8f49a7.png)
 
 ### 🍿 EntityDiagram
 ![marbox_entity](https://user-images.githubusercontent.com/26343023/177499646-da8b6d35-936e-4c35-aa7f-fc51bd1d5626.png)
