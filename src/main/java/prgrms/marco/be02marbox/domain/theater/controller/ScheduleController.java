@@ -45,8 +45,8 @@ public class ScheduleController {
 		return ResponseEntity.ok().body(currentMovieList);
 	}
 
-	@GetMapping
-	public ResponseEntity<ResponseFindSchedule> getSchedulesByRequestParam(
+	@GetMapping("/search")
+	public ResponseEntity<ResponseFindSchedule> searchSchedule(
 		@RequestParam(required = false) Long movieId,
 		@RequestParam(required = false) Long theaterId,
 		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
