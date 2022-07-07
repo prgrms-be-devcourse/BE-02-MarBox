@@ -146,7 +146,7 @@ class ScheduleControllerTest {
 
 		given(scheduleService.findMovieListAndDateListByTheaterId(1L)).willReturn(responseFindMovieListAndDateList);
 
-		mockMvc.perform(get("/schedules")
+		mockMvc.perform(get("/schedules/search")
 				.param("theaterId", "1"))
 			.andExpect(status().isOk())
 			.andDo(document("schedule-get-movie-and-date-in-theater",
@@ -171,7 +171,7 @@ class ScheduleControllerTest {
 		given(scheduleService.findMovieListAndDateListByTheaterId(200L))
 			.willThrow(new EntityNotFoundException(Message.INVALID_THEATER_EXP_MSG.getMessage()));
 
-		mockMvc.perform(get("/schedules")
+		mockMvc.perform(get("/schedules/search")
 				.param("theaterId", "200"))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.messages").exists())
@@ -194,7 +194,7 @@ class ScheduleControllerTest {
 
 		given(scheduleService.findMovieListByTheaterIdAndDate(1L, LocalDate.now())).willReturn(responseFindMovieList);
 
-		mockMvc.perform(get("/schedules")
+		mockMvc.perform(get("/schedules/search")
 				.param("theaterId", "1")
 				.param("date", LocalDate.now().toString()))
 			.andExpect(status().isOk())
@@ -238,7 +238,7 @@ class ScheduleControllerTest {
 
 		given(scheduleService.findTimeScheduleList(1L, 1L, LocalDate.now())).willReturn(responseFindMovieList);
 
-		mockMvc.perform(get("/schedules")
+		mockMvc.perform(get("/schedules/search")
 				.param("movieId", "1")
 				.param("theaterId", "1")
 				.param("date", LocalDate.now().toString()))
