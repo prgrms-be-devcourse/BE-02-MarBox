@@ -42,3 +42,6 @@ out/
 
 ### H2 DB file ###
 db/
+
+### Log ###
+logs/
