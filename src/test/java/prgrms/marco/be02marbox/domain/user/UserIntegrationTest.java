@@ -133,7 +133,7 @@ class UserIntegrationTest {
 			"pang",
 			Role.ROLE_ADMIN));
 
-		String accessToken = jwt.generateAccessToken(savedUser.getName(), savedUser.getRole());
+		String accessToken = jwt.generateAccessToken(savedUser.getEmail(), savedUser.getRole());
 		String refreshToken = jwt.generateRefreshToken();
 		refreshTokenRepository.save(new RefreshToken(savedUser, refreshToken));
 

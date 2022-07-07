@@ -16,7 +16,7 @@ import prgrms.marco.be02marbox.domain.user.Role;
 
 public final class Jwt {
 
-	private static final String USERNAME = "username";
+	private static final String EMAIL = "email";
 	private static final String ROLE = "role";
 	private static final String IAT = "iat";
 	private static final String EXP = "exp";
@@ -37,15 +37,15 @@ public final class Jwt {
 			.build();
 	}
 
-	public String generateAccessToken(String name, Role role) {
+	public String generateAccessToken(String email, Role role) {
 		Date now = new Date();
 		JWTCreator.Builder builder = getJwtBuilder(now);
 		if (this.expirySeconds > 0) {
 			builder.withExpiresAt(new Date(now.getTime() + this.expirySeconds));
 		}
 
-		Claims claims = Claims.from(name, role.name());
-		builder.withClaim(USERNAME, claims.username)
+		Claims claims = Claims.from(email, role.name());
+		builder.withClaim(EMAIL, claims.email)
 			.withClaim(ROLE, claims.role);
 
 		return builder.sign(this.algorithm);
@@ -94,7 +94,7 @@ public final class Jwt {
 
 	public static class Claims {
 
-		String username;
+		String email;
 		String role;
 		Date iat;
 		Date exp;
@@ -103,9 +103,9 @@ public final class Jwt {
 		}
 
 		public Claims(DecodedJWT decodedJwt) {
-			Claim username = decodedJwt.getClaim(USERNAME);
-			if (!username.isNull()) {
-				this.username = username.asString();
+			Claim email = decodedJwt.getClaim(EMAIL);
+			if (!email.isNull()) {
+				this.email = email.asString();
 			}
 			Claim role = decodedJwt.getClaim(ROLE);
 			if (!role.isNull()) {
@@ -115,9 +115,9 @@ public final class Jwt {
 			this.exp = decodedJwt.getExpiresAt();
 		}
 
-		public static Claims from(String username, String role) {
+		public static Claims from(String email, String role) {
 			Claims claims = new Claims();
-			claims.username = username;
+			claims.email = email;
 			claims.role = role;
 			return claims;
 		}
@@ -125,7 +125,7 @@ public final class Jwt {
 		@Override
 		public String toString() {
 			return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-				.append(USERNAME, this.username)
+				.append(EMAIL, this.email)
 				.append(ROLE, this.role)
 				.append(IAT, this.iat)
 				.append(EXP, this.exp)

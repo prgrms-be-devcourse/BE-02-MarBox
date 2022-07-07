@@ -45,7 +45,7 @@ public class JwtService {
 		User user = userService.login(email, password);
 
 		//토큰 생성
-		String accessToken = jwt.generateAccessToken(user.getName(), user.getRole());
+		String accessToken = jwt.generateAccessToken(user.getEmail(), user.getRole());
 		String refreshToken = jwt.generateRefreshToken();
 
 		refreshTokenService.updateRefreshToken(user, refreshToken);
@@ -66,7 +66,7 @@ public class JwtService {
 		RefreshToken validRefreshToken = validateRefreshToken(refreshToken);
 
 		String newAccessToken = jwt.generateAccessToken(
-			validRefreshToken.getUser().getName(), validRefreshToken.getUser().getRole());
+			validRefreshToken.getUser().getEmail(), validRefreshToken.getUser().getRole());
 		validRefreshToken.updateToken(jwt.generateRefreshToken());
 
 		return new ResponseJwtToken(newAccessToken, validRefreshToken.getToken());
