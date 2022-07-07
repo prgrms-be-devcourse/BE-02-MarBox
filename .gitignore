@@ -45,4 +45,4 @@ out/
 db/
 
 ### Logs ###
-/logs/
+logs/
