@@ -51,12 +51,15 @@ public final class Jwt {
 		return builder.sign(this.algorithm);
 	}
 
-	public String generateRefreshToken() {
+	public String generateRefreshToken(String email) {
 		Date now = new Date();
 		JWTCreator.Builder builder = getJwtBuilder(now);
 		if (this.expirySeconds > 0) {
 			builder.withExpiresAt(new Date(now.getTime() + this.expirySeconds * 1_000));
 		}
+
+		Claims claims = Claims.from(email);
+		builder.withClaim(EMAIL, claims.email);
 
 		return builder.sign(this.algorithm);
 	}
@@ -119,6 +122,12 @@ public final class Jwt {
 			Claims claims = new Claims();
 			claims.email = email;
 			claims.role = role;
+			return claims;
+		}
+
+		public static Claims from(String email) {
+			Claims claims = new Claims();
+			claims.email = email;
 			return claims;
 		}
 

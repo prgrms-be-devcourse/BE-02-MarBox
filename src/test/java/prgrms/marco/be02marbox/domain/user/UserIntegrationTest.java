@@ -134,7 +134,7 @@ class UserIntegrationTest {
 			Role.ROLE_ADMIN));
 
 		String accessToken = jwt.generateAccessToken(savedUser.getEmail(), savedUser.getRole());
-		String refreshToken = jwt.generateRefreshToken();
+		String refreshToken = jwt.generateRefreshToken(savedUser.getEmail());
 		refreshTokenRepository.save(new RefreshToken(savedUser, refreshToken));
 
 		//access token 유효기간 만료시키기

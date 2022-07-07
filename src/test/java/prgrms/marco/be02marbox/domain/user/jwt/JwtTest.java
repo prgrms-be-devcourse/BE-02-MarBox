@@ -55,12 +55,13 @@ class JwtTest {
 	void testRefreshTokenGenerateAndVerifySuccess() {
 		//given
 		Jwt jwt = new Jwt(jwtConfigure.issuer(), jwtConfigure.clientSecret(), jwtConfigure.expirySeconds());
-		String refreshToken = jwt.generateRefreshToken();
+		String email = "morgan@mailcom";
+		String refreshToken = jwt.generateRefreshToken(email);
 
 		//when
 		Jwt.Claims claims = jwt.verify(refreshToken);
 
 		//then
-		assertThat(claims).isNotNull();
+		assertThat(claims.email).isEqualTo(email);
 	}
 }

@@ -53,7 +53,7 @@ class JwtServiceTest {
 		String accessToken = "access-token";
 		String refreshToken = "refresh-token";
 		given(jwt.generateAccessToken(user.getEmail(), user.getRole())).willReturn(accessToken);
-		given(jwt.generateRefreshToken()).willReturn(refreshToken);
+		given(jwt.generateRefreshToken(user.getEmail())).willReturn(refreshToken);
 
 		//when
 		ResponseJwtToken responseJwtToken = jwtService.authenticateUser(user.getEmail(), rawPassword);
@@ -83,8 +83,9 @@ class JwtServiceTest {
 
 		String newAccessToken = "new-access-token";
 		String newRefreshToken = "new-refresh-token";
-		given(jwt.generateAccessToken(user.getEmail(), user.getRole())).willReturn(newAccessToken);
-		given(jwt.generateRefreshToken()).willReturn(newRefreshToken);
+		given(jwt.generateAccessToken(validRefreshToken.getUser().getEmail(), validRefreshToken.getUser().getRole()))
+			.willReturn(newAccessToken);
+		given(jwt.generateRefreshToken(validRefreshToken.getUser().getEmail())).willReturn(newRefreshToken);
 
 		//when
 		ResponseJwtToken responseJwtToken = jwtService.refreshToken(accessToken, refreshToken);
