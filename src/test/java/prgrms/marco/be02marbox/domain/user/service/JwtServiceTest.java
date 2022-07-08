@@ -52,8 +52,8 @@ class JwtServiceTest {
 
 		String accessToken = "access-token";
 		String refreshToken = "refresh-token";
-		given(jwt.generateAccessToken(user.getName(), user.getRole())).willReturn(accessToken);
-		given(jwt.generateRefreshToken()).willReturn(refreshToken);
+		given(jwt.generateAccessToken(user.getEmail(), user.getRole())).willReturn(accessToken);
+		given(jwt.generateRefreshToken(user.getEmail())).willReturn(refreshToken);
 
 		//when
 		ResponseJwtToken responseJwtToken = jwtService.authenticateUser(user.getEmail(), rawPassword);
@@ -78,13 +78,17 @@ class JwtServiceTest {
 			"pang",
 			Role.ROLE_ADMIN);
 		String refreshToken = "refresh-token";
-		RefreshToken validRefreshToken = new RefreshToken(user, refreshToken);
-		given(refreshTokenService.findByToken(refreshToken)).willReturn(validRefreshToken);
+		given(jwt.verify(refreshToken)).willReturn(Jwt.Claims.from(user.getEmail()));
+
+		RefreshToken validRefreshToken = new RefreshToken(user.getEmail(), refreshToken);
+		given(refreshTokenService.findByEmail(user.getEmail())).willReturn(validRefreshToken);
+
+		given(userService.findByEmail(user.getEmail())).willReturn(user);
 
 		String newAccessToken = "new-access-token";
 		String newRefreshToken = "new-refresh-token";
-		given(jwt.generateAccessToken(user.getName(), user.getRole())).willReturn(newAccessToken);
-		given(jwt.generateRefreshToken()).willReturn(newRefreshToken);
+		given(jwt.generateAccessToken(user.getEmail(), user.getRole())).willReturn(newAccessToken);
+		given(jwt.generateRefreshToken(user.getEmail())).willReturn(newRefreshToken);
 
 		//when
 		ResponseJwtToken responseJwtToken = jwtService.refreshToken(accessToken, refreshToken);

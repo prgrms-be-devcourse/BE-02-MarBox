@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import javax.servlet.http.Cookie;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignInUser;
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignUpUser;
 import prgrms.marco.be02marbox.domain.user.jwt.Jwt;
-import prgrms.marco.be02marbox.domain.user.repository.RefreshTokenRepository;
+import prgrms.marco.be02marbox.domain.user.repository.RefreshTokenRedisRepository;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 import prgrms.marco.be02marbox.domain.user.service.UserService;
 
@@ -50,10 +51,15 @@ class UserIntegrationTest {
 	private UserRepository userRepository;
 
 	@Autowired
-	private RefreshTokenRepository refreshTokenRepository;
+	private RefreshTokenRedisRepository refreshTokenRedisRepository;
 
 	@Autowired
 	private Jwt jwt;
+
+	@BeforeEach
+	void clean() {
+		this.refreshTokenRedisRepository.deleteAll();
+	}
 
 	@Test
 	@DisplayName("사용자 회원 가입 API 성공")
@@ -133,9 +139,9 @@ class UserIntegrationTest {
 			"pang",
 			Role.ROLE_ADMIN));
 
-		String accessToken = jwt.generateAccessToken(savedUser.getName(), savedUser.getRole());
-		String refreshToken = jwt.generateRefreshToken();
-		refreshTokenRepository.save(new RefreshToken(savedUser, refreshToken));
+		String accessToken = jwt.generateAccessToken(savedUser.getEmail(), savedUser.getRole());
+		String refreshToken = jwt.generateRefreshToken(savedUser.getEmail());
+		refreshTokenRedisRepository.save(new RefreshToken(savedUser.getEmail(), refreshToken));
 
 		//access token 유효기간 만료시키기
 		Thread.sleep(1000);
