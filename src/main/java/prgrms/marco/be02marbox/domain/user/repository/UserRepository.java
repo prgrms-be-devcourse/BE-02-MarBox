@@ -9,6 +9,4 @@ import prgrms.marco.be02marbox.domain.user.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	Optional<User> findByEmail(String email);
-
-	Optional<User> findByName(String name);
 }
