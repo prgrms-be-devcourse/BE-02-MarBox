@@ -131,6 +131,10 @@ public final class Jwt {
 			return claims;
 		}
 
+		public String getEmail() {
+			return email;
+		}
+
 		@Override
 		public String toString() {
 			return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
