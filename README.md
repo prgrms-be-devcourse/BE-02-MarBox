@@ -10,14 +10,21 @@
 ![Gradle](https://img.shields.io/badge/Gradle-7.4.1-green.svg)
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04-green.svg)
 ![Docker](https://img.shields.io/badge/Docker-20.10.14-green.svg)
+![SwaggerUI](https://img.shields.io/badge/SwaggerUI-3.0.0-green.svg)
+![Spring Rest Docs](https://img.shields.io/badge/Spring&nbsp;Rest&nbsp;Docs-2.0.6-green.svg)
 ![Issues](https://img.shields.io/github/issues/prgrms-be-devcourse/BE-02-MarBox)
 ![Forks](https://img.shields.io/github/forks/prgrms-be-devcourse/BE-02-MarBox)
 
 ## Index
 - [What is MarBox?](#what-is-marbox?)
-- Get Start
-- Member
-- 회고
+- [Planning](#planning)
+- [ERD & EntityDiagram](#ERD-&-EntityDiagram)
+- [Environment](#Environment)
+- [What we use](#What-we-use)
+- [Convention](#Convention)
+- [Get Start](#Get-Start)
+- [Member](#Member)
+- [Retrospect](#retrospect)
 
 ## 🎬 What is MarBox?
 > MarBox는 CGV 영화 예매 클론 프로젝트입니다.
@@ -33,16 +40,16 @@
 - 기한내 목표한 MVP 개발 경험
 
 
-## 🎬 기획
+## 🎬 Planning
 프로젝트 기간: 2022.06.15 ~ 2022.07.06
 ### 🍿 mvp1 (06.15 ~ 06.26)
 - 도메인 설계, 로그인, 영화 예매정보 조회
-- [상세](https://www.notion.so/backend-devcourse/MVP-6-15-6-26-457b4d6d35954604a5edca8f865ef4aa)
+- [상세](https://caring-pin-8ac.notion.site/MVP1-6-15-6-26-bdc09db96be247d9bdcc94aa653a3875)
 - [BackLog](https://github.com/prgrms-be-devcourse/BE-02-MarBox/projects/1)
 
 ### 🍿 mvp2 (06.27 ~ 07.06)
 - 영화 예매 구현
-- [상세](https://www.notion.so/backend-devcourse/MVP-6-27-7-06-aa4c86778af142c296d5e061586b0b68)
+- [상세](https://caring-pin-8ac.notion.site/MVP2-6-27-7-06-7262927eafc64fd8bf97b84e1143f6b5)
 - [BackLog](https://github.com/prgrms-be-devcourse/BE-02-MarBox/projects/2)
 
 ## 🎬 ERD & EntityDiagram
@@ -52,20 +59,11 @@
 ### 🍿 EntityDiagram
 ![marbox_entity](https://user-images.githubusercontent.com/26343023/177499646-da8b6d35-936e-4c35-aa7f-fc51bd1d5626.png)
 
-## 🎬 Get Start
-```
-//start in dev environment
-git clone https://github.com/prgrms-be-devcourse/BE-02-MarBox.git
-
-cd ./BE-02-MarBox/
-
-//set database
-docker-compose up -d
-
-//build & execute
-./gradlew clean build
-java -jar ./build/libs/BE-02-MarBox-0.0.1-SNAPSHOT.jar
-```
+## 🎬 Environment
+### 🍿 Dev Server
+![dev-enviornment](https://user-images.githubusercontent.com/29492667/177267082-226a0517-f61d-4dca-bf95-91b318e3fe01.png)
+### 🍿 Test Server
+![test-environment](https://user-images.githubusercontent.com/29492667/177497640-e07f521b-c89d-404d-833d-69bd8c9308cd.png)
 
 ## 🎬 What we use
 
@@ -74,7 +72,6 @@ java -jar ./build/libs/BE-02-MarBox-0.0.1-SNAPSHOT.jar
 - Spring Boot
 - Spring Security
 - Jpa
-
 
 ### 🍿 Devops
 - AWS
@@ -95,6 +92,9 @@ java -jar ./build/libs/BE-02-MarBox-0.0.1-SNAPSHOT.jar
 - Notion
 - Slack
 
+### 🍿 Docs
+- Spring Rest Docs
+- Swagger-UI
 
 ## 🎬 Convention
 ### 🍿 브랜치 전략
@@ -115,12 +115,20 @@ java -jar ./build/libs/BE-02-MarBox-0.0.1-SNAPSHOT.jar
 - [MarBox CI](https://github.com/prgrms-be-devcourse/BE-02-MarBox/blob/develop/.github/workflows/marbox-ci.yml) 통과
 - Review Approve 2개
 
-## 🎬 Environment
-### 🍿 Dev Server
-![dev-enviornment](https://user-images.githubusercontent.com/29492667/177267082-226a0517-f61d-4dca-bf95-91b318e3fe01.png)
-### 🍿 Test Server
-![test-environment](https://user-images.githubusercontent.com/29492667/177497640-e07f521b-c89d-404d-833d-69bd8c9308cd.png)
+## 🎬 Get Start
+```
+//start in dev environment
+git clone https://github.com/prgrms-be-devcourse/BE-02-MarBox.git
 
+cd ./BE-02-MarBox/
+
+//set database
+docker-compose up -d
+
+//build & execute
+./gradlew clean build
+java -jar ./build/libs/BE-02-MarBox-0.0.1-SNAPSHOT.jar
+```
 
 ## 🎬 Member
 |     Name      | Profile                                                                          | GitHub                                |      Role       |
@@ -131,5 +139,5 @@ java -jar ./build/libs/BE-02-MarBox-0.0.1-SNAPSHOT.jar
 |   Hanju Lee   | <img src="https://avatars.githubusercontent.com/u/43159295?v=4" width = "200px"> | [🍿 click](https://github.com/yanJuicy)  |  Product Owner  |
 | Dahyeon Jeong | <img src="https://avatars.githubusercontent.com/u/86591021?v=4" width = "200px"> | [🍿 click](https://github.com/sdardew)   |    Developer    |
 
-## 🎬 회고
-[링크]()
+## 🎬 Retrospect
+[링크](https://caring-pin-8ac.notion.site/97752ce3a8194036bccd0623464edf3c)
