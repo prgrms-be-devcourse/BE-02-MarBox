@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  marbox-redis:
+    image: redis:alpine
+    command: redis-server --requirepass marbox --port 6379
+    container_name: marbox-redis
+    hostname: marbox-redis
+    labels:
+      - "name=redis"
+      - "mode=standalone"
+    ports:
+      - "6379:6379"
