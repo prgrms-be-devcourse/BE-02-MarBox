@@ -1,0 +1,26 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/marbox
+    username: root
+    password: root1234
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 5
+      pool-name: MYSQL_DB
+
+  jpa:
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+logging:
+  level:
+    root: debug
+  config: classpath:logback-${spring.config.activate.on-profile}.xml

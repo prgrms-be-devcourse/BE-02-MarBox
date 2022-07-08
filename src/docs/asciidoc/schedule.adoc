@@ -1,0 +1,54 @@
+:hardbreaks:
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+
+== 스케줄
+
+### 스케줄 등록
+
+.Request
+include::{snippets}/schedule-save/http-request.adoc[]
+include::{snippets}/schedule-save/request-fields.adoc[]
+
+.Response
+include::{snippets}/schedule-save/http-response.adoc[]
+
+### 현재 상영중인 모든 영화 정보 가져오기
+
+.Request
+include::{snippets}/schedule-get-current-movies/http-request.adoc[]
+
+.Response
+include::{snippets}/schedule-get-current-movies/http-response.adoc[]
+include::{snippets}/schedule-get-current-movies/response-fields.adoc[]
+
+### 한 영화관의 영화, 날짜 정보 가져오기
+
+.Request
+include::{snippets}/schedule-get-movie-and-date-in-theater/http-request.adoc[]
+include::{snippets}/schedule-get-movie-and-date-in-theater/request-parameters.adoc[]
+
+.Response
+include::{snippets}/schedule-get-movie-and-date-in-theater/http-response.adoc[]
+include::{snippets}/schedule-get-movie-and-date-in-theater/response-fields.adoc[]
+
+### 특정 영화관, 특정 날짜의 영화 리스트 가져오기
+
+.Request
+include::{snippets}/schedule-get-movie-by-date-and-theater/http-request.adoc[]
+include::{snippets}/schedule-get-movie-by-date-and-theater/request-parameters.adoc[]
+
+.Response
+include::{snippets}/schedule-get-movie-by-date-and-theater/http-response.adoc[]
+include::{snippets}/schedule-get-movie-by-date-and-theater/response-fields.adoc[]
+
+### 영화, 영화관, 날짜의 상영 시간 리스트 가져오기
+
+.Request
+include::{snippets}/schedule-get-timeList-by-movie-and-theater-and-date/http-request.adoc[]
+include::{snippets}/schedule-get-timeList-by-movie-and-theater-and-date/request-parameters.adoc[]
+
+.Response
+include::{snippets}/schedule-get-timeList-by-movie-and-theater-and-date/http-response.adoc[]
+include::{snippets}/schedule-get-timeList-by-movie-and-theater-and-date/response-fields.adoc[]
