@@ -62,7 +62,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 		http
 			.authorizeRequests()
 			.antMatchers(HttpMethod.POST, "/users/sign-up", "/users/sign-in", "/users/refresh").permitAll()
-			.antMatchers(HttpMethod.GET, "/theaters", "/schedules/current-movies", "/schedules", "/swagger-ui/**",
+			.antMatchers(HttpMethod.GET, "/theaters", "/schedules/**", "/swagger-ui/**",
 				"/swagger-resources/**", "/docs/**").permitAll()
 			.anyRequest().hasAnyRole("ADMIN")
 			.and()
