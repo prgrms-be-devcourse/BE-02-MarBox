@@ -61,9 +61,9 @@
 
 ## 🎬 Environment
 ### 🍿 Dev Server
-![dev-enviornment](https://user-images.githubusercontent.com/29492667/177267082-226a0517-f61d-4dca-bf95-91b318e3fe01.png)
+![dev-environment](https://user-images.githubusercontent.com/29492667/177974855-9870e1d2-5e78-408f-8b36-15d833564dec.png)
 ### 🍿 Test Server
-![test-environment](https://user-images.githubusercontent.com/29492667/177497640-e07f521b-c89d-404d-833d-69bd8c9308cd.png)
+![test-environment](https://user-images.githubusercontent.com/29492667/177974984-92aa6ee3-b59a-4816-bb85-d3ce86998ae9.png)
 
 ## 🎬 What we use
 
