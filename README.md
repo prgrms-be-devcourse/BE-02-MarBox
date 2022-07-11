@@ -54,16 +54,16 @@
 
 ## 🎬 ERD & EntityDiagram
 ### 🍿 TableDiagram
-![marbox_table](https://user-images.githubusercontent.com/29492667/177698524-96ffa5f1-4857-4f63-8f0c-5949db8f49a7.png)
+![table](https://user-images.githubusercontent.com/29492667/178174500-e3f07c6c-0a12-4f20-bfc8-b16dec9d877c.png)
 
 ### 🍿 EntityDiagram
-![marbox_entity](https://user-images.githubusercontent.com/26343023/177499646-da8b6d35-936e-4c35-aa7f-fc51bd1d5626.png)
+![erd](https://user-images.githubusercontent.com/29492667/178174504-86b45617-d539-4c17-8671-d6c4292f286f.png)
 
 ## 🎬 Environment
 ### 🍿 Dev Server
-![dev-enviornment](https://user-images.githubusercontent.com/29492667/177267082-226a0517-f61d-4dca-bf95-91b318e3fe01.png)
+![dev-environment](https://user-images.githubusercontent.com/29492667/177974855-9870e1d2-5e78-408f-8b36-15d833564dec.png)
 ### 🍿 Test Server
-![test-environment](https://user-images.githubusercontent.com/29492667/177497640-e07f521b-c89d-404d-833d-69bd8c9308cd.png)
+![test-environment](https://user-images.githubusercontent.com/29492667/177974984-92aa6ee3-b59a-4816-bb85-d3ce86998ae9.png)
 
 ## 🎬 What we use
 

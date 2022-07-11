@@ -6,9 +6,11 @@ build/
 !**/src/test/**/build/
 .DS_Store
 
-
 ### 포스터가 저장되는 디렉토리 ###
 posters/
+
+### aws 설정파일 ###
+application-aws.yml
 
 ### STS ###
 .apt_generated

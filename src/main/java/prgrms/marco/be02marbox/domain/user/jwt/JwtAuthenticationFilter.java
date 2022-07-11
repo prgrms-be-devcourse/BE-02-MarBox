@@ -101,12 +101,12 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 	}
 
 	private JwtAuthenticationToken generateJwtAuthenticationToken(Jwt.Claims claims, String token) {
-		String username = claims.username;
+		String email = claims.email;
 		List<GrantedAuthority> authorities = getAuthorities(claims);
 
-		if (isNotEmpty(username) && !authorities.isEmpty()) {
+		if (isNotEmpty(email) && !authorities.isEmpty()) {
 			return new JwtAuthenticationToken(
-				new JwtAuthentication(token, username),
+				new JwtAuthentication(token, email),
 				null,
 				authorities);
 		}

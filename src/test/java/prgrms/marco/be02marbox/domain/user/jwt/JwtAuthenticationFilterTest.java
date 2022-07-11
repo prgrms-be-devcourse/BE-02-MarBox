@@ -62,9 +62,9 @@ class JwtAuthenticationFilterTest {
 		String token = "jwt-token";
 		given(this.req.getCookies()).willReturn(new Cookie[] {new Cookie("access-token", token)});
 
-		String username = "pang";
+		String email = "pang";
 		String role = "ROLE_ADMIN";
-		given(this.jwt.verify(token)).willReturn(Jwt.Claims.from(username, role));
+		given(this.jwt.verify(token)).willReturn(Jwt.Claims.from(email, role));
 
 		//when
 		this.filter.doFilter(this.req, this.res, this.chain);
@@ -79,7 +79,7 @@ class JwtAuthenticationFilterTest {
 
 		assertAll(
 			() -> assertThat(jwtAuthentication.getToken()).isEqualTo(token),
-			() -> assertThat(jwtAuthentication.getUsername()).isEqualTo(username),
+			() -> assertThat(jwtAuthentication.getEmail()).isEqualTo(email),
 			() -> assertThat(authorities.get(0).getAuthority()).isEqualTo(role)
 		);
 	}

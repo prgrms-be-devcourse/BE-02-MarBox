@@ -24,3 +24,13 @@ logging:
   config: classpath:logback-${spring.config.activate.on-profile}.xml
   level:
     root: info
+
+cloud:
+  aws:
+    s3:
+      bucket: marbox-bucket
+      save-dir-prefix: test/
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

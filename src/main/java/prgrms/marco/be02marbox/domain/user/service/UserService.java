@@ -61,4 +61,15 @@ public class UserService {
 
 		return user;
 	}
+
+	/**
+	 * 이메일 이용해 특정 사용자를 찾는다.
+	 * @param email
+	 * @return User
+	 * @throws InvalidEmailException
+	 */
+	public User findByEmail(String email) {
+		return userRepository.findByEmail(email)
+			.orElseThrow(() -> new InvalidEmailException(INVALID_EMAIL_EXP_MSG));
+	}
 }

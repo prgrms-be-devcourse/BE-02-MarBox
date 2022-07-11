@@ -4,11 +4,14 @@ import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 
+import prgrms.marco.be02marbox.domain.exception.custom.user.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.RefreshToken;
 import prgrms.marco.be02marbox.domain.user.User;
 import prgrms.marco.be02marbox.domain.user.dto.ResponseJwtToken;
@@ -34,21 +37,18 @@ public class JwtService {
 	 * 이메일과 비밀번호를 받아, 사용자를 인증하고 토큰을 발급해준다.
 	 * @param email
 	 * @param password
-	 * @return ResponseLoginToken
-	 * @throws @throws InvalidEmailException 이메일이 DB에 존재하지 않는 경우
-	 * @throws org.springframework.security.authentication.BadCredentialsException 비밀번호가 틀린 경우
+	 * @return ResponseJwtToken
+	 * @throws InvalidEmailException 이메일이 DB에 존재하지 않는 경우
+	 * @throws BadCredentialsException 비밀번호가 틀린 경우
 	 */
 	@Transactional
 	public ResponseJwtToken authenticateUser(String email, String password) {
-
-		//사용자 인증
 		User user = userService.login(email, password);
 
-		//토큰 생성
-		String accessToken = jwt.generateAccessToken(user.getName(), user.getRole());
-		String refreshToken = jwt.generateRefreshToken();
+		String accessToken = jwt.generateAccessToken(user.getEmail(), user.getRole());
+		String refreshToken = jwt.generateRefreshToken(user.getEmail());
 
-		refreshTokenService.updateRefreshToken(user, refreshToken);
+		refreshTokenService.updateRefreshToken(new RefreshToken(user.getEmail(), refreshToken));
 
 		return new ResponseJwtToken(accessToken, refreshToken);
 	}
@@ -57,17 +57,20 @@ public class JwtService {
 	 * access token, refresh token 재발급한다.
 	 * @param accessToken
 	 * @param refreshToken
-	 * @return JWTVerificationException 유효하지 않은 access token or refresh token
+	 * @return ResponseJwtToken
+	 * @throws JWTVerificationException 유효하지 않은 access token or refresh token
+	 * @throws InvalidEmailException 유요하지 않은 email
 	 */
-	@Transactional
 	public ResponseJwtToken refreshToken(String accessToken, String refreshToken) {
 		validateAccessTokenExpired(accessToken);
-
 		RefreshToken validRefreshToken = validateRefreshToken(refreshToken);
 
-		String newAccessToken = jwt.generateAccessToken(
-			validRefreshToken.getUser().getName(), validRefreshToken.getUser().getRole());
-		validRefreshToken.updateToken(jwt.generateRefreshToken());
+		User user = userService.findByEmail(validRefreshToken.getEmail());
+
+		String newAccessToken = jwt.generateAccessToken(user.getEmail(), user.getRole());
+		validRefreshToken.updateToken(jwt.generateRefreshToken(user.getEmail()));
+
+		refreshTokenService.updateRefreshToken(validRefreshToken);
 
 		return new ResponseJwtToken(newAccessToken, validRefreshToken.getToken());
 	}
@@ -83,8 +86,12 @@ public class JwtService {
 	}
 
 	private RefreshToken validateRefreshToken(String refreshToken) {
-		jwt.verify(refreshToken);
+		Jwt.Claims claims = jwt.verify(refreshToken);
 
-		return refreshTokenService.findByToken(refreshToken);
+		RefreshToken token = refreshTokenService.findByEmail(claims.getEmail());
+		if (!token.getToken().equals(refreshToken)) {
+			throw new JWTVerificationException(ALREADY_UPDATED_TOKEN_EXP_MSG.getMessage());
+		}
+		return token;
 	}
 }

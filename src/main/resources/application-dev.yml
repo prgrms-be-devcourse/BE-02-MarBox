@@ -17,10 +17,21 @@ spring:
     show-sql: true
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
 logging:
   level:
     root: debug
   config: classpath:logback-${spring.config.activate.on-profile}.xml
+
+cloud:
+  aws:
+    s3:
+      bucket: marbox-bucket
+      save-dir-prefix: dev/
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false

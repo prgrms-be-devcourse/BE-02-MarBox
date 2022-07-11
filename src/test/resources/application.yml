@@ -8,6 +8,7 @@ spring:
       minimum-idle: 1
       maximum-pool-size: 5
       pool-name: H2_DB
+
   jpa:
     show-sql: true
     open-in-view: false
@@ -15,12 +16,33 @@ spring:
       ddl-auto: create-drop
     properties:
       hibernate.dialect: org.hibernate.dialect.H2Dialect
+
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+  redis:
+    host: localhost
+    port: 6379
+    password: marbox
 
 jwt:
   header: testToken
   issuer: testIssuer
   client-secret: lsuvomkeoiotkbzdjrejfgdsfngusviykzsvjoriyukscpmxiijmpfsdwveljsml
   expiry-seconds: 100
+
+cloud:
+  aws:
+    s3:
+      bucket: marbox-bucket
+      save-dir-prefix: temp/
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      instance-profile: true
+      access-key:
+      secret-key:

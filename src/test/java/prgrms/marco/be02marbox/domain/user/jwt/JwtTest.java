@@ -36,16 +36,16 @@ class JwtTest {
 	@DisplayName("access token 생성,검증 성공")
 	void testSignAndVerifySuccess() {
 		//given
-		String username = "pang";
+		String email = "morgan@mail.com";
 		Role role = Role.ROLE_ADMIN;
-		String accessToken = jwt.generateAccessToken(username, role);
+		String accessToken = jwt.generateAccessToken(email, role);
 
 		//when
 		Jwt.Claims claims = jwt.verify(accessToken);
 
 		//then
 		assertAll(
-			() -> assertThat(claims.username).isEqualTo(username),
+			() -> assertThat(claims.email).isEqualTo(email),
 			() -> assertThat(claims.role).isEqualTo(role.name())
 		);
 	}
@@ -55,12 +55,13 @@ class JwtTest {
 	void testRefreshTokenGenerateAndVerifySuccess() {
 		//given
 		Jwt jwt = new Jwt(jwtConfigure.issuer(), jwtConfigure.clientSecret(), jwtConfigure.expirySeconds());
-		String refreshToken = jwt.generateRefreshToken();
+		String email = "morgan@mailcom";
+		String refreshToken = jwt.generateRefreshToken(email);
 
 		//when
 		Jwt.Claims claims = jwt.verify(refreshToken);
 
 		//then
-		assertThat(claims).isNotNull();
+		assertThat(claims.email).isEqualTo(email);
 	}
 }
