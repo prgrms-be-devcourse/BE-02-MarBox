@@ -1,6 +1,7 @@
 package prgrms.marco.be02marbox.domain.user;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.*;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -22,6 +24,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prgrms.marco.be02marbox.domain.user.dto.RequestSignInUser;
@@ -53,7 +56,7 @@ class UserIntegrationTest {
 	@Autowired
 	private RefreshTokenRedisRepository refreshTokenRedisRepository;
 
-	@Autowired
+	@MockBean
 	private Jwt jwt;
 
 	@BeforeEach
@@ -139,12 +142,15 @@ class UserIntegrationTest {
 			"pang",
 			Role.ROLE_ADMIN));
 
-		String accessToken = jwt.generateAccessToken(savedUser.getEmail(), savedUser.getRole());
-		String refreshToken = jwt.generateRefreshToken(savedUser.getEmail());
+		String accessToken = "expired-access-token";
+		String refreshToken = "refresh-token";
 		refreshTokenRedisRepository.save(new RefreshToken(savedUser.getEmail(), refreshToken));
 
-		//access token 유효기간 만료시키기
-		Thread.sleep(1000);
+		given(jwt.verify(accessToken)).willThrow(new TokenExpiredException(""));
+		given(jwt.verify(refreshToken)).willReturn(Jwt.Claims.from(savedUser.getEmail()));
+
+		given(jwt.generateAccessToken(savedUser.getEmail(), savedUser.getRole())).willReturn("new-access-token");
+		given(jwt.generateRefreshToken(savedUser.getEmail())).willReturn("new-refresh-token");
 
 		//when then
 		mockMvc.perform(post("/users/refresh")
