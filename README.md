@@ -54,10 +54,11 @@
 
 ## 🎬 ERD & EntityDiagram
 ### 🍿 TableDiagram
-![marbox_table](https://user-images.githubusercontent.com/29492667/177698524-96ffa5f1-4857-4f63-8f0c-5949db8f49a7.png)
+![table](https://user-images.githubusercontent.com/29492667/178174500-e3f07c6c-0a12-4f20-bfc8-b16dec9d877c.png)
 
 ### 🍿 EntityDiagram
-![marbox_entity](https://user-images.githubusercontent.com/26343023/177499646-da8b6d35-936e-4c35-aa7f-fc51bd1d5626.png)
+![erd](https://user-images.githubusercontent.com/29492667/178174504-86b45617-d539-4c17-8671-d6c4292f286f.png)
+
 
 ## 🎬 Environment
 ### 🍿 Dev Server
