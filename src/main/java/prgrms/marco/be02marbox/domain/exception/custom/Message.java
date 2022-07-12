@@ -19,7 +19,9 @@ public enum Message {
 	WRONG_PASSWORD_EXP_MSG("비밀번호가 틀렸습니다."),
 	ALREADY_UPDATED_TOKEN_EXP_MSG("갱신된 refresh token 입니다."),
 	VALID_ACCESS_TOKEN_EXP_MSG("아직 유효한 access token 입니다."),
-	INVALID_REFRESH_TOKEN_EXP_MSG("유효하지 않은 refresh token 입니다.");
+	INVALID_REFRESH_TOKEN_EXP_MSG("유효하지 않은 refresh token 입니다."),
+	NO_ACCOUNT_EXP_MSG("사용자 계좌 정보가 없습니다."),
+	NO_MONEY_EXP_MSG("잔액이 부족합니다.");
 
 	private final String message;
 

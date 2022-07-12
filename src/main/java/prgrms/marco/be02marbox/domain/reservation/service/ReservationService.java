@@ -38,4 +38,13 @@ public class ReservationService {
 		Set<Long> reservedSeatIdList = reservedSeatService.findReservedIdListByScheduleId(schedule.getId());
 		return seatService.findAvailableSeatList(schedule.getTheaterRoom().getId(), reservedSeatIdList);
 	}
+
+	// /**
+	//  *
+	//  */
+	// @Transactional
+	// public List<ResponseReservation> reservation(RequestReservation requestReservation) {
+	// 	//결제
+	// 	//티켓 저장
+	// }
 }
