@@ -1,3 +1,9 @@
+buildscript {
+    ext {
+        queryDslVersion = "4.4.0"
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.7.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -54,6 +60,20 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.mockito:mockito-inline:4.6.1'
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.0'
+
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    annotationProcessor(
+            "javax.persistence:javax.persistence-api",
+            "javax.annotation:javax.annotation-api",
+            "com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["$projectDir/src/main/java", "$projectDir/build/generated"]
+        }
+    }
 }
 
 tasks.named('test') {
