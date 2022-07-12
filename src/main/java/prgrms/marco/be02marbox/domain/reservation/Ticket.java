@@ -35,7 +35,10 @@ public class Ticket {
 	@Column(name = "reserved_at")
 	private LocalDateTime reservedAt;
 
-	public Ticket() {
+	@Column(name = "payment_amount")
+	private Integer paymentAmount;
+
+	protected Ticket() {
 	}
 
 	public Ticket(User user, Schedule schedule, LocalDateTime reservedAt) {
