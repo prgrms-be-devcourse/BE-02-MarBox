@@ -15,4 +15,8 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
 
 	@Query("select s from Seat s where s.theaterRoom.id=:theaterRoomId and s.id not in (:reservedSeatIdList)")
 	List<Seat> findByTheaterRoomIdAndIdNotIn(Long theaterRoomId, List<Long> reservedSeatIdList);
+
+	@Query("select s from Seat s where s.id in (:seatIdList)")
+	List<Seat> findByIdIn(List<Long> seatIdList);
+
 }

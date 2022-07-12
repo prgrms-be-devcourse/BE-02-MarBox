@@ -43,7 +43,7 @@ public class RepositoryTestUtil {
 	private static final int MAX_COUNT = (MAX_ROW * MAX_ROW);
 
 	@PersistenceContext
-	private EntityManager em;
+	protected EntityManager em;
 
 	@Autowired
 	public ReservedSeatRepository reservedSeatRepository;

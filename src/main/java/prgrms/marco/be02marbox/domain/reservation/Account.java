@@ -41,7 +41,7 @@ public class Account {
 	}
 
 	public void withdraw(Integer paymentAmount) {
-		if(this.money < paymentAmount) {
+		if (this.money < paymentAmount) {
 			throw new IllegalArgumentException(NO_MONEY_EXP_MSG.getMessage());
 		}
 		this.money -= paymentAmount;

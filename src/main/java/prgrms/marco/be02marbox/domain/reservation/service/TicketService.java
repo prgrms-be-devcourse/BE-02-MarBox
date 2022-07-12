@@ -73,6 +73,12 @@ public class TicketService {
 		return createdTicket.getId();
 	}
 
+	@Transactional
+	public Ticket createTicket(User user, Schedule schedule, int payAmount) {
+		Ticket newTicket = new Ticket(user, schedule, LocalDateTime.now(), payAmount);
+		return ticketRepository.save(newTicket);
+	}
+
 	/**
 	 *
 	 * @param ticketId 티켓Id
