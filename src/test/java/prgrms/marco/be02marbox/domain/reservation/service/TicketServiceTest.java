@@ -225,4 +225,21 @@ class TicketServiceTest {
 			() -> assertThat(ticketsOfSchedule.get(0).endTime()).isEqualTo(schedule1.getEndTime())
 		);
 	}
+
+
+	@Test
+	@DisplayName("티켓 생성 테스트")
+	void testCreateTicket_Parameters_With_User_And_Schedule() {
+		// given
+		int payAmount = 10000;
+
+		// when
+		Ticket createdTicket = ticketService.createTicket(user1, schedule1, payAmount);
+
+		// then
+		Ticket savedTicket = ticketRepository.findById(createdTicket.getId()).get();
+
+		assertThat(savedTicket).isNotNull();
+	}
+
 }
