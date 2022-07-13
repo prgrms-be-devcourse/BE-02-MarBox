@@ -58,7 +58,6 @@ public class ReservationService {
 	@Transactional
 	public Long reservation(RequestReservation requestReservation) {
 		User findUser = userService.findById(requestReservation.userId());
-
 		// 결제
 		List<Long> seats = requestReservation.selectedSeatIds();
 		int payAmount = PAY_AMOUNT * seats.size();
@@ -74,7 +73,6 @@ public class ReservationService {
 			.map(seat -> new ReservedSeat(savedTicket, seat))
 			.collect(Collectors.toList());
 		reservedSeatService.saveAll(selectedSeats);
-
 		return savedTicket.getId();
 	}
 }

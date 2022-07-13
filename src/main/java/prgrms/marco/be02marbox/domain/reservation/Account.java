@@ -50,4 +50,8 @@ public class Account {
 	public Integer getMoney() {
 		return money;
 	}
+
+	public Long getId() {
+		return id;
+	}
 }
