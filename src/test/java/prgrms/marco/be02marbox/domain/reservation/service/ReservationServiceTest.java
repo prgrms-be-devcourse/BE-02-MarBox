@@ -10,7 +10,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 
 import prgrms.marco.be02marbox.domain.reservation.Account;
 import prgrms.marco.be02marbox.domain.reservation.ReservedSeat;
@@ -167,7 +166,8 @@ class ReservationServiceTest extends ServiceTestUtil {
 
 		// then
 		assertThatThrownBy(() -> reservationService.reservation(request))
-			.isInstanceOf(DataIntegrityViolationException.class);
+			.isInstanceOf(IllegalArgumentException.class)
+			.hasMessageContaining(ALREADY_RESERVED_SEAT_EXP_MSG.getMessage());
 
 		Account findAccount2 = accountRepository.findById(saveAccount.getId()).get();
 		long ticketCount2 = ticketRepository.count();

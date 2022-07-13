@@ -1,6 +1,6 @@
 package prgrms.marco.be02marbox.domain.reservation.service;
 
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 
 import java.util.List;
 import java.util.Set;
@@ -34,8 +34,8 @@ public class ReservedSeatService {
 	}
 
 	@Transactional
-	public void saveAll(List<ReservedSeat> selectedSeats) {
-		reservedSeatRepository.saveAll(selectedSeats);
+	public void saveAllAndFlush(List<ReservedSeat> selectedSeats) {
+		reservedSeatRepository.saveAllAndFlush(selectedSeats);
 	}
 
 }

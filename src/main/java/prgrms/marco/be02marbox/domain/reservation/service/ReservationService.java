@@ -1,9 +1,12 @@
 package prgrms.marco.be02marbox.domain.reservation.service;
 
+import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,7 +75,13 @@ public class ReservationService {
 		List<ReservedSeat> selectedSeats = findSeats.stream()
 			.map(seat -> new ReservedSeat(savedTicket, seat))
 			.collect(Collectors.toList());
-		reservedSeatService.saveAll(selectedSeats);
+
+		try {
+			reservedSeatService.saveAllAndFlush(selectedSeats);
+		} catch (DataIntegrityViolationException e) {
+			throw new IllegalArgumentException(ALREADY_RESERVED_SEAT_EXP_MSG.getMessage());
+		}
+
 		return savedTicket.getId();
 	}
 }

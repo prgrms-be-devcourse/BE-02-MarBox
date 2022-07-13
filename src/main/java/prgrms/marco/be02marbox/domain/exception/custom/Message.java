@@ -21,7 +21,8 @@ public enum Message {
 	VALID_ACCESS_TOKEN_EXP_MSG("아직 유효한 access token 입니다."),
 	INVALID_REFRESH_TOKEN_EXP_MSG("유효하지 않은 refresh token 입니다."),
 	NO_ACCOUNT_EXP_MSG("사용자 계좌 정보가 없습니다."),
-	NO_MONEY_EXP_MSG("잔액이 부족합니다.");
+	NO_MONEY_EXP_MSG("잔액이 부족합니다."),
+	ALREADY_RESERVED_SEAT_EXP_MSG("이미 예약된 좌석입니다.");
 
 	private final String message;
 
