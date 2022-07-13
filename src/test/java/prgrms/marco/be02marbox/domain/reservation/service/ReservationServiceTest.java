@@ -6,45 +6,24 @@ import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
 
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 
-import prgrms.marco.be02marbox.domain.movie.service.utils.MovieConverter;
 import prgrms.marco.be02marbox.domain.reservation.Account;
 import prgrms.marco.be02marbox.domain.reservation.ReservedSeat;
 import prgrms.marco.be02marbox.domain.reservation.Ticket;
 import prgrms.marco.be02marbox.domain.reservation.dto.RequestReservation;
 import prgrms.marco.be02marbox.domain.reservation.dto.ResponseFindReservedSeat;
 import prgrms.marco.be02marbox.domain.reservation.repository.AccountRepository;
-import prgrms.marco.be02marbox.domain.reservation.repository.RepositoryTestUtil;
-import prgrms.marco.be02marbox.domain.reservation.service.utils.TicketConverter;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.Seat;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
-import prgrms.marco.be02marbox.domain.theater.service.ScheduleService;
-import prgrms.marco.be02marbox.domain.theater.service.SeatService;
-import prgrms.marco.be02marbox.domain.theater.service.utils.ScheduleConverter;
 import prgrms.marco.be02marbox.domain.user.User;
-import prgrms.marco.be02marbox.domain.user.service.UserService;
 
-@Import({ReservationService.class,
-	ReservedSeatService.class,
-	SeatService.class,
-	ScheduleService.class,
-	ScheduleConverter.class,
-	MovieConverter.class,
-	AccountService.class,
-	TicketService.class,
-	TicketConverter.class,
-	UserService.class
-})
-class ReservationServiceTest extends RepositoryTestUtil {
+class ReservationServiceTest extends ServiceTestUtil {
 
 	private static final int PAY_AMOUNT = 10000;
 
@@ -54,8 +33,20 @@ class ReservationServiceTest extends RepositoryTestUtil {
 	@Autowired
 	AccountRepository accountRepository;
 
-	@MockBean
-	PasswordEncoder passwordEncoder;
+	@AfterEach
+	void clear() {
+		reservedSeatRepository.deleteAllInBatch();
+		ticketRepository.deleteAllInBatch();
+		seatRepository.deleteAllInBatch();
+		accountRepository.deleteAllInBatch();
+		userRepository.deleteAllInBatch();
+
+		scheduleRepository.deleteAllInBatch();
+		movieRepository.deleteAllInBatch();
+
+		theaterRoomRepository.deleteAllInBatch();
+		theaterRepository.deleteAllInBatch();
+	}
 
 	@Test
 	@DisplayName("존재하지 않는 스케줄 id로 예매 가능 좌석 조회시 IllegalArgumentException")
@@ -103,12 +94,12 @@ class ReservationServiceTest extends RepositoryTestUtil {
 		User user = saveUser();
 		Schedule schedule = saveSchedule();
 
-		int totalSeatCount = 5;
+		int totalSeatCount = 2;
 		TheaterRoom theaterRoom = saveSeatMulti(totalSeatCount);
 		List<Seat> seats = seatRepository.findByTheaterRoomId(theaterRoom.getId());
 		List<Long> seatIdList = seats.stream().map(Seat::getId).toList();
 
-		Account account = new Account(user, 50000);
+		Account account = new Account(user, totalSeatCount * PAY_AMOUNT);
 		Account saveAccount = accountRepository.save(account);
 
 		RequestReservation request = new RequestReservation(user.getId(), schedule.getId(), seatIdList);
@@ -116,15 +107,12 @@ class ReservationServiceTest extends RepositoryTestUtil {
 		// when
 		Long ticketId = reservationService.reservation(request);
 
-		//then
-		em.flush();
-		em.clear();
-
+		// then
 		Ticket findTicket = ticketRepository.findById(ticketId).get();
 		List<ReservedSeat> reservedSeats = reservedSeatRepository.searchByScheduleIdStartsWith(schedule.getId());
-
+		Account findAccount = accountRepository.findById(saveAccount.getId()).get();
 		assertThat(findTicket).isNotNull();
-		assertThat(saveAccount.getMoney()).isEqualTo(0);
+		assertThat(findAccount.getMoney()).isZero();
 		assertThat(reservedSeats).hasSize(seats.size());
 	}
 
@@ -157,7 +145,6 @@ class ReservationServiceTest extends RepositoryTestUtil {
 
 	@Test
 	@DisplayName("예약 실패 - saveAll 실패 시 RollBack 확인")
-	@Transactional(rollbackFor = RuntimeException.class)
 	void testReservationSaveAllExp() {
 		// given
 		User user = saveUser();
@@ -178,7 +165,6 @@ class ReservationServiceTest extends RepositoryTestUtil {
 		long ticketCount = ticketRepository.count();
 		int size = reservedSeatRepository.searchByScheduleIdStartsWith(schedule.getId()).size();
 
-		System.out.println("=== === === === ===");
 		// then
 		assertThatThrownBy(() -> reservationService.reservation(request))
 			.isInstanceOf(DataIntegrityViolationException.class);
