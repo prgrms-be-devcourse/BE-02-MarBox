@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import prgrms.marco.be02marbox.config.QueryDslConfig;
 import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
 import prgrms.marco.be02marbox.domain.movie.Movie;
@@ -43,7 +44,7 @@ import prgrms.marco.be02marbox.domain.user.User;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
 @DataJpaTest
-@Import({TicketService.class, TicketConverter.class})
+@Import({TicketService.class, TicketConverter.class, QueryDslConfig.class})
 class TicketServiceTest {
 
 	@Autowired
@@ -104,6 +105,7 @@ class TicketServiceTest {
 
 		RequestCreateTicket request = new RequestCreateTicket(user1.getId(), schedule1.getId(), LocalDateTime.now(),
 			collect);
+
 		// when
 		Long createdTicketId = ticketService.createTicket(request);
 		Ticket savedTicket = ticketRepository.findById(createdTicketId)
@@ -225,7 +227,6 @@ class TicketServiceTest {
 			() -> assertThat(ticketsOfSchedule.get(0).endTime()).isEqualTo(schedule1.getEndTime())
 		);
 	}
-
 
 	@Test
 	@DisplayName("티켓 생성 테스트")
