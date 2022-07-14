@@ -7,6 +7,22 @@ servers:
 - url: http://localhost:8080
 tags: []
 paths:
+  /reservation:
+    post:
+      tags:
+      - reservation
+      operationId: reservation-create
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/reservation778141638'
+            examples:
+              reservation-create:
+                value: "{\"userId\":1,\"scheduleId\":2,\"selectedSeatIds\":[3,4,5]}"
+      responses:
+        "201":
+          description: "201"
   /reserved-seats/{scheduleId}:
     get:
       tags:
@@ -31,6 +47,43 @@ paths:
                   value: "[{\"row\":0,\"col\":0,\"reserved\":false},{\"row\":0,\"\
                     col\":1,\"reserved\":true}]"
   /schedules:
+    post:
+      tags:
+      - schedules
+      operationId: schedule-save
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/schedules266360835'
+            examples:
+              schedule-save:
+                value: "{\"theaterRoomId\":1,\"movieId\":1,\"startTime\":\"2022-07-14T16:37:29.573038\"\
+                  ,\"endTime\":\"2022-07-14T16:37:29.573058\"}"
+      responses:
+        "201":
+          description: "201"
+  /schedules/current-movies:
+    get:
+      tags:
+      - schedules
+      operationId: schedule-get-current-movies
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/schedules-current-movies1672648316'
+              examples:
+                schedule-get-current-movies:
+                  value: "[{\"name\":\"테스트1\",\"limitAge\":\"CHILD\",\"genre\":\"\
+                    ACTION\",\"runningTime\":100,\"posterImgLocation\":\"test/location\"\
+                    },{\"name\":\"테스트2\",\"limitAge\":\"CHILD\",\"genre\":\"ROMANCE\"\
+                    ,\"runningTime\":150,\"posterImgLocation\":\"test/location\"},{\"\
+                    name\":\"테스트3\",\"limitAge\":\"ADULT\",\"genre\":\"ACTION\",\"\
+                    runningTime\":120,\"posterImgLocation\":\"test/location\"}]"
+  /schedules/search:
     get:
       tags:
       - schedules
@@ -60,7 +113,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/schedules588914321'
+                $ref: '#/components/schemas/schedules-search588914321'
               examples:
                 schedule-get-movie-and-date-in-theater:
                   value: "{\"movieList\":[{\"name\":\"영화1\",\"limitAge\":\"CHILD\"\
@@ -69,8 +122,8 @@ paths:
                     genre\":\"ROMANCE\",\"runningTime\":120,\"posterImgLocation\"\
                     :\"test/location\"},{\"name\":\"영화3\",\"limitAge\":\"CHILD\",\"\
                     genre\":\"ANIMATION\",\"runningTime\":150,\"posterImgLocation\"\
-                    :\"test/location\"}],\"theaterList\":[],\"dateList\":[\"2022-07-06\"\
-                    ,\"2022-07-07\"],\"timeList\":[]}"
+                    :\"test/location\"}],\"theaterList\":[],\"dateList\":[\"2022-07-14\"\
+                    ,\"2022-07-15\"],\"timeList\":[]}"
                 schedule-get-movie-by-date-and-theater:
                   value: "{\"movieList\":[{\"name\":\"영화1\",\"limitAge\":\"CHILD\"\
                     ,\"genre\":\"ACTION\",\"runningTime\":100,\"posterImgLocation\"\
@@ -86,42 +139,6 @@ paths:
                     startTimeList\":[\"09:30:00\",\"14:25:00\",\"16:45:00\",\"19:30:00\"\
                     ]},{\"theaterRoomName\":\"상영관2\",\"totalSeatCount\":100,\"startTimeList\"\
                     :[\"20:40:00\"]}]}"
-    post:
-      tags:
-      - schedules
-      operationId: schedule-save
-      requestBody:
-        content:
-          application/json;charset=UTF-8:
-            schema:
-              $ref: '#/components/schemas/schedules266360835'
-            examples:
-              schedule-save:
-                value: "{\"theaterRoomId\":1,\"movieId\":1,\"startTime\":\"2022-07-06T16:28:34.850918\"\
-                  ,\"endTime\":\"2022-07-06T16:28:34.850938\"}"
-      responses:
-        "201":
-          description: "201"
-  /schedules/current-movies:
-    get:
-      tags:
-      - schedules
-      operationId: schedule-get-current-movies
-      responses:
-        "200":
-          description: "200"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/schedules-current-movies1672648316'
-              examples:
-                schedule-get-current-movies:
-                  value: "[{\"name\":\"테스트1\",\"limitAge\":\"CHILD\",\"genre\":\"\
-                    ACTION\",\"runningTime\":100,\"posterImgLocation\":\"test/location\"\
-                    },{\"name\":\"테스트2\",\"limitAge\":\"CHILD\",\"genre\":\"ROMANCE\"\
-                    ,\"runningTime\":150,\"posterImgLocation\":\"test/location\"},{\"\
-                    name\":\"테스트3\",\"limitAge\":\"ADULT\",\"genre\":\"ACTION\",\"\
-                    runningTime\":120,\"posterImgLocation\":\"test/location\"}]"
   /theater-rooms:
     post:
       tags:
@@ -369,6 +386,24 @@ components:
         region:
           type: string
           description: 지역
+    reservation778141638:
+      type: object
+      properties:
+        userId:
+          type: number
+          description: 유저 ID
+        scheduleId:
+          type: number
+          description: 스케줄 ID
+        selectedSeatIds:
+          type: array
+          description: 선택한 좌석
+          items:
+            oneOf:
+            - type: object
+            - type: boolean
+            - type: string
+            - type: number
     users-sign-up2102361656:
       type: object
       properties:
@@ -384,7 +419,7 @@ components:
         email:
           type: string
           description: 사용자 이메일
-    schedules588914321:
+    schedules-search588914321:
       type: object
       properties:
         theaterList:
