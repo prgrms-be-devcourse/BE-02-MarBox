@@ -23,7 +23,7 @@ public class ReservedSeatRepositoryCustomImpl implements ReservedSeatRepositoryC
 	public List<ReservedSeat> searchByScheduleIdStartsWith(Long scheduleId) {
 		return jpaQueryFactory.selectFrom(reservedSeat)
 			.leftJoin(reservedSeat.seat).fetchJoin()
-			.where(reservedSeat.id.like(scheduleId + "_" + "%"))
+			.where(reservedSeat.id.startsWith(scheduleId + "_" ))
 			.fetch();
 	}
 }
