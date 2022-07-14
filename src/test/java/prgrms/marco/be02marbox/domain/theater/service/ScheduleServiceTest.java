@@ -1,8 +1,7 @@
 package prgrms.marco.be02marbox.domain.theater.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -19,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import prgrms.marco.be02marbox.config.QueryDslConfig;
 import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
 import prgrms.marco.be02marbox.domain.movie.Movie;
@@ -36,7 +36,7 @@ import prgrms.marco.be02marbox.domain.theater.repository.TheaterRoomRepository;
 import prgrms.marco.be02marbox.domain.theater.service.utils.ScheduleConverter;
 
 @DataJpaTest
-@Import({ScheduleService.class, ScheduleConverter.class, MovieConverter.class})
+@Import({ScheduleService.class, ScheduleConverter.class, MovieConverter.class, QueryDslConfig.class})
 class ScheduleServiceTest {
 
 	@Autowired

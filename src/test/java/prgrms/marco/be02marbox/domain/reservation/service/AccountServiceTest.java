@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import prgrms.marco.be02marbox.config.QueryDslConfig;
 import prgrms.marco.be02marbox.domain.reservation.Account;
 import prgrms.marco.be02marbox.domain.reservation.repository.AccountRepository;
 import prgrms.marco.be02marbox.domain.user.Role;
@@ -18,7 +19,7 @@ import prgrms.marco.be02marbox.domain.user.User;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
 @DataJpaTest
-@Import(AccountService.class)
+@Import({AccountService.class, QueryDslConfig.class})
 class AccountServiceTest {
 
 	@Autowired
