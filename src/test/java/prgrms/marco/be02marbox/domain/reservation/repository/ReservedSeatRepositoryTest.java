@@ -53,5 +53,4 @@ class ReservedSeatRepositoryTest extends RepositoryTestUtil {
 
 		assertThat(reservedSeats).isEmpty();
 	}
-	
 }
