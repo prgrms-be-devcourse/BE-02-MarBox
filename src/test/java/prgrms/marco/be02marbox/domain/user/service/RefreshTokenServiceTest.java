@@ -13,11 +13,12 @@ import org.springframework.context.annotation.Import;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
+import prgrms.marco.be02marbox.config.QueryDslConfig;
 import prgrms.marco.be02marbox.domain.user.RefreshToken;
 import prgrms.marco.be02marbox.domain.user.repository.RefreshTokenRedisRepository;
 
 @DataRedisTest
-@Import(RefreshTokenService.class)
+@Import({RefreshTokenService.class})
 class RefreshTokenServiceTest {
 
 	@Autowired
