@@ -3,7 +3,6 @@ package prgrms.marco.be02marbox.domain.movie.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -18,6 +17,7 @@ import org.springframework.context.annotation.Import;
 import com.amazonaws.services.s3.AmazonS3Client;
 
 import prgrms.marco.be02marbox.aws.S3Upload;
+import prgrms.marco.be02marbox.config.QueryDslConfig;
 import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
 import prgrms.marco.be02marbox.domain.movie.Movie;
@@ -25,7 +25,7 @@ import prgrms.marco.be02marbox.domain.movie.repository.MovieRepository;
 import prgrms.marco.be02marbox.domain.movie.service.utils.MovieConverter;
 
 @DataJpaTest
-@Import({MovieService.class, MovieConverter.class, S3Upload.class, AmazonS3Client.class})
+@Import({MovieService.class, MovieConverter.class, S3Upload.class, AmazonS3Client.class, QueryDslConfig.class})
 class MovieServiceTest {
 
 	@Autowired

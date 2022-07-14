@@ -60,7 +60,6 @@ public class TicketService {
 
 		//Account 호출 확인하고, 이상 없으면, Ticket 생성 else 예외 던지기
 
-
 		Ticket newTicket = new Ticket(user, schedule, request.reservedAt());
 		Ticket createdTicket = ticketRepository.save(newTicket);
 		List<ReservedSeat> selectedSeat = seatRepository.findByTheaterRoomIdAndIdIn(
