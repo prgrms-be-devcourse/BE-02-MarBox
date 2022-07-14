@@ -24,7 +24,7 @@ import prgrms.marco.be02marbox.domain.user.service.UserService;
 @Service
 @Transactional(readOnly = true)
 public class ReservationService {
-	private static final int PAY_AMOUNT = 10000;
+	private static final int TICKET_PRICE = 10000;
 
 	private final ReservedSeatService reservedSeatService;
 	private final SeatService seatService;
@@ -58,12 +58,17 @@ public class ReservationService {
 		return seatService.findAvailableSeatList(schedule.getTheaterRoom().getId(), reservedSeatIdList);
 	}
 
+	/**
+	 *
+	 * @param requestReservation
+	 * @return 티켓 Id
+	 */
 	@Transactional
 	public Long reservation(RequestReservation requestReservation) {
 		User findUser = userService.findById(requestReservation.userId());
 		// 결제
 		List<Long> seats = requestReservation.selectedSeatIds();
-		int payAmount = PAY_AMOUNT * seats.size();
+		int payAmount = TICKET_PRICE * seats.size();
 		payService.pay(findUser, payAmount);
 
 		//티켓 저장
