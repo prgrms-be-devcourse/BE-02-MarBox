@@ -15,3 +15,14 @@ jwt:
   issuer: marbox
   client-secret: EENY5W0eegTf1naQB2eDeyCLl5kRS2b8xa5c4qLdS0hmVjtbvo8tOyhPMcAmtPuQ
   expiry-seconds: 3600000 # 1시간 = 3,600,000ms
+
+cloud:
+  aws:
+    s3:
+      bucket: marbox-bucket
+      save-dir-prefix: dev/
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
