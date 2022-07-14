@@ -1,0 +1,15 @@
+:hardbreaks:
+ifndef::snippets[]
+:snippets: ../../../target/generated-snippets
+endif::[]
+
+== 티켓 결제
+
+### 결제
+
+.Request
+include::{snippets}/reservation-create/http-request.adoc[]
+include::{snippets}/reservation-create/request-fields.adoc[]
+
+.Response
+include::{snippets}/reservation-create/http-response.adoc[]
