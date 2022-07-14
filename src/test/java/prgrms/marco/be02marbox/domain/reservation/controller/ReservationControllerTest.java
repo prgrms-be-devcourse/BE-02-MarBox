@@ -1,6 +1,7 @@
 package prgrms.marco.be02marbox.domain.reservation.controller;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.*;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -88,7 +90,9 @@ class ReservationControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(request)))
-			.andExpect(status().isBadRequest());
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.messages.[0]").value(equalTo(ALREADY_RESERVED_SEAT_EXP_MSG.getMessage())))
+			.andExpect(jsonPath("$.statusCode").value(equalTo(HttpStatus.BAD_REQUEST.value())));
 	}
 
 	@Test
@@ -108,6 +112,8 @@ class ReservationControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(request)))
-			.andExpect(status().isBadRequest());
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.messages.[0]").value(equalTo(NO_MONEY_EXP_MSG.getMessage())))
+			.andExpect(jsonPath("$.statusCode").value(equalTo(HttpStatus.BAD_REQUEST.value())));
 	}
 }
