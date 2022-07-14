@@ -5,6 +5,7 @@ plugins {
     id 'java'
     id 'checkstyle'
     id 'com.epages.restdocs-api-spec' version '0.16.0'
+    id 'jacoco'
 }
 
 group = 'prgrms.marco'
@@ -23,6 +24,37 @@ checkstyle {
 
 ext {
     set('snippetsDir', file("build/generated-snippets"))
+}
+
+jacoco {
+    toolVersion = '0.8.7'
+}
+
+jacocoTestReport {
+    reports {
+        html.enabled(true)
+        xml.enabled(false)
+        csv.enabled(false)
+    }
+
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = 'BUNDLE'
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.80
+            }
+
+            excludes = []
+        }
+    }
 }
 
 dependencies {
@@ -54,11 +86,23 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.mockito:mockito-inline:4.6.1'
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.0'
+    implementation "com.querydsl:querydsl-core"
+    implementation "com.querydsl:querydsl-jpa"
+
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
+    // querydsl JPAAnnotationProcessor 사용 지정
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    // java.lang.NoClassDefFoundError(javax.annotation.Entity) 발생 대응
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    // java.lang.NoClassDefFoundError (javax.annotation.Generated) 발생 대응
 }
+
 
 tasks.named('test') {
     outputs.dir snippetsDir
     useJUnitPlatform()
+
+    finalizedBy 'jacocoTestReport'
 }
 
 tasks.named('asciidoctor') {

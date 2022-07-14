@@ -11,7 +11,9 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
+import prgrms.marco.be02marbox.config.QueryDslConfig;
 import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
 import prgrms.marco.be02marbox.domain.movie.Movie;
@@ -37,6 +39,7 @@ import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
  * save{Entity} 함수는 1개의 고정된 데이터의 Entity 를 저장 후 반환한다. (unique 컬럼이 존재하면 2번 호출 시 Exception)
  */
 @DataJpaTest
+@Import(QueryDslConfig.class)
 public class RepositoryTestUtil {
 
 	private static final int MAX_ROW = 10;

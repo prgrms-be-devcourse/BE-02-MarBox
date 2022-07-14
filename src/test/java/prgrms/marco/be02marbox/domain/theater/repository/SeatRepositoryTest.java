@@ -8,11 +8,14 @@ import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.Import;
 
+import prgrms.marco.be02marbox.config.QueryDslConfig;
 import prgrms.marco.be02marbox.domain.reservation.repository.RepositoryTestUtil;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.Seat;
 import prgrms.marco.be02marbox.domain.theater.TheaterRoom;
+
 
 class SeatRepositoryTest extends RepositoryTestUtil {
 
@@ -59,7 +62,7 @@ class SeatRepositoryTest extends RepositoryTestUtil {
 
 		List<Seat> seats = seatRepository.findByTheaterRoomId(theaterRoom.getId());
 		List<Long> seatIdList = seats.stream()
-				.map(Seat::getId).toList();
+			.map(Seat::getId).toList();
 
 		List<Long> oddIds = seats.stream()
 			.map(Seat::getId)

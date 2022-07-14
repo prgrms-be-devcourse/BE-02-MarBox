@@ -15,6 +15,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import prgrms.marco.be02marbox.config.QueryDslConfig;
 import prgrms.marco.be02marbox.domain.exception.custom.user.DuplicateEmailException;
 import prgrms.marco.be02marbox.domain.exception.custom.user.InvalidEmailException;
 import prgrms.marco.be02marbox.domain.user.Role;
@@ -22,7 +23,7 @@ import prgrms.marco.be02marbox.domain.user.User;
 import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
 
 @DataJpaTest
-@Import({UserService.class, BCryptPasswordEncoder.class})
+@Import({UserService.class, BCryptPasswordEncoder.class, QueryDslConfig.class})
 class UserServiceTest {
 
 	@Autowired
