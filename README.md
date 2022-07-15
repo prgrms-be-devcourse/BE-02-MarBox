@@ -4,9 +4,12 @@
 ![Spring Security](https://img.shields.io/badge/Spring&nbsp;Security-5.7.1-green.svg)
 ![JPA](https://img.shields.io/badge/JPA-2.7.0-green.svg)
 ![Jakarta Validation](https://img.shields.io/badge/Jakarta&nbsp;Validation-2.0.2-green.svg)
+![QueryDSL](https://img.shields.io/badge/QueryDSL-5.0.0-green.svg)
+![Jacoco](https://img.shields.io/badge/Jacoco-0.8.7-green.svg)
 ![JUnit5](https://img.shields.io/badge/JUnit5-5.8.2-green.svg)
 ![H2](https://img.shields.io/badge/H2-2.1.2-green.svg)
 ![My SQL](https://img.shields.io/badge/My&nbsp;SQL-8.0.28-green.svg)
+![Redis](https://img.shields.io/badge/Redis-alpine-green.svg)
 ![Gradle](https://img.shields.io/badge/Gradle-7.4.1-green.svg)
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-20.04-green.svg)
 ![Docker](https://img.shields.io/badge/Docker-20.10.14-green.svg)
@@ -41,7 +44,7 @@
 
 
 ## 🎬 Planning
-프로젝트 기간: 2022.06.15 ~ 2022.07.06
+프로젝트 기간: 2022.06.15 ~ 2022.07.18
 ### 🍿 mvp1 (06.15 ~ 06.26)
 - 도메인 설계, 로그인, 영화 예매정보 조회
 - [상세](https://caring-pin-8ac.notion.site/MVP1-6-15-6-26-bdc09db96be247d9bdcc94aa653a3875)
@@ -52,18 +55,23 @@
 - [상세](https://caring-pin-8ac.notion.site/MVP2-6-27-7-06-7262927eafc64fd8bf97b84e1143f6b5)
 - [BackLog](https://github.com/prgrms-be-devcourse/BE-02-MarBox/projects/2)
 
+### 🍿 mvp3 (7.11 ~7.18)
+- 결제 구현, 프로젝트 리펙터링
+- [상세](https://caring-pin-8ac.notion.site/MVP3-7-11-7-18-a6703f880f0c48e5b21a853547bcad70)
+- [BackLog](https://github.com/prgrms-be-devcourse/BE-02-MarBox/projects/3)
+
 ## 🎬 ERD & EntityDiagram
 ### 🍿 TableDiagram
-![table](https://user-images.githubusercontent.com/29492667/178174500-e3f07c6c-0a12-4f20-bfc8-b16dec9d877c.png)
+![table-diagram](https://user-images.githubusercontent.com/29492667/179153690-e663b225-cfdf-4ee3-b803-72e7c19bf050.png)
 
 ### 🍿 EntityDiagram
-![erd](https://user-images.githubusercontent.com/29492667/178174504-86b45617-d539-4c17-8671-d6c4292f286f.png)
+![erd](https://user-images.githubusercontent.com/26343023/179152786-ac9b2aab-b4b9-49a3-95a7-a28a602f3df1.png)
 
 ## 🎬 Environment
 ### 🍿 Dev Server
 ![dev-environment](https://user-images.githubusercontent.com/29492667/177974855-9870e1d2-5e78-408f-8b36-15d833564dec.png)
 ### 🍿 Test Server
-![test-environment](https://user-images.githubusercontent.com/29492667/177974984-92aa6ee3-b59a-4816-bb85-d3ce86998ae9.png)
+![test-environment](https://user-images.githubusercontent.com/29492667/179156796-4a4a2954-82ab-4d7f-bad3-1cb96c917c73.png)
 
 ## 🎬 What we use
 
@@ -72,23 +80,30 @@
 - Spring Boot
 - Spring Security
 - Jpa
+- QueryDSL
 
-### 🍿 Devops
+### 🍿 Infra
 - AWS
   - EC2
   - RDS
+  - S3
 - Docker
+  - Mysql
+  - Redis
 - Nginx
-- Github Action (CI)
+
+### 🍿 DevOps
+- GitHub Actions(CI)
+  - Check Style
+  - Jacoco
 
 ### 🍿 Tool
 - IntelliJ
 - Postman
 
 ### 🍿 Collaborate
-- Check Style
 - Git
-- Github
+- GitHub
 - Notion
 - Slack
 
@@ -124,6 +139,8 @@ cd ./BE-02-MarBox/
 
 //set database
 docker-compose up -d
+
+// need application-aws.yml (for S3 keys)
 
 //build & execute
 ./gradlew clean build
