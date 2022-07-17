@@ -62,8 +62,9 @@ public class ScheduleController {
 	}
 
 	@GetMapping(value = "/search", params = {"theaterId", "date"})
-	public ResponseEntity<ResponseFindSchedule> searchSchedule(@RequestParam Long theaterId,
-		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+	public ResponseEntity<ResponseFindSchedule> searchSchedule(
+		@RequestParam Long theaterId,
+		@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 		ResponseFindSchedule movieAndDateList = scheduleService.findMovieListByTheaterIdAndDate(theaterId, date);
 		return ResponseEntity.ok().body(movieAndDateList);
 	}
@@ -72,7 +73,7 @@ public class ScheduleController {
 	public ResponseEntity<ResponseFindSchedule> searchSchedule(
 		@RequestParam Long movieId,
 		@RequestParam Long theaterId,
-		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+		@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 		ResponseFindSchedule movieAndDateList = scheduleService.findTimeScheduleList(movieId, theaterId, date);
 		return ResponseEntity.ok().body(movieAndDateList);
 	}
