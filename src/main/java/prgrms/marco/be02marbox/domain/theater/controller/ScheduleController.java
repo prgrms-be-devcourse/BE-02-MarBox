@@ -46,25 +46,35 @@ public class ScheduleController {
 	}
 
 	@GetMapping("/search")
-	public ResponseEntity<ResponseFindSchedule> searchSchedule(
-		@RequestParam(required = false) Long movieId,
-		@RequestParam(required = false) Long theaterId,
+	public ResponseEntity<ResponseFindSchedule> searchSchedule() {
+		return ResponseEntity.ok()
+			.body(new ResponseFindSchedule(
+				Collections.emptyList(),
+				Collections.emptyList(),
+				Collections.emptyList(),
+				Collections.emptyList()));
+	}
+
+	@GetMapping(value = "/search", params = "theaterId")
+	public ResponseEntity<ResponseFindSchedule> searchSchedule(@RequestParam Long theaterId) {
+		ResponseFindSchedule movieAndDateList = scheduleService.findMovieListAndDateListByTheaterId(theaterId);
+		return ResponseEntity.ok().body(movieAndDateList);
+	}
+
+	@GetMapping(value = "/search", params = {"theaterId", "date"})
+	public ResponseEntity<ResponseFindSchedule> searchSchedule(@RequestParam Long theaterId,
 		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+		ResponseFindSchedule movieAndDateList = scheduleService.findMovieListByTheaterIdAndDate(theaterId, date);
+		return ResponseEntity.ok().body(movieAndDateList);
+	}
 
-		ResponseFindSchedule responseFindSchedule;
-
-		if (movieId != null && theaterId != null && date != null) {
-			responseFindSchedule = scheduleService.findTimeScheduleList(movieId, theaterId, date);
-		} else if (movieId == null && theaterId != null && date == null) {
-			responseFindSchedule = scheduleService.findMovieListAndDateListByTheaterId(theaterId);
-		} else if (movieId == null && theaterId != null && date != null) {
-			responseFindSchedule = scheduleService.findMovieListByTheaterIdAndDate(theaterId, date);
-		} else {
-			responseFindSchedule = new ResponseFindSchedule(Collections.emptyList(), Collections.emptyList(),
-				Collections.emptyList(), Collections.emptyList());
-		}
-
-		return ResponseEntity.ok().body(responseFindSchedule);
+	@GetMapping(value = "/search", params = {"movieId", "theaterId", "date"})
+	public ResponseEntity<ResponseFindSchedule> searchSchedule(
+		@RequestParam Long movieId,
+		@RequestParam Long theaterId,
+		@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+		ResponseFindSchedule movieAndDateList = scheduleService.findTimeScheduleList(movieId, theaterId, date);
+		return ResponseEntity.ok().body(movieAndDateList);
 	}
 
 }
