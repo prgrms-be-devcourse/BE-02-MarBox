@@ -57,6 +57,9 @@ public class TicketService {
 			.orElseThrow(() -> new EntityNotFoundException(NOT_EXISTS_USER_EXP_MSG.getMessage()));
 		Schedule schedule = scheduleRepository.findById(request.scheduleId())
 			.orElseThrow(() -> new EntityNotFoundException(INVALID_MOVIE_EXP_MSG.getMessage()));
+
+		//Account 호출 확인하고, 이상 없으면, Ticket 생성 else 예외 던지기
+
 		Ticket newTicket = new Ticket(user, schedule, request.reservedAt());
 		Ticket createdTicket = ticketRepository.save(newTicket);
 		List<ReservedSeat> selectedSeat = seatRepository.findByTheaterRoomIdAndIdIn(
@@ -67,6 +70,12 @@ public class TicketService {
 				Collectors.toList());
 		reservedSeatRepository.saveAll(selectedSeat);
 		return createdTicket.getId();
+	}
+
+	@Transactional
+	public Ticket createTicket(User user, Schedule schedule, int payAmount) {
+		Ticket newTicket = new Ticket(user, schedule, LocalDateTime.now(), payAmount);
+		return ticketRepository.save(newTicket);
 	}
 
 	/**

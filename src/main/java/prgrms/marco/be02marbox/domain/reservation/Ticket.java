@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 
 import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.user.User;
@@ -35,13 +36,24 @@ public class Ticket {
 	@Column(name = "reserved_at")
 	private LocalDateTime reservedAt;
 
-	public Ticket() {
+	@Column(name = "payment_amount")
+	@Min(value = 0)
+	private Integer paymentAmount;
+
+	protected Ticket() {
 	}
 
 	public Ticket(User user, Schedule schedule, LocalDateTime reservedAt) {
 		this.user = user;
 		this.schedule = schedule;
 		this.reservedAt = reservedAt;
+	}
+
+	public Ticket(User user, Schedule schedule, LocalDateTime reservedAt, int paymentAmount) {
+		this.user = user;
+		this.schedule = schedule;
+		this.reservedAt = reservedAt;
+		this.paymentAmount = paymentAmount;
 	}
 
 	public Schedule getSchedule() {
@@ -58,5 +70,9 @@ public class Ticket {
 
 	public LocalDateTime getReservedAt() {
 		return reservedAt;
+	}
+
+	public Integer getPaymentAmount() {
+		return paymentAmount;
 	}
 }

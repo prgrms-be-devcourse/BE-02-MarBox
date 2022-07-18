@@ -1,7 +1,9 @@
 spring:
   profiles:
     default: dev
-    include: aws
+    group:
+      "dev": dev, aws
+      "test": test, aws
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

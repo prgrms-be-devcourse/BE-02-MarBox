@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import prgrms.marco.be02marbox.domain.reservation.dto.ResponseFindReservedSeat;
 import prgrms.marco.be02marbox.domain.theater.Seat;
 import prgrms.marco.be02marbox.domain.theater.repository.SeatRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class SeatService {
 
 	private final SeatRepository seatRepository;
@@ -36,4 +38,9 @@ public class SeatService {
 		});
 		return seatList;
 	}
+
+	public List<Seat> findSeatsByIdIn(List<Long> seats) {
+		return seatRepository.findByIdIn(seats);
+	}
+
 }

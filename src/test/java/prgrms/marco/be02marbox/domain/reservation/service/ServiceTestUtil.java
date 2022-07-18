@@ -1,4 +1,4 @@
-package prgrms.marco.be02marbox.domain.reservation.repository;
+package prgrms.marco.be02marbox.domain.reservation.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -6,20 +6,17 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import prgrms.marco.be02marbox.config.QueryDslConfig;
 import prgrms.marco.be02marbox.domain.movie.Genre;
 import prgrms.marco.be02marbox.domain.movie.LimitAge;
 import prgrms.marco.be02marbox.domain.movie.Movie;
 import prgrms.marco.be02marbox.domain.movie.repository.MovieRepository;
 import prgrms.marco.be02marbox.domain.reservation.ReservedSeat;
 import prgrms.marco.be02marbox.domain.reservation.Ticket;
+import prgrms.marco.be02marbox.domain.reservation.repository.ReservedSeatRepository;
+import prgrms.marco.be02marbox.domain.reservation.repository.TicketRepository;
 import prgrms.marco.be02marbox.domain.theater.Region;
 import prgrms.marco.be02marbox.domain.theater.Schedule;
 import prgrms.marco.be02marbox.domain.theater.Seat;
@@ -38,15 +35,11 @@ import prgrms.marco.be02marbox.domain.user.repository.UserRepository;
  *
  * save{Entity} 함수는 1개의 고정된 데이터의 Entity 를 저장 후 반환한다. (unique 컬럼이 존재하면 2번 호출 시 Exception)
  */
-@DataJpaTest
-@Import(QueryDslConfig.class)
-public class RepositoryTestUtil {
+@SpringBootTest
+public class ServiceTestUtil {
 
 	private static final int MAX_ROW = 10;
 	private static final int MAX_COUNT = (MAX_ROW * MAX_ROW);
-
-	@PersistenceContext
-	protected EntityManager em;
 
 	@Autowired
 	public ReservedSeatRepository reservedSeatRepository;
@@ -92,7 +85,6 @@ public class RepositoryTestUtil {
 	public Seat saveSeat(TheaterRoom theaterRoom, int row, int col) {
 		Seat seat = new Seat(theaterRoom, row, col);
 		Seat savedSeat = seatRepository.save(seat);
-		clear();
 		return savedSeat;
 	}
 
@@ -119,7 +111,6 @@ public class RepositoryTestUtil {
 		Theater theater = saveTheater("강남");
 		TheaterRoom theaterRoom = new TheaterRoom(theater, name);
 		TheaterRoom savedTheaterRoom = theaterRoomRepository.save(theaterRoom);
-		clear();
 		return savedTheaterRoom;
 	}
 
@@ -130,7 +121,6 @@ public class RepositoryTestUtil {
 	public Theater saveTheater(String name) {
 		Theater theater = new Theater(Region.SEOUL, name);
 		Theater savedTheater = theaterRepository.save(theater);
-		clear();
 		return savedTheater;
 	}
 
@@ -145,7 +135,6 @@ public class RepositoryTestUtil {
 			"test",
 			Role.ROLE_CUSTOMER);
 		User savedUser = userRepository.save(user);
-		clear();
 		return savedUser;
 	}
 
@@ -158,16 +147,13 @@ public class RepositoryTestUtil {
 		Schedule schedule = saveSchedule();
 		Ticket ticket = new Ticket(user, schedule, LocalDateTime.now());
 		Ticket savedTicket = ticketRepository.save(ticket);
-		clear();
 		return savedTicket;
 	}
 
 	public Ticket saveTicket(Schedule schedule) {
 		User user = saveUser();
 		Ticket ticket = new Ticket(user, schedule, LocalDateTime.now());
-
 		Ticket savedTicket = ticketRepository.save(ticket);
-		clear();
 		return savedTicket;
 	}
 
@@ -185,7 +171,6 @@ public class RepositoryTestUtil {
 			.endTime(LocalDateTime.now())
 			.build();
 		Schedule savedSchedule = scheduleRepository.save(schedule);
-		clear();
 		return savedSchedule;
 	}
 
@@ -198,7 +183,6 @@ public class RepositoryTestUtil {
 			.endTime(LocalDateTime.now())
 			.build();
 		Schedule savedSchedule = scheduleRepository.save(schedule);
-		clear();
 		return savedSchedule;
 	}
 
@@ -209,7 +193,6 @@ public class RepositoryTestUtil {
 	public Movie saveMovie(String name) {
 		Movie movie = new Movie(name, LimitAge.ADULT, Genre.ACTION, 100);
 		Movie savedMovie = movieRepository.save(movie);
-		clear();
 		return savedMovie;
 	}
 
@@ -223,7 +206,6 @@ public class RepositoryTestUtil {
 
 		ReservedSeat reservedSeat = new ReservedSeat(ticket, seat);
 		ReservedSeat savedReservedSeat = reservedSeatRepository.save(reservedSeat);
-		clear();
 		return savedReservedSeat;
 	}
 
@@ -241,7 +223,6 @@ public class RepositoryTestUtil {
 			ReservedSeat reservedSeat = new ReservedSeat(ticket, seat);
 			reservedSeatRepository.save(reservedSeat);
 		});
-		clear();
 		return ticket.getSchedule();
 	}
 
@@ -269,7 +250,6 @@ public class RepositoryTestUtil {
 			ReservedSeat reservedSeat = new ReservedSeat(ticket, seat);
 			reservedSeatRepository.save(reservedSeat);
 		});
-		clear();
 		return schedule;
 	}
 
@@ -286,10 +266,5 @@ public class RepositoryTestUtil {
 
 	private int seqToCol(int seq) {
 		return (seq % MAX_ROW);
-	}
-
-	private void clear() {
-		em.flush();
-		em.clear();
 	}
 }

@@ -2,6 +2,8 @@ package prgrms.marco.be02marbox.domain.user.service;
 
 import static prgrms.marco.be02marbox.domain.exception.custom.Message.*;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,4 +74,10 @@ public class UserService {
 		return userRepository.findByEmail(email)
 			.orElseThrow(() -> new InvalidEmailException(INVALID_EMAIL_EXP_MSG));
 	}
+
+	public User findById(Long userId) {
+		return userRepository.findById(userId)
+			.orElseThrow(() -> new EntityNotFoundException(NOT_EXISTS_USER_EXP_MSG.getMessage()));
+	}
+
 }

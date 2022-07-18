@@ -2,11 +2,13 @@ package prgrms.marco.be02marbox.domain.reservation.service;
 
 import static java.util.stream.Collectors.*;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import prgrms.marco.be02marbox.domain.reservation.ReservedSeat;
 import prgrms.marco.be02marbox.domain.reservation.repository.ReservedSeatRepository;
 
 @Service
@@ -30,4 +32,10 @@ public class ReservedSeatService {
 			.map(reservedSeat -> reservedSeat.getSeat().getId())
 			.collect(toSet());
 	}
+
+	@Transactional
+	public void saveAllAndFlush(List<ReservedSeat> selectedSeats) {
+		reservedSeatRepository.saveAllAndFlush(selectedSeats);
+	}
+
 }
